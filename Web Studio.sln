@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web Studio", "Web Studio\Web Studio.csproj", "{DA8D8AD9-4E1B-4BAF-A8B5-BD2EC69C1223}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generador Reglas", "Generador Reglas\Generador Reglas.csproj", "{2FD4BCA2-2813-40B9-A404-A4B4E442BBE9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{DA8D8AD9-4E1B-4BAF-A8B5-BD2EC69C1223}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA8D8AD9-4E1B-4BAF-A8B5-BD2EC69C1223}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA8D8AD9-4E1B-4BAF-A8B5-BD2EC69C1223}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FD4BCA2-2813-40B9-A404-A4B4E442BBE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FD4BCA2-2813-40B9-A404-A4B4E442BBE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FD4BCA2-2813-40B9-A404-A4B4E442BBE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FD4BCA2-2813-40B9-A404-A4B4E442BBE9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
