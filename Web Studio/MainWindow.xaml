@@ -13,6 +13,6 @@
     Name="textEditor"
     FontFamily="Consolas"
     SyntaxHighlighting="HTML"
-    FontSize="10pt" Margin="10"/>
+    FontSize="12pt" Margin="10" Foreground="White"/>
     </Grid>
 </Controls:MetroWindow>
