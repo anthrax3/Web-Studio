@@ -8,6 +8,11 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        
+        <avalonEdit:TextEditor
+            xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+    Name="textEditor"
+    FontFamily="Consolas"
+    SyntaxHighlighting="HTML"
+    FontSize="10pt" Margin="10"/>
     </Grid>
 </Controls:MetroWindow>
