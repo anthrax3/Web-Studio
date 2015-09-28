@@ -20,10 +20,5 @@ namespace Web_Studio
 
         }
 
-        private void button_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            XmlReader reader = XmlReader.Create("D:\\ProyectoCSharp\\otro.xshd");
-            textEditor.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
-        }
     }
 }
