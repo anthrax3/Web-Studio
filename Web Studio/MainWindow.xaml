@@ -8,11 +8,18 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
+        <Menu IsMainMenu="True">
+            <MenuItem Header="_File"></MenuItem>
+            <MenuItem Header="_Edit"></MenuItem>
+            <MenuItem Header="_View "></MenuItem>
+            <MenuItem Header="_Windows"></MenuItem>
+            <MenuItem Header="_Help"></MenuItem>
+        </Menu>
         <avalonEdit:TextEditor
             xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
     Name="textEditor"
     FontFamily="Consolas"
     SyntaxHighlighting="HTML"
-    FontSize="10pt" Margin="10" Foreground="White"/>
+    FontSize="10pt" Margin="10,30,10,10" Foreground="White"/>
     </Grid>
 </Controls:MetroWindow>
