@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.Windows.Media;
+using System.Xml;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 
@@ -14,9 +15,15 @@ namespace Web_Studio
             InitializeComponent();
             XmlReader reader = XmlReader.Create("D:\\ProyectoCSharp\\otro.xshd");
             textEditor.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
-         
+            textEditor.TextArea.TextView.LinkTextForegroundBrush = Brushes.DeepSkyBlue;
 
 
+        }
+
+        private void button_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            XmlReader reader = XmlReader.Create("D:\\ProyectoCSharp\\otro.xshd");
+            textEditor.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
         }
     }
 }

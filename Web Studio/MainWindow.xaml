@@ -13,6 +13,7 @@
     Name="textEditor"
     FontFamily="Consolas"
     SyntaxHighlighting="HTML"
-    FontSize="10pt" Margin="10" Foreground="White"/>
+    FontSize="10pt" Margin="10,40,10,10" Foreground="White"/>
+        <Button x:Name="button" Content="Actualizar estilo" HorizontalAlignment="Left" Margin="26,10,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
     </Grid>
 </Controls:MetroWindow>
