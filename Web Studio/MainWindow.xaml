@@ -1,25 +1,30 @@
-﻿<Controls:MetroWindow x:Class="Web_Studio.MainWindow"
+﻿<controls:MetroWindow x:Class="Web_Studio.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Web_Studio"
-        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:localization="clr-namespace:Web_Studio.Localization"
+        xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Web Studio" TitleCaps="False" Height="350" Width="525">
     <Grid>
         <Menu IsMainMenu="True">
-            <MenuItem Header="_File"></MenuItem>
-            <MenuItem Header="_Edit"></MenuItem>
-            <MenuItem Header="_View "></MenuItem>
-            <MenuItem Header="_Windows"></MenuItem>
-            <MenuItem Header="_Help"></MenuItem>
+            <MenuItem Header="{x:Static localization:Strings.File}">
+                <MenuItem Header="{x:Static localization:Strings.New_File}"></MenuItem>
+                <MenuItem Header="{x:Static localization:Strings.New_Project}"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="{x:Static localization:Strings.Edit}">
+                <MenuItem Header="{x:Static localization:Strings.Options}"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="{x:Static localization:Strings.View}"></MenuItem>
+            <MenuItem Header="{x:Static localization:Strings.Window}"></MenuItem>
+            <MenuItem Header="{x:Static localization:Strings.Help}"></MenuItem>
         </Menu>
         <avalonEdit:TextEditor
             xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
-    Name="textEditor"
+    Name="TextEditor"
     FontFamily="Consolas"
     SyntaxHighlighting="HTML"
-    FontSize="10pt" Margin="10,30,10,10" Foreground="White"/>
+    FontSize="10pt" Margin="10,40,10,0" Foreground="White"/>
     </Grid>
-</Controls:MetroWindow>
+</controls:MetroWindow>
