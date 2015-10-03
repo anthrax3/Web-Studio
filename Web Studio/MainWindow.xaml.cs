@@ -20,5 +20,10 @@ namespace Web_Studio
             TextEditor.TextArea.TextView.LinkTextForegroundBrush = Brushes.DeepSkyBlue;
         }
 
+        private void Options_OnClick(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var a = new Options();
+            a.Show();
+        }
     }
 }

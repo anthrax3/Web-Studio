@@ -6,32 +6,36 @@
         xmlns:localization="clr-namespace:Web_Studio.Localization"
         xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         mc:Ignorable="d"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        lex:LocalizeDictionary.DesignCulture="es"
+        lex:ResxLocalizationProvider.DefaultAssembly="Web Studio"
+        lex:ResxLocalizationProvider.DefaultDictionary="Strings"
         Title="Web Studio" TitleCaps="False" Height="350" Width="525" WindowState="Maximized">
     <Grid>
         <Menu IsMainMenu="True">
-            <MenuItem Header="{x:Static localization:Strings.File}">
-                <MenuItem Header="{x:Static localization:Strings.New}" >
-                    <MenuItem Header="{x:Static localization:Strings.File}"></MenuItem>
-                    <MenuItem Header="{x:Static localization:Strings.Project}"></MenuItem>
+            <MenuItem Header="{lex:Loc File}">
+                <MenuItem Header="{lex:Loc New}" >
+                    <MenuItem Header="{lex:Loc File}"></MenuItem>
+                    <MenuItem Header="{lex:Loc Project}"></MenuItem>
                 </MenuItem>
-                <MenuItem Header="{x:Static localization:Strings.Open }">
-                    <MenuItem Header="{x:Static localization:Strings.File}"></MenuItem>
-                    <MenuItem Header="{x:Static localization:Strings.Project}"></MenuItem>
+                <MenuItem Header="{lex:Loc Open}">
+                    <MenuItem Header="{lex:Loc File}"></MenuItem>
+                    <MenuItem Header="{lex:Loc Project}"></MenuItem>
                 </MenuItem>
-                <MenuItem Header="{x:Static localization:Strings.Add_File}"></MenuItem>
-                <MenuItem Header="{x:Static localization:Strings.Close_File}"></MenuItem>
-                <MenuItem Header="{x:Static localization:Strings.Save_File}"></MenuItem>
-                <MenuItem Header="{x:Static localization:Strings.Save_Project}"></MenuItem>
+                <MenuItem Header="{lex:Loc AddFile}"></MenuItem>
+                <MenuItem Header="{lex:Loc CloseFile}"></MenuItem>
+                <MenuItem Header="{lex:Loc SaveFile}"></MenuItem>
+                <MenuItem Header="{lex:Loc SaveProject}"></MenuItem>
                 <Separator></Separator>
-                <MenuItem Header="{x:Static localization:Strings.Exit}"></MenuItem>
+                <MenuItem Header="{lex:Loc Exit}"></MenuItem>
                 
             </MenuItem>
-            <MenuItem Header="{x:Static localization:Strings.Edit}">
-                <MenuItem Header="{x:Static localization:Strings.Options}"></MenuItem>
+            <MenuItem Header="{lex:Loc Edit}">
+                <MenuItem Header="{lex:Loc Options}" Click="Options_OnClick"></MenuItem>
             </MenuItem>
-            <MenuItem Header="{x:Static localization:Strings.View}"></MenuItem>
-            <MenuItem Header="{x:Static localization:Strings.Window}"></MenuItem>
-            <MenuItem Header="{x:Static localization:Strings.Help}"></MenuItem>
+            <MenuItem Header="{lex:Loc View}"></MenuItem>
+            <MenuItem Header="{lex:Loc Window}"></MenuItem>
+            <MenuItem Header="{lex:Loc Help}"></MenuItem>
         </Menu>
         <avalonEdit:TextEditor
             xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"

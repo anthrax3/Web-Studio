@@ -70,11 +70,38 @@ namespace Web_Studio.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Add File.
+        /// </summary>
+        public static string AddFile {
+            get {
+                return ResourceManager.GetString("AddFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Close File.
+        /// </summary>
+        public static string CloseFile {
+            get {
+                return ResourceManager.GetString("CloseFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Edit.
         /// </summary>
         public static string Edit {
             get {
                 return ResourceManager.GetString("Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Exit.
+        /// </summary>
+        public static string Exit {
+            get {
+                return ResourceManager.GetString("Exit", resourceCulture);
             }
         }
         
@@ -97,20 +124,20 @@ namespace Web_Studio.Localization {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a New File.
+        ///   Busca una cadena traducida similar a New.
         /// </summary>
-        public static string New_File {
+        public static string New {
             get {
-                return ResourceManager.GetString("New File", resourceCulture);
+                return ResourceManager.GetString("New", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a New Project.
+        ///   Busca una cadena traducida similar a Open.
         /// </summary>
-        public static string New_Project {
+        public static string Open {
             get {
-                return ResourceManager.GetString("New Project", resourceCulture);
+                return ResourceManager.GetString("Open", resourceCulture);
             }
         }
         
@@ -120,6 +147,33 @@ namespace Web_Studio.Localization {
         public static string Options {
             get {
                 return ResourceManager.GetString("Options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Project.
+        /// </summary>
+        public static string Project {
+            get {
+                return ResourceManager.GetString("Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Save File.
+        /// </summary>
+        public static string SaveFile {
+            get {
+                return ResourceManager.GetString("SaveFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Save Project.
+        /// </summary>
+        public static string SaveProject {
+            get {
+                return ResourceManager.GetString("SaveProject", resourceCulture);
             }
         }
         
