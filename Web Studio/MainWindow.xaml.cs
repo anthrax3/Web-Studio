@@ -15,7 +15,8 @@ namespace Web_Studio
         public MainWindow()
         {
             InitializeComponent();
-            XmlReader reader = XmlReader.Create("Temas/HTML.xshd");
+            XmlReader reader = XmlReader.Create("Temas/CSS.xshd");
+            TextEditor.ShowLineNumbers = true;
             TextEditor.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
             TextEditor.TextArea.TextView.LinkTextForegroundBrush = Brushes.DeepSkyBlue;
         }
