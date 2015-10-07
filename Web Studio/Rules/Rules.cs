@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Web_Studio.Reglas
 {
     /// <summary>
-    /// Class to manage the rules
+    ///     Class to manage the rules
     /// </summary>
-    class Rules
+    internal class Rules
     {
         public List<RulesLanguage> Text { get; set; }
         public string RunToCheck { get; set; }

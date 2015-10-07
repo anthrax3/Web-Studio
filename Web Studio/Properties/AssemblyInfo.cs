@@ -1,12 +1,11 @@
 ﻿using System.Reflection;
-using System.Resources;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 
 // La información general de un ensamblado se controla mediante el siguiente 
 // conjunto de atributos. Cambie estos valores de atributo para modificar la información
 // asociada con un ensamblado.
+
 [assembly: AssemblyTitle("Web Studio")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
@@ -19,6 +18,7 @@ using System.Windows;
 // Si establece ComVisible en false, los tipos de este ensamblado no estarán visibles 
 // para los componentes COM.  Si necesita obtener acceso a un tipo de este ensamblado desde 
 // COM, establezca el atributo ComVisible en true en este tipo.
+
 [assembly: ComVisible(false)]
 
 //Para comenzar a compilar aplicaciones que se puedan traducir, establezca 
@@ -33,12 +33,12 @@ using System.Windows;
 
 [assembly: ThemeInfo(
     ResourceDictionaryLocation.None, //donde se encuentran los diccionarios de recursos específicos del tema
-                                     //(se utiliza si no se encuentra ningún recurso en la página 
-                                     // ni diccionarios de recursos de la aplicación)
+    //(se utiliza si no se encuentra ningún recurso en la página 
+    // ni diccionarios de recursos de la aplicación)
     ResourceDictionaryLocation.SourceAssembly //donde se encuentra el diccionario de recursos genérico
-                                              //(se utiliza si no se encuentra ningún recurso en la página, 
-                                              // aplicación o diccionarios de recursos específicos del tema)
-)]
+    //(se utiliza si no se encuentra ningún recurso en la página, 
+    // aplicación o diccionarios de recursos específicos del tema)
+    )]
 
 
 // La información de versión de un ensamblado consta de los cuatro valores siguientes:
@@ -51,5 +51,6 @@ using System.Windows;
 // Puede especificar todos los valores o usar los valores predeterminados de número de compilación y de revisión 
 // mediante el carácter '*', como se muestra a continuación:
 // [assembly: AssemblyVersion("1.0.*")]
+
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
