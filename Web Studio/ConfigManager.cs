@@ -13,7 +13,7 @@ namespace Web_Studio
         [JsonIgnore]
         public static ConfigManager Instance { get; set; } = new ConfigManager();
         [JsonIgnore]
-        public TextEditor MyTextEditor { get; set; }
+        //public TextEditor MyTextEditor { get; set; }
         public  bool EditorShowLineNumbers { get; set; } = true;
         public  Brush EditorLinkTextForegroundBrush { get; set; } = Brushes.DeepSkyBlue;
         public  int EditorFontSize { get; set; } = 55;
@@ -27,7 +27,7 @@ namespace Web_Studio
         /// Load config options. First try to load from config file, second use defaults values
         /// </summary>
         /// <param name="myTextEditor"></param>
-        public void Load(TextEditor myTextEditor)
+        public void Load()
         {
             try
             {
@@ -44,10 +44,10 @@ namespace Web_Studio
             }
             finally
             {
-                Instance.MyTextEditor = myTextEditor;
+           /*     Instance.MyTextEditor = myTextEditor;
                 Instance.MyTextEditor.ShowLineNumbers = Instance.EditorShowLineNumbers;
                 Instance.MyTextEditor.TextArea.TextView.LinkTextForegroundBrush = Instance.EditorLinkTextForegroundBrush;
-                Instance.MyTextEditor.FontSize = Instance.EditorFontSize;
+                Instance.MyTextEditor.FontSize = Instance.EditorFontSize; */
             }
 
         }
