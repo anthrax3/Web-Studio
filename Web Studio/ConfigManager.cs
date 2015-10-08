@@ -42,22 +42,14 @@ namespace Web_Studio
             {
                 // ignored
             }
-            finally
-            {
-           /*     Instance.MyTextEditor = myTextEditor;
-                Instance.MyTextEditor.ShowLineNumbers = Instance.EditorShowLineNumbers;
-                Instance.MyTextEditor.TextArea.TextView.LinkTextForegroundBrush = Instance.EditorLinkTextForegroundBrush;
-                Instance.MyTextEditor.FontSize = Instance.EditorFontSize; */
-            }
-
+            
         }
 
         public  void Save()
         {
             using (StreamWriter file = File.CreateText(@"config.json"))
                 {
-                    JsonSerializer serializer = new JsonSerializer();
-                    serializer.Formatting = Formatting.Indented;
+                    JsonSerializer serializer = new JsonSerializer {Formatting = Formatting.Indented};
                     serializer.Serialize(file, Instance);
                 }
         }
