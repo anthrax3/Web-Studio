@@ -9,7 +9,7 @@
                       lex:ResxLocalizationProvider.DefaultAssembly="Web Studio"
                       lex:ResxLocalizationProvider.DefaultDictionary="Strings"
                       mc:Ignorable="d"
-                      Title="Options" Height="300" Width="300">
+                      Title="{lex:Loc Options}" Height="300" Width="300">
     <Grid>
         <CheckBox IsChecked="{Binding EditorShowLineNumbers}" Content="Hola"></CheckBox>
         <Button Click="ButtonBase_OnClick" Content="{lex:Loc New}" Margin="72,166,126,71" />
