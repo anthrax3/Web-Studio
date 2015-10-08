@@ -16,7 +16,7 @@
             <MenuItem Header="{lex:Loc File}">
                 <MenuItem Header="{lex:Loc New}">
                     <MenuItem Header="{lex:Loc File}" />
-                    <MenuItem Header="{lex:Loc Project}" />
+                    <MenuItem Header="{lex:Loc Project}" Name="FileNewProject" Click="FileNewProject_OnClick" />
                 </MenuItem>
                 <MenuItem Header="{lex:Loc Open}">
                     <MenuItem Header="{lex:Loc File}" />

@@ -28,8 +28,15 @@ namespace Web_Studio
         /// <param name="e"></param>
         private void Options_OnClick(object sender, RoutedEventArgs e)
         {
-            var a = new Options {Owner = this};
-            a.ShowDialog();
+            var optionWindow = new Options {Owner = this};
+            optionWindow.ShowDialog();
+        }
+
+        private void FileNewProject_OnClick(object sender, RoutedEventArgs e)
+        {
+            var newProjectWindow = new NewProject { Owner = this};
+            newProjectWindow.ShowDialog();
+
         }
     }
 }

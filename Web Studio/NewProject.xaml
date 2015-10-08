@@ -9,24 +9,28 @@
                       lex:LocalizeDictionary.DesignCulture="es"
                       lex:ResxLocalizationProvider.DefaultAssembly="Web Studio"
                       lex:ResxLocalizationProvider.DefaultDictionary="Strings"
-                      mc:Ignorable="d" Height="500" Width="500" ResizeMode="NoResize">
+                      mc:Ignorable="d" Height="500" Width="500" ResizeMode="NoResize" Title="{lex:Loc WizardCreateNewProject}">
 
     <xctk:Wizard HelpButtonVisibility="Hidden" CanHelp="False" CancelButtonContent="{lex:Loc Cancel}" BackButtonContent="{lex:Loc Back}"
                  NextButtonContent="{lex:Loc Next}" FinishButtonContent="{lex:Loc Finish}"  Background="{DynamicResource WindowBackgroundBrush}"
                  ExteriorPanelMinWidth="0" BorderBrush="{x:Null}" BorderThickness="0">
-        <xctk:WizardPage x:Name="Interior" 
-                                   Title="{lex:Loc WizardCreateNewProject}"
-                                   Description="{lex:Loc WizardDescription}" Background="{DynamicResource WindowBackgroundBrush}" HeaderBackground="{DynamicResource AccentColorBrush}">
-          <Grid>
+        <xctk:WizardPage x:Name="IntroPage" Description="{lex:Loc WizardDescription}" 
+                         Background="{DynamicResource WindowBackgroundBrush}" HeaderBackground="{DynamicResource AccentColorBrush}">
+          <Grid VerticalAlignment="Top">
               <Grid.ColumnDefinitions>
                   <ColumnDefinition></ColumnDefinition>
+                  <ColumnDefinition Width="2*"></ColumnDefinition>
                   <ColumnDefinition></ColumnDefinition>
               </Grid.ColumnDefinitions>
               <Grid.RowDefinitions>
                   <RowDefinition></RowDefinition>
                   <RowDefinition></RowDefinition>
               </Grid.RowDefinitions>
-              <Label Content="{lex:Loc WizardProjectName}"></Label>
+              <Label Content="{lex:Loc WizardProjectName}" Grid.Row="0" Grid.Column="0"/>
+              <TextBox Name="tbProjectName"  Grid.Row="0" Grid.Column="1"/>
+              <Label Content="{lex:Loc WizardPath}" Grid.Row="1" Grid.Column="0"/>
+              <TextBox Name="tbPath" Grid.Row="1" Grid.Column="1"/>
+              <Button Name="bBrowser" Content="{lex:Loc Browse}" Grid.Row="1" Grid.Column="2" Click="ButtonBrowser_OnClick" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
           </Grid>
         </xctk:WizardPage>
     <xctk:WizardPage x:Name="Page1" PageType="Interior"

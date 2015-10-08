@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
 using Xceed.Wpf.Toolkit;
 
 namespace Web_Studio
@@ -24,6 +25,15 @@ namespace Web_Studio
         public NewProject()
         {
             InitializeComponent();
+        }
+
+        private void ButtonBrowser_OnClick(object sender, RoutedEventArgs e)
+        {
+            var saveFileDialog = new SaveFileDialog();
+            saveFileDialog.FileName = tbProjectName.Text.Length != 0 ? tbProjectName.Text : "Projecto";
+            saveFileDialog.DefaultExt = ".ws";
+            saveFileDialog.Filter = "Web Studio (.ws) | *.ws ";
+            saveFileDialog.ShowDialog();
         }
     }
 }
