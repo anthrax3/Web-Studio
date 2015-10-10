@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Windows;
+using Web_Studio.Managers;
 using WPFLocalizeExtension.Engine;
 using WPFLocalizeExtension.Providers;
 
@@ -10,6 +11,9 @@ namespace Web_Studio
     /// </summary>
     public partial class Options
     {
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public Options()
         {
             InitializeComponent();

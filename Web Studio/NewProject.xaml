@@ -13,8 +13,8 @@
 
     <xctk:Wizard HelpButtonVisibility="Hidden" CanHelp="False" CancelButtonContent="{lex:Loc Cancel}" BackButtonContent="{lex:Loc Back}"
                  NextButtonContent="{lex:Loc Next}" FinishButtonContent="{lex:Loc Finish}"  Background="{DynamicResource WindowBackgroundBrush}"
-                 ExteriorPanelMinWidth="0" BorderBrush="{x:Null}" BorderThickness="0">
-        <xctk:WizardPage x:Name="IntroPage" Description="{lex:Loc WizardDescription}" 
+                 ExteriorPanelMinWidth="0" BorderBrush="{x:Null}" BorderThickness="0" Name="Wizard" Finish="Wizard_Finish">
+        <xctk:WizardPage x:Name="IntroPage" Description="{lex:Loc WizardDescription}" CanSelectNextPage="{Binding ElementName=Window, Path=NextPageEnabled}" 
                          Background="{DynamicResource WindowBackgroundBrush}" HeaderBackground="{DynamicResource AccentColorBrush}">
           <Grid VerticalAlignment="Top">
               <Grid.ColumnDefinitions>
@@ -27,24 +27,15 @@
                   <RowDefinition></RowDefinition>
               </Grid.RowDefinitions>
               <Label Content="{lex:Loc WizardProjectName}" Grid.Row="0" Grid.Column="0"/>
-              <TextBox Name="tbProjectName"  Grid.Row="0" Grid.Column="1"/>
+               <TextBox Name="tbProjectName"  Grid.Row="0" Grid.Column="1" TextChanged="TextBox_TextChanged" Text="{Binding Name}"/>
               <Label Content="{lex:Loc WizardPath}" Grid.Row="1" Grid.Column="0"/>
-              <TextBox Name="tbPath" Grid.Row="1" Grid.Column="1"/>
+                <TextBox Name="tbPath" Grid.Row="1" Grid.Column="1" TextChanged="TextBox_TextChanged" Text="{Binding FullPath}"/>
               <Button Name="bBrowser" Content="{lex:Loc Browse}" Grid.Row="1" Grid.Column="2" Click="ButtonBrowser_OnClick" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
           </Grid>
         </xctk:WizardPage>
-    <xctk:WizardPage x:Name="Page1" PageType="Interior"
-                                   Title="Page 1"
-                                   Description="This is the first page in the process."
-                                   NextPage="{Binding ElementName=Page2}"
-                                   PreviousPage="{Binding ElementName=IntroPage}"/>
-    <xctk:WizardPage x:Name="Page2" PageType="Interior"
-                                   Title="Page 2"
-                                   Description="This is the second page in the process"/>
-    <xctk:WizardPage x:Name="LastPage" PageType="Interior"
-                                   Title="Last Page"
-                                   Description="This is the last page in the process"
-                                   CanFinish="True"/>
+    <xctk:WizardPage x:Name="Page1" PageType="Interior" Background="{DynamicResource WindowBackgroundBrush}" CanFinish="True" CanSelectNextPage="False">
+        <Button>AAAA</Button>
+        </xctk:WizardPage>
 </xctk:Wizard>
         
     </controls:MetroWindow>

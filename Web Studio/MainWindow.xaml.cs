@@ -3,6 +3,7 @@ using System.Windows.Media;
 using System.Xml;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using Web_Studio.Managers;
 
 namespace Web_Studio
 {
@@ -11,6 +12,9 @@ namespace Web_Studio
     /// </summary>
     public partial class MainWindow
     {
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
