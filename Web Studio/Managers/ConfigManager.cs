@@ -1,23 +1,37 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Media;
-using System.Windows.Navigation;
-using ICSharpCode.AvalonEdit;
 using Newtonsoft.Json;
+using Web_Studio.Utils;
 
-namespace Web_Studio
+namespace Web_Studio.Managers
 {
-    
+    /// <summary>
+    /// Class to manage the Web Studio settings
+    /// </summary>
     public class ConfigManager
     {
+        /// <summary>
+        /// Singleton pattern
+        /// </summary>
         [JsonIgnore]
         public static ConfigManager Instance { get; set; } = new ConfigManager();
-        [JsonIgnore]
-        //public TextEditor MyTextEditor { get; set; }
+        /// <summary>
+        /// Enable to show line numbers in editor
+        /// </summary>
         public  bool EditorShowLineNumbers { get; set; } = true;
+        /// <summary>
+        /// Color for links
+        /// </summary>
         public  Brush EditorLinkTextForegroundBrush { get; set; } = Brushes.DeepSkyBlue;
+        /// <summary>
+        /// Font size in editor
+        /// </summary>
         public  int EditorFontSize { get; set; } = 55;
 
+        /// <summary>
+        /// Default constructor (Singleton pattern)
+        /// </summary>
         private ConfigManager()
         {
             
@@ -26,7 +40,6 @@ namespace Web_Studio
         /// <summary>
         /// Load config options. First try to load from config file, second use defaults values
         /// </summary>
-        /// <param name="myTextEditor"></param>
         public void Load()
         {
             try
@@ -38,20 +51,22 @@ namespace Web_Studio
                     Instance = (ConfigManager) serializer.Deserialize(file, typeof (ConfigManager));
                 }
             }
-            catch (Exception) //FileException or JSonException --> Load default values
+            catch (Exception) //FileException or JSonException --> use default values
             {
                 // ignored
             }
             
         }
 
+        /// <summary>
+        /// Save instance to file
+        /// </summary>
         public  void Save()
         {
-            using (StreamWriter file = File.CreateText(@"config.json"))
-                {
-                    JsonSerializer serializer = new JsonSerializer {Formatting = Formatting.Indented};
-                    serializer.Serialize(file, Instance);
-                }
+            if (Json.ObjectToFile(Instance, "config.json"))
+            {
+                //error when saving
+            }
         }
         
     }
