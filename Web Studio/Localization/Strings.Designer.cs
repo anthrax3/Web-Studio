@@ -79,11 +79,47 @@ namespace Web_Studio.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Back.
+        /// </summary>
+        public static string Back {
+            get {
+                return ResourceManager.GetString("Back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Browse....
+        /// </summary>
+        public static string Browse {
+            get {
+                return ResourceManager.GetString("Browse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Cancel.
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Close File.
         /// </summary>
         public static string CloseFile {
             get {
                 return ResourceManager.GetString("CloseFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Create.
+        /// </summary>
+        public static string Create {
+            get {
+                return ResourceManager.GetString("Create", resourceCulture);
             }
         }
         
@@ -115,6 +151,15 @@ namespace Web_Studio.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Finish.
+        /// </summary>
+        public static string Finish {
+            get {
+                return ResourceManager.GetString("Finish", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Help.
         /// </summary>
         public static string Help {
@@ -129,6 +174,15 @@ namespace Web_Studio.Localization {
         public static string New {
             get {
                 return ResourceManager.GetString("New", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Next.
+        /// </summary>
+        public static string Next {
+            get {
+                return ResourceManager.GetString("Next", resourceCulture);
             }
         }
         
@@ -192,6 +246,42 @@ namespace Web_Studio.Localization {
         public static string Window {
             get {
                 return ResourceManager.GetString("Window", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Create a new project.
+        /// </summary>
+        public static string WizardCreateNewProject {
+            get {
+                return ResourceManager.GetString("WizardCreateNewProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a You are going to create a new project. A new project can help you to manage a full website.
+        /// </summary>
+        public static string WizardDescription {
+            get {
+                return ResourceManager.GetString("WizardDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Path.
+        /// </summary>
+        public static string WizardPath {
+            get {
+                return ResourceManager.GetString("WizardPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Project name.
+        /// </summary>
+        public static string WizardProjectName {
+            get {
+                return ResourceManager.GetString("WizardProjectName", resourceCulture);
             }
         }
     }
