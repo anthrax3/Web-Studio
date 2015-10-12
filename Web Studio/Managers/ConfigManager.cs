@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Media;
+using ICSharpCode.AvalonEdit;
 using Newtonsoft.Json;
 using Web_Studio.Utils;
 
@@ -27,7 +28,7 @@ namespace Web_Studio.Managers
         /// <summary>
         /// Font size in editor
         /// </summary>
-        public  int EditorFontSize { get; set; } = 55;
+        public  int EditorFontSize { get; set; } = 14;
 
         /// <summary>
         /// Default constructor (Singleton pattern)
@@ -37,25 +38,22 @@ namespace Web_Studio.Managers
             
         }
 
+      
+
         /// <summary>
-        /// Load config options. First try to load from config file, second use defaults values
+        /// Load config options. First try to load from config file, second use defaults values and apply changes
         /// </summary>
-        public void Load()
+        public void Load(TextEditor myTextEditor)
         {
-            try
+            var parsed = (ConfigManager) Json.FileToObject(Instance, "config.json");
+            if (parsed != null)
             {
-                //Try to find the config file
-                using (StreamReader file = File.OpenText(@"config.json"))
-                {
-                    JsonSerializer serializer = new JsonSerializer();
-                    Instance = (ConfigManager) serializer.Deserialize(file, typeof (ConfigManager));
-                }
+                Instance = parsed;
             }
-            catch (Exception) //FileException or JSonException --> use default values
-            {
-                // ignored
-            }
-            
+            myTextEditor.DataContext = Instance;
+            myTextEditor.TextArea.TextView.LinkTextForegroundBrush = Instance.EditorLinkTextForegroundBrush;
+
+
         }
 
         /// <summary>

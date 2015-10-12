@@ -20,9 +20,7 @@ namespace Web_Studio
             InitializeComponent();
             var reader = XmlReader.Create("SyntaxHighlighter/CSS.xshd");
             TextEditor.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
-            ConfigManager.Instance.Load();
-            TextEditor.DataContext = ConfigManager.Instance;
-            ConfigManager.Instance.Save();
+            ConfigManager.Instance.Load(TextEditor);
         }
 
         /// <summary>
