@@ -20,7 +20,7 @@
                 </MenuItem>
                 <MenuItem Header="{lex:Loc Open}">
                     <MenuItem Header="{lex:Loc File}" />
-                    <MenuItem Header="{lex:Loc Project}" />
+                    <MenuItem Header="{lex:Loc Project}" Name="FileOpenProject" Click="FileOpenProject_OnClick" />
                 </MenuItem>
                 <MenuItem Header="{lex:Loc AddFile}" />
                 <MenuItem Header="{lex:Loc CloseFile}" />

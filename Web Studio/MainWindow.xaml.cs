@@ -1,9 +1,12 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 using System.Windows.Media;
 using System.Xml;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using Microsoft.Win32;
 using Web_Studio.Managers;
+using Web_Studio.Utils;
 
 namespace Web_Studio
 {
@@ -34,11 +37,40 @@ namespace Web_Studio
             optionWindow.ShowDialog();
         }
 
+        /// <summary>
+        /// Display a wizard to config a new project
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void FileNewProject_OnClick(object sender, RoutedEventArgs e)
         {
             var newProjectWindow = new NewProject { Owner = this};
             newProjectWindow.ShowDialog();
 
+        }
+
+        /// <summary>
+        /// Display a dialog to select a project
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void FileOpenProject_OnClick(object sender, RoutedEventArgs e)
+        {
+            //Config
+            var openFile = new OpenFileDialog
+            {
+                Multiselect = false,
+                CheckFileExists = true,
+                CheckPathExists = true,
+                Filter = "Web Studio (*.ws)|*.ws"
+            };
+
+            if (openFile.ShowDialog()==true)
+            {
+                ProjectManager.Instance = (ProjectManager) Json.FileToObject(ProjectManager.Instance, openFile.FileName);
+                ProjectManager.Instance.FullPath = Path.GetDirectoryName(openFile.FileName);
+
+            }
         }
     }
 }
