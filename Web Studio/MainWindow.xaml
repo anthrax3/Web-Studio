@@ -41,7 +41,9 @@
             xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
             Name="TextEditor"
             FontFamily="Consolas"
-            Margin="120,40,10,0" Foreground="White" ShowLineNumbers="{Binding EditorShowLineNumbers}" FontSize="{Binding EditorFontSize}" > 
+            Margin="120,40,10,0" Foreground="White" ShowLineNumbers="{Binding EditorShowLineNumbers}" FontSize="{Binding EditorFontSize}"
+            HorizontalScrollBarVisibility="Auto"  VerticalScrollBarVisibility="Auto"> 
+           
             
         </avalonEdit:TextEditor>
         <TreeView x:Name="treeView" HorizontalAlignment="Left" Height="100" Margin="0,40,0,0" VerticalAlignment="Top"
