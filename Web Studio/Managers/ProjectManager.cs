@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using System.IO;
+using Newtonsoft.Json;
+using Web_Studio.Utils;
 
 namespace Web_Studio.Managers
 {
@@ -27,6 +30,47 @@ namespace Web_Studio.Managers
         private ProjectManager()
         {
             
+        }
+
+        /// <summary>
+        /// Create a new project
+        /// </summary>
+        /// <returns></returns>
+        public bool Create()
+        {
+            try
+            {
+                Directory.CreateDirectory(Instance.FullPath);
+                //Create project config
+                Json.ObjectToFile(Instance, System.IO.Path.Combine(Instance.FullPath, Instance.Name + ".ws"));
+
+
+                //Create source folder
+                string srcPath = Path.Combine(Instance.FullPath, "src");
+                Directory.CreateDirectory(srcPath);
+
+                //Create js folder
+                Directory.CreateDirectory(Path.Combine(srcPath, "js"));
+
+                //Create css folder
+                Directory.CreateDirectory(Path.Combine(srcPath, "css"));
+
+                //Create font folder
+                Directory.CreateDirectory(Path.Combine(srcPath, "font"));
+
+                //Create img folder
+                Directory.CreateDirectory(Path.Combine(srcPath, "img"));
+
+                //Create index file
+                File.Create(Path.Combine(srcPath, "index.html"));
+                return true;
+
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
         }
 
     }

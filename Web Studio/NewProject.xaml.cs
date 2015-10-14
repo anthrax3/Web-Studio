@@ -84,9 +84,11 @@ namespace Web_Studio
         private void Wizard_Finish(object sender, RoutedEventArgs e)
         {
             string fullPath = System.IO.Path.Combine(ProjectManager.Instance.FullPath, ProjectManager.Instance.Name);
-            Directory.CreateDirectory(fullPath);
-            Json.ObjectToFile(ProjectManager.Instance,
-                System.IO.Path.Combine(fullPath, ProjectManager.Instance.Name + ".ws"));
+            ProjectManager.Instance.FullPath = fullPath;
+            ProjectManager.Instance.Create();
+
+
+
         }
     }
 }
