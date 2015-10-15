@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit;
@@ -20,15 +21,16 @@ namespace Web_Studio.Managers
         /// <summary>
         /// Enable to show line numbers in editor
         /// </summary>
-        public  bool EditorShowLineNumbers { get; set; } = true;
+        public  bool EditorShowLineNumbers { get; set; }
         /// <summary>
         /// Color for links
         /// </summary>
-        public  Brush EditorLinkTextForegroundBrush { get; set; } = Brushes.DeepSkyBlue;
+        public  Brush EditorLinkTextForegroundBrush { get; set; }
+
         /// <summary>
         /// Font size in editor
         /// </summary>
-        public  int EditorFontSize { get; set; } = 14;
+        public int EditorFontSize { get; set; }
 
         /// <summary>
         /// Default constructor (Singleton pattern)
@@ -41,30 +43,26 @@ namespace Web_Studio.Managers
       
 
         /// <summary>
-        /// Load config options. First try to load from config file, second use defaults values and apply changes
+        /// Load config options. First try to load from settings, second use defaults values and apply changes
         /// </summary>
         public void Load(TextEditor myTextEditor)
         {
-            var parsed = (ConfigManager) Json.FileToObject(Instance, "config.json");
-            if (parsed != null)
-            {
-                Instance = parsed;
-            }
+            Instance.EditorShowLineNumbers = Properties.Settings.Default.EditorShowLineNumbers;
+            Instance.EditorFontSize = Properties.Settings.Default.EditorFontSize;
+            Instance.EditorLinkTextForegroundBrush = (SolidColorBrush)(new BrushConverter().ConvertFrom(Properties.Settings.Default.EditorLinkTextForegroundBrush));
             myTextEditor.DataContext = Instance;
             myTextEditor.TextArea.TextView.LinkTextForegroundBrush = Instance.EditorLinkTextForegroundBrush;
-
-
         }
 
         /// <summary>
-        /// Save instance to file
+        /// Save to Settings
         /// </summary>
         public  void Save()
         {
-            if (Json.ObjectToFile(Instance, "config.json"))
-            {
-                //error when saving
-            }
+            Properties.Settings.Default.EditorShowLineNumbers = Instance.EditorShowLineNumbers;
+            Properties.Settings.Default.EditorLinkTextForegroundBrush = Instance.EditorLinkTextForegroundBrush.ToString();
+            Properties.Settings.Default.EditorFontSize = Instance.EditorFontSize;
+            Properties.Settings.Default.Save();
         }
         
     }
