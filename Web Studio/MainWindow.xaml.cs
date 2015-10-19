@@ -21,7 +21,7 @@ namespace Web_Studio
         public MainWindow()
         {
             InitializeComponent();
-            var reader = XmlReader.Create("SyntaxHighlighter/CSS.xshd");
+            var reader = XmlReader.Create("Editor/SyntaxHighlighter/CSS.xshd");
             TextEditor.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
             ConfigManager.Instance.Load(TextEditor);
         }
@@ -67,9 +67,7 @@ namespace Web_Studio
 
             if (openFile.ShowDialog()==true)
             {
-                ProjectManager.Instance = (ProjectManager) Json.FileToObject(ProjectManager.Instance, openFile.FileName);
-                ProjectManager.Instance.FullPath = Path.GetDirectoryName(openFile.FileName);
-
+                ProjectManager.Open(openFile.FileName);
             }
         }
     }

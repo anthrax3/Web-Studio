@@ -121,6 +121,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Editor\TreeView\FileNode.cs" />
+    <Compile Include="Editor\TreeView\FolderNode.cs" />
+    <Compile Include="Editor\TreeView\INode.cs" />
+    <Compile Include="Editor\TreeView\TreeViewManager.cs" />
     <Compile Include="Managers\ConfigManager.cs" />
     <Compile Include="Localization\Strings.es.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -196,21 +200,21 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Editor\SyntaxHighlighter\CSS.xshd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Editor\SyntaxHighlighter\HTML.xshd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Editor\SyntaxHighlighter\JS.xshd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="SyntaxHighlighter\CSS.xshd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="SyntaxHighlighter\HTML.xshd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="SyntaxHighlighter\JS.xshd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

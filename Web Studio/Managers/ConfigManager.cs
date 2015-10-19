@@ -39,8 +39,7 @@ namespace Web_Studio.Managers
         {
             
         }
-
-      
+        
 
         /// <summary>
         /// Load config options. First try to load from settings, second use defaults values and apply changes

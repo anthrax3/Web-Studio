@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Newtonsoft.Json;
+using Web_Studio.Editor.TreeView;
 using Web_Studio.Utils;
 
 namespace Web_Studio.Managers
@@ -63,7 +64,11 @@ namespace Web_Studio.Managers
 
                 //Create index file
                 File.Create(Path.Combine(srcPath, "index.html"));
+
+                Open(Instance.FullPath);
+
                 return true;
+
 
             }
             catch (Exception)
@@ -72,6 +77,19 @@ namespace Web_Studio.Managers
             }
 
         }
+
+        /// <summary>
+        /// Open a project, load project config and enable project UI
+        /// </summary>
+        /// <param name="path"></param>
+        public static void Open(string path)
+        {
+            //Load instance
+            Instance = (ProjectManager)Json.FileToObject(Instance, path);
+            Instance.FullPath = Path.GetDirectoryName(path);
+            TreeViewManager.Create(Path.GetDirectoryName(path));
+        }
+
 
     }
 }
