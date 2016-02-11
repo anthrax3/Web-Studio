@@ -1,19 +1,24 @@
 ﻿<controls:MetroWindow
-                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                      xmlns:localization="clr-namespace:Web_Studio.Localization"
-                      xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-                      xmlns:lex="http://wpflocalizeextension.codeplex.com"
-                      xmlns:Reglas="clr-namespace:Web_Studio.Reglas" 
-                      xmlns:TreeView="clr-namespace:Web_Studio.Editor.TreeView"
-                      x:Class="Web_Studio.MainWindow"
-                      mc:Ignorable="d"
-                      lex:LocalizeDictionary.DesignCulture="es"
-                      lex:ResxLocalizationProvider.DefaultAssembly="Web Studio"
-                      lex:ResxLocalizationProvider.DefaultDictionary="Strings"
-                      Title="Web Studio" TitleCaps="False" Height="350" Width="525" WindowState="Maximized">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:localization="clr-namespace:Web_Studio.Localization"
+    xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+    xmlns:lex="http://wpflocalizeextension.codeplex.com"
+    xmlns:Reglas="clr-namespace:Web_Studio.Reglas"
+    xmlns:TreeView="clr-namespace:Web_Studio.Editor.TreeView"
+    xmlns:viewModels="clr-namespace:Web_Studio.ViewModels"
+    xmlns:editor="clr-namespace:Web_Studio.Editor"
+    x:Class="Web_Studio.MainWindow"
+    mc:Ignorable="d"
+    lex:LocalizeDictionary.DesignCulture="es"
+    lex:ResxLocalizationProvider.DefaultAssembly="Web Studio"
+    lex:ResxLocalizationProvider.DefaultDictionary="Strings"
+    Title="Web Studio" TitleCaps="False" Height="350" Width="525" WindowState="Maximized">
+    <controls:MetroWindow.Resources>
+        <viewModels:TextEditViewModel x:Key="TextEditViewModel" />
+    </controls:MetroWindow.Resources>
     <Grid>
         <Menu IsMainMenu="True">
             <MenuItem Header="{lex:Loc File}">
@@ -40,20 +45,20 @@
             <MenuItem Header="{lex:Loc Window}" />
             <MenuItem Header="{lex:Loc Help}" />
         </Menu>
-        <avalonEdit:TextEditor
-			xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
-			x:Name="TextEditor"
-			FontFamily="Consolas"
-			Margin="120,40,10,0" Foreground="White" ShowLineNumbers="{Binding EditorShowLineNumbers}" FontSize="{Binding EditorFontSize}"
-			HorizontalScrollBarVisibility="Auto"  VerticalScrollBarVisibility="Auto"/>
+        <editor:TextEditorMvvm
+            FontFamily="Consolas" Margin="120,40,10,0" Foreground="White"
+            ShowLineNumbers="{Binding EditorShowLineNumbers}" FontSize="{Binding EditorFontSize}"
+            HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+            DataContext="{StaticResource TextEditViewModel}" />
         <TreeView x:Name="TreeView" HorizontalAlignment="Left" Height="269" Margin="10,29,0,0" VerticalAlignment="Top"
-			Width="100"  ItemsSource="{x:Static TreeView:TreeViewManager.Nodes}" Background="White" BorderBrush="Red" Foreground="#FFB88D8D">
+                  Width="100" ItemsSource="{x:Static TreeView:TreeViewManager.Nodes}" Background="White"
+                  BorderBrush="Red" Foreground="#FFB88D8D">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Nodes}">
-                    <TreeViewItem Header="{Binding Label}"/>
+                    <TreeViewItem Header="{Binding Label}" />
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
-            
+
         </TreeView>
 
     </Grid>

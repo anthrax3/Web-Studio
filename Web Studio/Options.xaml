@@ -11,7 +11,7 @@
                       mc:Ignorable="d"
                       Title="{lex:Loc Options}" Height="300" Width="300">
     <Grid>
-        <CheckBox IsChecked="{Binding EditorShowLineNumbers}" Content="Hola"></CheckBox>
+        <CheckBox IsChecked="{Binding EditorShowLineNumbers}" Content="Hola" />
         <Button Click="ButtonBase_OnClick" Content="{lex:Loc New}" Margin="72,166,126,71" />
         <ComboBox x:Name="ComboBoxLanguage" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"
                   Margin="72,203,0,0" />

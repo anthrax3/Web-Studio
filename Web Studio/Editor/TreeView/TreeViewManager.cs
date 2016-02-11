@@ -11,11 +11,12 @@ namespace Web_Studio.Editor.TreeView
     public class TreeViewManager
     {
         /// <summary>
-        /// Nodes of the treeview
+        ///     Nodes of the treeview
         /// </summary>
         public static ObservableCollection<INode> Nodes = new ObservableCollection<INode>();
+
         /// <summary>
-        /// Full path of the project folder
+        ///     Full path of the project folder
         /// </summary>
         private static string fullPath;
 

@@ -7,34 +7,36 @@ using Web_Studio.Utils;
 namespace Web_Studio.Managers
 {
     /// <summary>
-    /// Class to manage settings of one project
+    ///     Class to manage settings of one project
     /// </summary>
     public class ProjectManager
     {
         /// <summary>
-        /// Singleton pattern
-        /// </summary>
-        [JsonIgnore]
-        public static ProjectManager Instance { get; set; } = new ProjectManager();
-        /// <summary>
-        /// Project full path
-        /// </summary>
-        [JsonIgnore]
-        public string FullPath { get; set; }
-        /// <summary>
-        /// Name of project
-        /// </summary>
-        public string Name { get; set; }
-        /// <summary>
-        /// Default constructor (Singleton pattern)
+        ///     Default constructor (Singleton pattern)
         /// </summary>
         private ProjectManager()
         {
-            
         }
 
         /// <summary>
-        /// Create a new project
+        ///     Singleton pattern
+        /// </summary>
+        [JsonIgnore]
+        public static ProjectManager Instance { get; set; } = new ProjectManager();
+
+        /// <summary>
+        ///     Project full path
+        /// </summary>
+        [JsonIgnore]
+        public string FullPath { get; set; }
+
+        /// <summary>
+        ///     Name of project
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        ///     Create a new project
         /// </summary>
         /// <returns></returns>
         public bool Create()
@@ -43,11 +45,11 @@ namespace Web_Studio.Managers
             {
                 Directory.CreateDirectory(Instance.FullPath);
                 //Create project config
-                Json.ObjectToFile(Instance, System.IO.Path.Combine(Instance.FullPath, Instance.Name + ".ws"));
+                Json.ObjectToFile(Instance, Path.Combine(Instance.FullPath, Instance.Name + ".ws"));
 
 
                 //Create source folder
-                string srcPath = Path.Combine(Instance.FullPath, "src");
+                var srcPath = Path.Combine(Instance.FullPath, "src");
                 Directory.CreateDirectory(srcPath);
 
                 //Create js folder
@@ -68,28 +70,23 @@ namespace Web_Studio.Managers
                 Open(Instance.FullPath);
 
                 return true;
-
-
             }
             catch (Exception)
             {
                 return false;
             }
-
         }
 
         /// <summary>
-        /// Open a project, load project config and enable project UI
+        ///     Open a project, load project config and enable project UI
         /// </summary>
         /// <param name="path"></param>
         public static void Open(string path)
         {
             //Load instance
-            Instance = (ProjectManager)Json.FileToObject(Instance, path);
+            Instance = (ProjectManager) Json.FileToObject(Instance, path);
             Instance.FullPath = Path.GetDirectoryName(path);
             TreeViewManager.Create(Path.GetDirectoryName(path));
         }
-
-
     }
 }

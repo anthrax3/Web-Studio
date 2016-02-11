@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using System.Windows;
-using Web_Studio.Managers;
 using WPFLocalizeExtension.Engine;
 using WPFLocalizeExtension.Providers;
 
@@ -12,12 +11,12 @@ namespace Web_Studio
     public partial class Options
     {
         /// <summary>
-        /// Default constructor
+        ///     Default constructor
         /// </summary>
         public Options()
         {
             InitializeComponent();
-            this.DataContext = ConfigManager.Instance;
+            // this.DataContext = ConfigManager.Instance;
             ComboBoxLanguage.ItemsSource = ResxLocalizationProvider.Instance.AvailableCultures;
             //CultureInfo.CurrentUICulture.DisplayName
             ComboBoxLanguage.DisplayMemberPath = "DisplayName";
