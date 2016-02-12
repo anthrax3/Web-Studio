@@ -139,6 +139,9 @@
     <Compile Include="Editor\TreeView\FolderNode.cs" />
     <Compile Include="Editor\TreeView\INode.cs" />
     <Compile Include="Editor\TreeView\TreeViewManager.cs" />
+    <Compile Include="Events\EventSystem.cs" />
+    <Compile Include="Events\FontSizeChanged.cs" />
+    <Compile Include="Events\ShowLineNumbersChanged.cs" />
     <Compile Include="Localization\Strings.es.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -156,6 +159,7 @@
     <Compile Include="Options.xaml.cs">
       <DependentUpon>Options.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Rules\Rules.cs" />
     <Compile Include="Rules\RulesLanguage.cs" />
     <Compile Include="Localization\Strings.Designer.cs">
@@ -164,7 +168,8 @@
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
     <Compile Include="Utils\Json.cs" />
-    <Compile Include="ViewModels\TextEditViewModel.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\OptionsViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -209,6 +214,7 @@
     <EmbeddedResource Include="Localization\Strings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -244,6 +250,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

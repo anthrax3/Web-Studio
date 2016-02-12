@@ -192,4 +192,19 @@
 	<data name="WizardPath" xml:space="preserve">
 		<value>Path:</value>
 	</data>
+	<data name="Editor" xml:space="preserve">
+		<value>Editor</value>
+	</data>
+	<data name="ShowLineNumbers" xml:space="preserve">
+		<value>Show line numbers</value>
+	</data>
+	<data name="FontSize" xml:space="preserve">
+		<value>Font size</value>
+	</data>
+	<data name="Software" xml:space="preserve">
+		<value>Sofware</value>
+	</data>
+	<data name="SelectNewLanguage" xml:space="preserve">
+		<value>Select the software's language</value>
+	</data>
 </root>

@@ -5,16 +5,35 @@
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                       xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
                       xmlns:lex="http://wpflocalizeextension.codeplex.com"
+                      xmlns:viewModels="clr-namespace:Web_Studio.ViewModels"
                       lex:LocalizeDictionary.DesignCulture="es"
                       lex:ResxLocalizationProvider.DefaultAssembly="Web Studio"
                       lex:ResxLocalizationProvider.DefaultDictionary="Strings"
-                      mc:Ignorable="d"
+                      mc:Ignorable="d" TitleCaps="False"
                       Title="{lex:Loc Options}" Height="300" Width="300">
+    <controls:MetroWindow.DataContext>
+        <viewModels:OptionsViewModel></viewModels:OptionsViewModel>
+    </controls:MetroWindow.DataContext>
+    
     <Grid>
-        <CheckBox IsChecked="{Binding EditorShowLineNumbers}" Content="Hola" />
-        <Button Click="ButtonBase_OnClick" Content="{lex:Loc New}" Margin="72,166,126,71" />
-        <ComboBox x:Name="ComboBoxLanguage" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"
-                  Margin="72,203,0,0" />
+        <TabControl Margin="10">
+            <TabItem Header="{lex:Loc Editor}">
+                <StackPanel>
+                    <CheckBox IsChecked="{Binding EditorShowLineNumbers}" Content="{lex:Loc ShowLineNumbers }" Margin="5"/>
+                    <TextBlock Text="{lex:Loc FontSize}" Margin="5"/>
+                    <Slider Minimum="10" Maximum="30" Value="{Binding EditorFontSize}" TickFrequency="2" Margin="5" TickPlacement="BottomRight"></Slider>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="{lex:Loc Software}">
+                <StackPanel>
+                    <TextBlock Text="{lex:Loc SelectNewLanguage}" Margin="5"></TextBlock>
+                    <ComboBox x:Name="ComboBoxLanguage" Margin="5" ItemsSource="{Binding Languages}" DisplayMemberPath="NativeName" SelectedItem="{Binding SelectedLanguage}"/>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+       
+        
+       
 
     </Grid>
 </controls:MetroWindow>

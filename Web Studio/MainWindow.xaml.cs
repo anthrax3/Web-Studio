@@ -24,8 +24,8 @@ namespace Web_Studio
         /// <param name="e"></param>
         private void Options_OnClick(object sender, RoutedEventArgs e)
         {
-            var optionWindow = new Options {Owner = this};
-            optionWindow.ShowDialog();
+            var optionWindow = new Options ();
+            optionWindow.Show();
         }
 
         /// <summary>

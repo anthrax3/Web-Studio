@@ -16,9 +16,10 @@
     lex:ResxLocalizationProvider.DefaultAssembly="Web Studio"
     lex:ResxLocalizationProvider.DefaultDictionary="Strings"
     Title="Web Studio" TitleCaps="False" Height="350" Width="525" WindowState="Maximized">
-    <controls:MetroWindow.Resources>
-        <viewModels:TextEditViewModel x:Key="TextEditViewModel" />
-    </controls:MetroWindow.Resources>
+    <controls:MetroWindow.DataContext>
+        <viewModels:MainWindowViewModel></viewModels:MainWindowViewModel>
+    </controls:MetroWindow.DataContext>
+   
     <Grid>
         <Menu IsMainMenu="True">
             <MenuItem Header="{lex:Loc File}">
@@ -39,7 +40,7 @@
 
             </MenuItem>
             <MenuItem Header="{lex:Loc Edit}">
-                <MenuItem Header="{lex:Loc Options}" Click="Options_OnClick" />
+                <MenuItem Header="{lex:Loc Options}" Click="Options_OnClick"/>
             </MenuItem>
             <MenuItem Header="{lex:Loc View}" />
             <MenuItem Header="{lex:Loc Window}" />
@@ -48,8 +49,7 @@
         <editor:TextEditorMvvm
             FontFamily="Consolas" Margin="120,40,10,0" Foreground="White"
             ShowLineNumbers="{Binding EditorShowLineNumbers}" FontSize="{Binding EditorFontSize}"
-            HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
-            DataContext="{StaticResource TextEditViewModel}" />
+            HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
         <TreeView x:Name="TreeView" HorizontalAlignment="Left" Height="269" Margin="10,29,0,0" VerticalAlignment="Top"
                   Width="100" ItemsSource="{x:Static TreeView:TreeViewManager.Nodes}" Background="White"
                   BorderBrush="Red" Foreground="#FFB88D8D">

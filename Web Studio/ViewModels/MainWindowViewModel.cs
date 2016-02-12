@@ -1,5 +1,8 @@
-﻿using System.Windows.Media;
+﻿using System;
+using System.Windows.Media;
+using Prism.Commands;
 using Prism.Mvvm;
+using Web_Studio.Events;
 using Web_Studio.Properties;
 
 namespace Web_Studio.ViewModels
@@ -7,36 +10,38 @@ namespace Web_Studio.ViewModels
     /// <summary>
     ///     ViewModel for my custom Avalon TextEditor (aka TextEditorMvvm)
     /// </summary>
-    public class TextEditViewModel : BindableBase
+    public class MainWindowViewModel : BindableBase
     {
+       
+
         /// <summary>
         ///     Default constructor, it loads the values from user config.
         /// </summary>
-        public TextEditViewModel()
+        public MainWindowViewModel()
         {
+            EventSystem.Subscribe<FontSizeChanged>(ChangeFont);
+            EventSystem.Subscribe<ShowLineNumbersChanged>(ChangeShowLineNumbers);
             EditorShowLineNumbers = Settings.Default.EditorShowLineNumbers;
             EditorFontSize = Settings.Default.EditorFontSize;
             EditorLinkTextForegroundBrush =
-                (SolidColorBrush) new BrushConverter().ConvertFrom(Settings.Default.EditorLinkTextForegroundBrush);
+                (SolidColorBrush)new BrushConverter().ConvertFrom(Settings.Default.EditorLinkTextForegroundBrush);
         }
 
-        /// <summary>
-        ///     Save to Settings
-        /// </summary>
-        public void Save()
+        private void ChangeShowLineNumbers(ShowLineNumbersChanged obj)
         {
-            Settings.Default.EditorShowLineNumbers = EditorShowLineNumbers;
-            Settings.Default.EditorLinkTextForegroundBrush = EditorLinkTextForegroundBrush.ToString();
-            Settings.Default.EditorFontSize = EditorFontSize;
-            Settings.Default.Save();
+            EditorShowLineNumbers = obj.ShowLineNumbers;
+        }
+
+        private void ChangeFont(FontSizeChanged obj)
+        {
+            EditorFontSize = obj.FontSize;
         }
 
         #region Properties
 
-        /// <summary>
-        ///     var for property EditorShowLineNumbers
-        /// </summary>
         private bool _editorShowLineNumbers;
+        private Brush _editorLinkTextForegroundBrush;
+        private int _editorFontSize;
 
         /// <summary>
         ///     Enable to show line numbers in editor
@@ -47,10 +52,7 @@ namespace Web_Studio.ViewModels
             set { SetProperty(ref _editorShowLineNumbers, value); }
         }
 
-        /// <summary>
-        ///     var for property EditorLinkTextForegroundBrush
-        /// </summary>
-        private Brush _editorLinkTextForegroundBrush;
+        
 
         /// <summary>
         ///     Color for links
@@ -61,10 +63,7 @@ namespace Web_Studio.ViewModels
             set { SetProperty(ref _editorLinkTextForegroundBrush, value); }
         }
 
-        /// <summary>
-        ///     var for property EditorFontSize
-        /// </summary>
-        private int _editorFontSize;
+       
 
         /// <summary>
         ///     Font size in editor
@@ -76,5 +75,6 @@ namespace Web_Studio.ViewModels
         }
 
         #endregion
+
     }
 }
