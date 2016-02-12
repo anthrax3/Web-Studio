@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using Microsoft.Win32;
-using Web_Studio.Managers;
+using Web_Studio.Models;
 
 namespace Web_Studio
 {
@@ -57,7 +57,7 @@ namespace Web_Studio
 
             if (openFile.ShowDialog() == true)
             {
-                ProjectManager.Open(openFile.FileName);
+                ProjectModel.Open(openFile.FileName);
             }
         }
     }

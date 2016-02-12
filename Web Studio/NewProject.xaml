@@ -6,21 +6,36 @@
                       xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
                       xmlns:lex="http://wpflocalizeextension.codeplex.com"
                       xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+                      xmlns:viewModels="clr-namespace:Web_Studio.ViewModels"
+                      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                       lex:LocalizeDictionary.DesignCulture="es"
                       lex:ResxLocalizationProvider.DefaultAssembly="Web Studio"
                       lex:ResxLocalizationProvider.DefaultDictionary="Strings"
-                      mc:Ignorable="d" Height="500" Width="500" ResizeMode="NoResize"
-                      Title="{lex:Loc WizardCreateNewProject}">
+                      mc:Ignorable="d" ResizeMode="NoResize"
+                      Title="{lex:Loc WizardCreateNewProject}" TitleCaps="False">
+    <controls:MetroWindow.DataContext>
+        <viewModels:NewProjectViewModel></viewModels:NewProjectViewModel>
+    </controls:MetroWindow.DataContext>
 
     <xctk:Wizard HelpButtonVisibility="Hidden" CanHelp="False" CancelButtonContent="{lex:Loc Cancel}"
                  BackButtonContent="{lex:Loc Back}"
                  NextButtonContent="{lex:Loc Next}" FinishButtonContent="{lex:Loc Finish}"
                  Background="{DynamicResource WindowBackgroundBrush}"
-                 ExteriorPanelMinWidth="0" BorderBrush="{x:Null}" BorderThickness="0" Name="Wizard"
-                 Finish="Wizard_Finish">
-        <xctk:WizardPage x:Name="IntroPage" Description="{lex:Loc WizardDescription}"
-                         CanSelectNextPage="{Binding ElementName=Window, Path=NextPageEnabled}"
-                         Background="{DynamicResource WindowBackgroundBrush}"
+                 ExteriorPanelMinWidth="0" BorderBrush="{x:Null}" BorderThickness="0" Name="Wizard">
+        <xctk:Wizard.Resources>
+            <Style TargetType="xctk:WizardPage">
+                <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush}"></Setter>
+            </Style>
+        </xctk:Wizard.Resources>
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="Finish">
+                <i:InvokeCommandAction Command="{Binding WizardFinish}"></i:InvokeCommandAction>
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
+        
+        
+        <xctk:WizardPage Description="{lex:Loc WizardDescription}"
+                         CanSelectNextPage="{Binding NextPageEnabled}"
                          HeaderBackground="{DynamicResource AccentColorBrush}">
             <Grid VerticalAlignment="Top">
                 <Grid.ColumnDefinitions>
@@ -33,18 +48,13 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <Label Content="{lex:Loc WizardProjectName}" Grid.Row="0" Grid.Column="0" />
-                <TextBox Name="tbProjectName" Grid.Row="0" Grid.Column="1" TextChanged="TextBox_TextChanged"
-                         Text="{Binding Name}" />
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ProjectName}" />
                 <Label Content="{lex:Loc WizardPath}" Grid.Row="1" Grid.Column="0" />
-                <TextBox Name="tbPath" Grid.Row="1" Grid.Column="1" TextChanged="TextBox_TextChanged"
-                         Text="{Binding FullPath}" />
-                <Button Name="bBrowser" Content="{lex:Loc Browse}" Grid.Row="1" Grid.Column="2"
-                        Click="ButtonBrowser_OnClick" Margin="10,0,0,0" HorizontalAlignment="Left"
-                        VerticalAlignment="Center" />
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ProjectPath}" />
+                <Button Content="{lex:Loc Browse}" Grid.Row="1" Grid.Column="2" Command="{Binding BrowseButton}" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
             </Grid>
         </xctk:WizardPage>
-        <xctk:WizardPage x:Name="Page1" PageType="Interior" Background="{DynamicResource WindowBackgroundBrush}"
-                         CanFinish="True" CanSelectNextPage="False">
+        <xctk:WizardPage x:Name="Page1" PageType="Interior" CanFinish="True" CanSelectNextPage="False">
             <Button>AAAA</Button>
         </xctk:WizardPage>
     </xctk:Wizard>

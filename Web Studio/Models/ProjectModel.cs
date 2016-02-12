@@ -4,17 +4,17 @@ using Newtonsoft.Json;
 using Web_Studio.Editor.TreeView;
 using Web_Studio.Utils;
 
-namespace Web_Studio.Managers
+namespace Web_Studio.Models
 {
     /// <summary>
     ///     Class to manage settings of one project
     /// </summary>
-    public class ProjectManager
+    public class ProjectModel
     {
         /// <summary>
         ///     Default constructor (Singleton pattern)
         /// </summary>
-        private ProjectManager()
+        private ProjectModel()
         {
         }
 
@@ -22,7 +22,7 @@ namespace Web_Studio.Managers
         ///     Singleton pattern
         /// </summary>
         [JsonIgnore]
-        public static ProjectManager Instance { get; set; } = new ProjectManager();
+        public static ProjectModel Instance { get; set; } = new ProjectModel();
 
         /// <summary>
         ///     Project full path
@@ -84,7 +84,7 @@ namespace Web_Studio.Managers
         public static void Open(string path)
         {
             //Load instance
-            Instance = (ProjectManager) Json.FileToObject(Instance, path);
+            Instance = (ProjectModel) Json.FileToObject(Instance, path);
             Instance.FullPath = Path.GetDirectoryName(path);
             TreeViewManager.Create(Path.GetDirectoryName(path));
         }
