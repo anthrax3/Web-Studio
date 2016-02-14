@@ -207,4 +207,10 @@
 	<data name="SelectNewLanguage" xml:space="preserve">
 		<value>Select the software's language</value>
 	</data>
+	<data name="WizardSocial" xml:space="preserve">
+		<value>Social settings</value>
+	</data>
+	<data name="WizardSocialCheckAvailability" xml:space="preserve">
+		<value>Check name availability</value>
+	</data>
 </root>

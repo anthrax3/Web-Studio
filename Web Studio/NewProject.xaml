@@ -7,6 +7,7 @@
                       xmlns:lex="http://wpflocalizeextension.codeplex.com"
                       xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
                       xmlns:viewModels="clr-namespace:Web_Studio.ViewModels"
+                      xmlns:converters="clr-namespace:Web_Studio.Converters"
                       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                       lex:LocalizeDictionary.DesignCulture="es"
                       lex:ResxLocalizationProvider.DefaultAssembly="Web Studio"
@@ -16,47 +17,69 @@
     <controls:MetroWindow.DataContext>
         <viewModels:NewProjectViewModel></viewModels:NewProjectViewModel>
     </controls:MetroWindow.DataContext>
+    <controls:MetroWindow.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" True="Visible" False="Hidden"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverterInverse" True="Hidden" False="Visible"/>
+    </controls:MetroWindow.Resources>
+    <Grid>
+        <xctk:Wizard HelpButtonVisibility="Hidden" CanHelp="False" CancelButtonContent="{lex:Loc Cancel}"
+                     BackButtonContent="{lex:Loc Back}"
+                     NextButtonContent="{lex:Loc Next}" FinishButtonContent="{lex:Loc Finish}"
+                     Background="{DynamicResource WindowBackgroundBrush}"
+                     ExteriorPanelMinWidth="0" BorderBrush="{x:Null}" BorderThickness="0" Name="Wizard">
+            <xctk:Wizard.Resources>
+                <Style TargetType="xctk:WizardPage">
+                    <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush}"></Setter>
+                    <Setter Property="HeaderBackground" Value="{DynamicResource AccentColorBrush}"></Setter>
+                </Style>
+            </xctk:Wizard.Resources>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Finish">
+                    <i:InvokeCommandAction Command="{Binding WizardFinish}"></i:InvokeCommandAction>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
 
-    <xctk:Wizard HelpButtonVisibility="Hidden" CanHelp="False" CancelButtonContent="{lex:Loc Cancel}"
-                 BackButtonContent="{lex:Loc Back}"
-                 NextButtonContent="{lex:Loc Next}" FinishButtonContent="{lex:Loc Finish}"
-                 Background="{DynamicResource WindowBackgroundBrush}"
-                 ExteriorPanelMinWidth="0" BorderBrush="{x:Null}" BorderThickness="0" Name="Wizard">
-        <xctk:Wizard.Resources>
-            <Style TargetType="xctk:WizardPage">
-                <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush}"></Setter>
-            </Style>
-        </xctk:Wizard.Resources>
-        <i:Interaction.Triggers>
-            <i:EventTrigger EventName="Finish">
-                <i:InvokeCommandAction Command="{Binding WizardFinish}"></i:InvokeCommandAction>
-            </i:EventTrigger>
-        </i:Interaction.Triggers>
-        
-        
-        <xctk:WizardPage Description="{lex:Loc WizardDescription}"
-                         CanSelectNextPage="{Binding NextPageEnabled}"
-                         HeaderBackground="{DynamicResource AccentColorBrush}">
-            <Grid VerticalAlignment="Top">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="2*" />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <Label Content="{lex:Loc WizardProjectName}" Grid.Row="0" Grid.Column="0" />
-                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ProjectName}" />
-                <Label Content="{lex:Loc WizardPath}" Grid.Row="1" Grid.Column="0" />
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ProjectPath}" />
-                <Button Content="{lex:Loc Browse}" Grid.Row="1" Grid.Column="2" Command="{Binding BrowseButton}" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
-            </Grid>
-        </xctk:WizardPage>
-        <xctk:WizardPage x:Name="Page1" PageType="Interior" CanFinish="True" CanSelectNextPage="False">
-            <Button>AAAA</Button>
-        </xctk:WizardPage>
-    </xctk:Wizard>
 
+            <xctk:WizardPage x:Name="Page1" Description="{lex:Loc WizardDescription}" PageType="Interior" CanSelectNextPage="{Binding Page1IsChecked}">
+                <Grid VerticalAlignment="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Label Content="{lex:Loc WizardProjectName}" Grid.Row="0" Grid.Column="0" Margin="0,0,0,10" />
+                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ProjectName, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center" />
+                    <Label Content="{lex:Loc WizardPath}" Grid.Row="1" Grid.Column="0" />
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ProjectPath}" />
+                    <Button Content="{lex:Loc Browse}" Grid.Row="1" Grid.Column="2" Command="{Binding BrowseButton}" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                </Grid>
+            </xctk:WizardPage>
+            <xctk:WizardPage x:Name="Page2" PageType="Interior" CanFinish="True" CanSelectNextPage="False" Description="{lex:Loc WizardSocial}">
+                <StackPanel>
+                    <Button Command="{Binding SocialCheckAvailability}" Content="{lex:Loc WizardSocialCheckAvailability}" HorizontalAlignment="Center" FontSize="18.667" Margin="0,0,0,10"></Button>
+                    <ListView ItemsSource="{Binding SocialCheckItems}" BorderThickness="0">
+                        <ListView.ItemTemplate>
+                        <DataTemplate>
+                           <Grid>
+                             <Grid.ColumnDefinitions>
+                                 <ColumnDefinition></ColumnDefinition>
+                                 <ColumnDefinition></ColumnDefinition>
+                                 <ColumnDefinition></ColumnDefinition>
+                             </Grid.ColumnDefinitions>
+                                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding ServiceName}" Grid.Column="0"></TextBlock>
+                                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding NameInService}" Grid.Column="1"></TextBlock>
+                                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="{Binding IsAvailable, Converter={StaticResource BoolToVisibilityConverter}}" Text="" FontFamily="Segoe MDL2 Assets" Grid.Column="2" Foreground="Green"></TextBlock>
+                                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="{Binding IsAvailable, Converter={StaticResource BoolToVisibilityConverterInverse}}" Text="" FontFamily="Segoe MDL2 Assets" Grid.Column="2" Foreground="Red"></TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+            </xctk:WizardPage>
+        </xctk:Wizard>
+    </Grid>
 </controls:MetroWindow>

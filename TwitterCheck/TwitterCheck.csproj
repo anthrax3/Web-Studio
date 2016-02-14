@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2FD4BCA2-2813-40B9-A404-A4B4E442BBE9}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{26B3EC45-C8D3-4620-AFDC-6CBAAEF93245}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Generador_Reglas</RootNamespace>
-    <AssemblyName>Generador Reglas</AssemblyName>
+    <RootNamespace>TwitterCheck</RootNamespace>
+    <AssemblyName>TwitterCheck</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -38,6 +35,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -47,16 +45,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="TwitterCheck.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reglas\Rules.cs" />
-    <Compile Include="Reglas\RulesLanguage.cs" />
+    <Compile Include="TwitterJson.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <ProjectReference Include="..\SocialCheckInterface\SocialCheckInterface.csproj">
+      <Project>{ee4e6c9a-5fc8-4897-9ae8-321ef92f17da}</Project>
+      <Name>SocialCheckInterface</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>echo f | xcopy /y "$(TargetPath)" "$(SolutionDir)SocialTest\bin\Debug\Plugins\$(TargetFileName)"
+echo f | xcopy /y "$(TargetPath)" "$(SolutionDir)SocialTest\bin\Release\Plugins\$(TargetFileName)"
+echo f | xcopy /y "$(TargetPath)" "$(SolutionDir)Web Studio\bin\Debug\Plugins\$(TargetFileName)"
+echo f | xcopy /y "$(TargetPath)" "$(SolutionDir)Web Studio\bin\Release\Plugins\$(TargetFileName)"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

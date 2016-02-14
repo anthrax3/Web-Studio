@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Forms;
 using Prism.Commands;
 using Prism.Mvvm;
+using SocialCheckInterface;
 using Web_Studio.Models;
 
 namespace Web_Studio.ViewModels
@@ -17,9 +19,16 @@ namespace Web_Studio.ViewModels
         /// </summary>
         public NewProjectViewModel()
         {
-            BrowseButton = new DelegateCommand(BrowseClick);
             WizardFinish = new DelegateCommand(WizardFinishRun);
+            BrowseButton = new DelegateCommand(BrowseRun);
+            SocialCheckAvailability = new DelegateCommand(SocialCheckAvailabilityRun);
+            SocialCheckItems = new ObservableCollection<ISocialCheck>();
         }
+
+        /// <summary>
+        /// Command to manage wizard finish event
+        /// </summary>
+        public DelegateCommand WizardFinish { get; private set; }
 
         /// <summary>
         /// Process wizard finish event
@@ -31,10 +40,11 @@ namespace Web_Studio.ViewModels
             ProjectModel.Instance.Create();
         }
 
+        #region Page 1
         /// <summary>
         /// Browse for project folder
         /// </summary>
-        private void BrowseClick()
+        private void BrowseRun()
         {
             try
             {
@@ -82,14 +92,14 @@ namespace Web_Studio.ViewModels
                 CheckPage1();
             }
         }
-        private bool _nextPageEnabled;
+        private bool _page1IsChecked;
         /// <summary>
-        ///     Enable next button in wizard
+        ///     Enable next button in wizard from page1 to page2
         /// </summary>
-        public bool NextPageEnabled
+        public bool Page1IsChecked
         {
-            get { return _nextPageEnabled; }
-            set { SetProperty(ref _nextPageEnabled, value); }
+            get { return _page1IsChecked; }
+            set { SetProperty(ref _page1IsChecked, value); }
         }
 
         /// <summary>
@@ -99,11 +109,11 @@ namespace Web_Studio.ViewModels
         {
             if (ProjectName.Length != 0 && ProjectPath.Length != 0)
             {
-                NextPageEnabled = true;
+                Page1IsChecked = true;
             }
             else
             {
-                NextPageEnabled = false;
+                Page1IsChecked = false;
             }
         }
 
@@ -111,10 +121,39 @@ namespace Web_Studio.ViewModels
         /// Browse for project's folder
         /// </summary>
         public DelegateCommand BrowseButton { get; private set; }
+        #endregion
+
+
+
+        #region Page 2
         /// <summary>
-        /// Command to manage wizard finish event
+        /// Command to manage social check button click
         /// </summary>
-        public DelegateCommand WizardFinish { get; private set; }
+        public DelegateCommand SocialCheckAvailability { get; private set; }
+
+        private void SocialCheckAvailabilityRun()
+        {
+            GenericMefPluginLoader<ISocialCheck> loader = new GenericMefPluginLoader<ISocialCheck>("Plugins");
+            string name = ProjectName.Replace(" ", String.Empty);
+            foreach (ISocialCheck sc in loader.Plugins)
+            {
+                sc.CheckAvailability(name);
+                SocialCheckItems.Add(sc);
+            }
+
+        }
+
+        private ObservableCollection<ISocialCheck> _socialCheckItems;
+        /// <summary>
+        /// Collection of plugins
+        /// </summary>
+        public ObservableCollection<ISocialCheck> SocialCheckItems
+        {
+            get { return _socialCheckItems; }
+            set { SetProperty(ref _socialCheckItems, value); }
+        }
+
+        #endregion
 
     }
 }
