@@ -6,6 +6,9 @@ using SocialCheckInterface;
 
 namespace DomainCheck
 {
+    /// <summary>
+    ///     class to check domain availability
+    /// </summary>
     [Export(typeof (ISocialCheck))]
     public class DomainCheck : ISocialCheck
     {

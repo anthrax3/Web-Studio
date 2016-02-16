@@ -138,10 +138,6 @@
     <Compile Include="Converters\BooleanConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Editor\TextEditorMVVM.cs" />
-    <Compile Include="Editor\TreeView\FileNode.cs" />
-    <Compile Include="Editor\TreeView\FolderNode.cs" />
-    <Compile Include="Editor\TreeView\INode.cs" />
-    <Compile Include="Editor\TreeView\TreeViewManager.cs" />
     <Compile Include="Events\EventSystem.cs" />
     <Compile Include="Events\FontSizeChanged.cs" />
     <Compile Include="Events\ShowLineNumbersChanged.cs" />

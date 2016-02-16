@@ -6,18 +6,11 @@ namespace SocialTest
 {
     public class GenericMEFPluginLoader<T>
     {
-        private CompositionContainer _Container;
-
-        [ImportMany]
-        public IEnumerable<T> Plugins
-        {
-            get;
-            set;
-        }
+        private readonly CompositionContainer _Container;
 
         public GenericMEFPluginLoader(string path)
         {
-            DirectoryCatalog directoryCatalog = new DirectoryCatalog(path);
+            var directoryCatalog = new DirectoryCatalog(path);
 
             //An aggregate catalog that combines multiple catalogs
             var catalog = new AggregateCatalog(directoryCatalog);
@@ -28,5 +21,8 @@ namespace SocialTest
             //Fill the imports of this object
             _Container.ComposeParts(this);
         }
+
+        [ImportMany]
+        public IEnumerable<T> Plugins { get; set; }
     }
 }

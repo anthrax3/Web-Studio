@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using Newtonsoft.Json;
-using Web_Studio.Editor.TreeView;
 using Web_Studio.Utils;
 
 namespace Web_Studio.Models
@@ -86,7 +85,7 @@ namespace Web_Studio.Models
             //Load instance
             Instance = (ProjectModel) Json.FileToObject(Instance, path);
             Instance.FullPath = Path.GetDirectoryName(path);
-            TreeViewManager.Create(Path.GetDirectoryName(path));
+            //TreeViewManager.Create(Path.GetDirectoryName(path));
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace Web_Studio.Editor.TreeView
+namespace TreeViewExplorerControl
 {
     /// <summary>
-    ///     Use this class is the node is a folder
+    ///     Class for folders
     /// </summary>
     public class FolderNode : INode
     {
@@ -16,18 +16,18 @@ namespace Web_Studio.Editor.TreeView
         }
 
         /// <summary>
-        ///     Collection for subfolders
-        /// </summary>
-        public ObservableCollection<INode> Nodes { get; set; }
-
-        /// <summary>
-        ///     Full path of the folder
+        ///     Full path to folder
         /// </summary>
         public string FullPath { get; set; }
 
         /// <summary>
-        ///     Name of the folder
+        ///     Folder name
         /// </summary>
-        public string Label { get; set; }
+        public string Name { get; set; }
+
+        /// <summary>
+        ///     Files and folders inside this folder
+        /// </summary>
+        public ObservableCollection<INode> Nodes { get; set; }
     }
 }

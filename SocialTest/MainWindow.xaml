@@ -8,8 +8,7 @@
         Title="MainWindow" Height="350" Width="525">
     <StackPanel>
         <TextBlock>Introduce el nombre a probar</TextBlock>
-        <TextBox KeyDown="TextBox_KeyDown"></TextBox>
-        <StackPanel x:Name="mySC">
-        </StackPanel>
+        <TextBox KeyDown="TextBox_KeyDown" />
+        <StackPanel x:Name="mySC" />
     </StackPanel>
 </Window>

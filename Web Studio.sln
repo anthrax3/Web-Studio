@@ -16,7 +16,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreeView", "TreeView\TreeVi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pruebas", "Pruebas", "{E156449B-B804-420C-AFCC-A8E54FDB0942}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SocialCheckPlugin", "SocialCheckPlugin", "{97FCEAD0-DF6F-4DC7-833D-1459028A2C58}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SocialCheckPlugins", "SocialCheckPlugins", "{97FCEAD0-DF6F-4DC7-833D-1459028A2C58}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocialCheckInterface", "SocialCheckInterface\SocialCheckInterface.csproj", "{EE4E6C9A-5FC8-4897-9AE8-321EF92F17DA}"
 EndProject
@@ -27,6 +27,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterCheck", "TwitterCheck\TwitterCheck.csproj", "{26B3EC45-C8D3-4620-AFDC-6CBAAEF93245}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FacebookCheck", "FacebookCheck\FacebookCheck.csproj", "{646C53E8-9E7D-439C-90E6-BACCEADAE852}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreeViewExplorerControl", "TreeViewExplorerControl\TreeViewExplorerControl.csproj", "{C9A42623-7CCB-406B-BB6C-1990CAA8CD02}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Controls", "Controls", "{1D77347C-3086-4AC7-A070-BF1627A0CBC8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -66,6 +70,10 @@ Global
 		{646C53E8-9E7D-439C-90E6-BACCEADAE852}.Debug|Any CPU.Build.0 = Release|Any CPU
 		{646C53E8-9E7D-439C-90E6-BACCEADAE852}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{646C53E8-9E7D-439C-90E6-BACCEADAE852}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9A42623-7CCB-406B-BB6C-1990CAA8CD02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9A42623-7CCB-406B-BB6C-1990CAA8CD02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9A42623-7CCB-406B-BB6C-1990CAA8CD02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9A42623-7CCB-406B-BB6C-1990CAA8CD02}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -78,5 +86,6 @@ Global
 		{20D258BB-B13C-43EB-BC7E-2592E2460046} = {97FCEAD0-DF6F-4DC7-833D-1459028A2C58}
 		{26B3EC45-C8D3-4620-AFDC-6CBAAEF93245} = {97FCEAD0-DF6F-4DC7-833D-1459028A2C58}
 		{646C53E8-9E7D-439C-90E6-BACCEADAE852} = {97FCEAD0-DF6F-4DC7-833D-1459028A2C58}
+		{C9A42623-7CCB-406B-BB6C-1990CAA8CD02} = {1D77347C-3086-4AC7-A070-BF1627A0CBC8}
 	EndGlobalSection
 EndGlobal

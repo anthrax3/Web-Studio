@@ -5,7 +5,10 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Security.Permissions;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
+using Prism.Mvvm;
 using TreeView.Annotations;
 
 namespace TreeView
@@ -13,79 +16,22 @@ namespace TreeView
     /// <summary>
     /// Lógica de interacción para MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : INotifyPropertyChanged
+    public partial class MainWindow : Window
     {
-        private ObservableCollection<INode> m_folders;
-
-        public ObservableCollection<INode> Nodes
-        {
-            get { return m_folders; }
-            set
-            {
-                m_folders = value;
-                OnPropertyChanged("Nodes");
-            }
-        }
-        public string path = @"C:\Users\JORGE\Desktop\hola";
+        private ViewModel vm;
 
         public MainWindow()
         {
             InitializeComponent();
-     
-            //Revisamos esta ruta
-            Nodes = new ObservableCollection<INode>();
-            FileSystemWatcher watcher = new FileSystemWatcher(path);
-
-            watcher.IncludeSubdirectories = true;
-            watcher.NotifyFilter = NotifyFilters.DirectoryName | NotifyFilters.FileName ;
-
-            watcher.Changed += WatcherOnChanged;
-            watcher.Created += WatcherOnChanged;
-            watcher.Deleted += WatcherOnChanged;
-            watcher.Renamed += WatcherOnChanged;
-
-            // Begin watching.
-            watcher.EnableRaisingEvents = true;
-
-            generateTree(path,Nodes);
-            TreeView.ItemsSource = Nodes;
+            vm = new ViewModel();
+            this.DataContext = vm;
+            vm.Paths = @"C:\Users\JORGE\Desktop\hola";
         }
 
-        private void WatcherOnChanged(object sender, FileSystemEventArgs e)
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            Dispatcher.BeginInvoke((Action)(() =>
-            {
-                Nodes.Clear();
-                generateTree(path, Nodes);
-            }));
+            vm.Paths = @"D:\Captures";
         }
-
-        public void generateTree(string path, ObservableCollection<INode> Nodes )
-        {
-           // Nodes.Add(new Node {FullPath = path,Label = System.IO.Path.GetFileName(path)});
-            //Adding folders
-            foreach (string directory in Directory.GetDirectories(path))
-            {
-                var directoryNode = new Node {FullPath = directory, Label = System.IO.Path.GetFileName(directory)};
-                generateTree(directory,directoryNode.Nodes);
-                Nodes.Add(directoryNode);
-
-            }
-
-            //Adding files
-            foreach (string file in Directory.GetFiles(path))
-            {
-                Nodes.Add(new Node {FullPath = file,Label = System.IO.Path.GetFileName(file)});
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-   }
+    }
 }
 

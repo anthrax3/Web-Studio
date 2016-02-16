@@ -7,7 +7,6 @@
     xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
     xmlns:Reglas="clr-namespace:Web_Studio.Reglas"
-    xmlns:TreeView="clr-namespace:Web_Studio.Editor.TreeView"
     xmlns:viewModels="clr-namespace:Web_Studio.ViewModels"
     xmlns:editor="clr-namespace:Web_Studio.Editor"
     x:Class="Web_Studio.MainWindow"
@@ -50,16 +49,7 @@
             FontFamily="Consolas" Margin="120,40,10,0" Foreground="White"
             ShowLineNumbers="{Binding EditorShowLineNumbers}" FontSize="{Binding EditorFontSize}"
             HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
-        <TreeView x:Name="TreeView" HorizontalAlignment="Left" Height="269" Margin="10,29,0,0" VerticalAlignment="Top"
-                  Width="100" ItemsSource="{x:Static TreeView:TreeViewManager.Nodes}" Background="White"
-                  BorderBrush="Red" Foreground="#FFB88D8D">
-            <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding Nodes}">
-                    <TreeViewItem Header="{Binding Label}" />
-                </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
-
-        </TreeView>
+       <!-- TreeView -->
 
     </Grid>
 </controls:MetroWindow>
