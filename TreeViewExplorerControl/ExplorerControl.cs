@@ -178,10 +178,13 @@ namespace TreeViewExplorerControl
             set
             {
                 SetValue(PathToWatchProperty, value);
-                _watcher.Path = value;
-                _watcher.EnableRaisingEvents = true;
-                Nodes.Clear();
-                GenerateTree(PathToWatch, Nodes);
+                if (value != null)
+                {
+                    _watcher.Path = value;
+                    _watcher.EnableRaisingEvents = true;
+                    Nodes.Clear();
+                    GenerateTree(PathToWatch, Nodes);
+                }
             }
         }
 
