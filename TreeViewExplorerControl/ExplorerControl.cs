@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 /*
     ///     Realice los pasos 1a o 1b y luego 2 para usar este control personalizado en un archivo XAML.
@@ -87,15 +88,19 @@ namespace TreeViewExplorerControl
             RoutedPropertyChangedEventArgs<object> routedPropertyChangedEventArgs)
         {
             var selectedNode = (INode) ((TreeView) sender).SelectedItem;
-            SelectedItemName = selectedNode?.Name;
-            SelectedItemPath = selectedNode?.FullPath;
-            if (selectedNode is FolderNode)
+            if (selectedNode != null) //Check null avoid Null exception
             {
-                SelectedItemIsFolder = true;
-            }
-            else
-            {
-                SelectedItemIsFolder = false;
+                SelectedItemName = selectedNode?.Name;
+                SelectedItemPath = selectedNode?.FullPath;
+                if (selectedNode is FolderNode)
+                {
+                    SelectedItemIsFolder = true;
+                }
+                else
+                {
+                    SelectedItemIsFolder = false;
+                }
+                this.SelectedItemChanged.Execute(null);
             }
         }
 
@@ -137,6 +142,8 @@ namespace TreeViewExplorerControl
 
         #region Dependency Properties
 
+        // We need two way binding because we need to update the property value in the vm from this control 
+
         /// <summary>
         ///     Dependency property to get and set the path to watch
         /// </summary>
@@ -155,19 +162,27 @@ namespace TreeViewExplorerControl
         ///     Dependency property for SelectedItemName
         /// </summary>
         public static readonly DependencyProperty SelectedItemNameProperty =
-            DependencyProperty.Register("SelectedItemName", typeof (string), typeof (ExplorerControl));
+            DependencyProperty.Register("SelectedItemName", typeof (string), typeof (ExplorerControl), 
+                new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, SelectedItemChanges));
+
+        private static void SelectedItemChanges(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            //Do nothing, it's readonly from source
+        }
 
         /// <summary>
         ///     Dependency property for SelectedItemPath
         /// </summary>
         public static readonly DependencyProperty SelectedItemPathProperty =
-            DependencyProperty.Register("SelectedItemPath", typeof (string), typeof (ExplorerControl));
+            DependencyProperty.Register("SelectedItemPath", typeof(string), typeof(ExplorerControl),
+                new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, SelectedItemChanges));
 
         /// <summary>
         ///     Dependency property for SelectedItemIsFolder
         /// </summary>
         public static readonly DependencyProperty SelectedItemIsFolderProperty =
-            DependencyProperty.Register("SelectedItemIsFolder", typeof (bool), typeof (ExplorerControl));
+            DependencyProperty.Register("SelectedItemIsFolder", typeof(bool), typeof(ExplorerControl),
+                new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, SelectedItemChanges));
 
         /// <summary>
         ///     Property to get and set the path to watch and show in the explorer control
@@ -194,7 +209,7 @@ namespace TreeViewExplorerControl
         public string SelectedItemName
         {
             get { return (string) GetValue(SelectedItemNameProperty); }
-            private set { SetValue(SelectedItemNameProperty, value); }
+            set { SetValue(SelectedItemNameProperty, value); }
         }
 
         /// <summary>
@@ -203,7 +218,7 @@ namespace TreeViewExplorerControl
         public string SelectedItemPath
         {
             get { return (string) GetValue(SelectedItemPathProperty); }
-            private set { SetValue(SelectedItemPathProperty, value); }
+            set { SetValue(SelectedItemPathProperty, value); }
         }
 
         /// <summary>
@@ -212,7 +227,21 @@ namespace TreeViewExplorerControl
         public bool SelectedItemIsFolder
         {
             get { return (bool) GetValue(SelectedItemIsFolderProperty); }
-            private set { SetValue(SelectedItemIsFolderProperty, value); }
+            set { SetValue(SelectedItemIsFolderProperty, value); }
+        }
+
+        /// <summary>
+        /// Dependency Property to manage the selected item changed event
+        /// </summary>
+        public static DependencyProperty SelectedItemChangedProperty = DependencyProperty.Register("SelectedItemChanged",typeof(ICommand),typeof(ExplorerControl));
+
+        /// <summary>
+        /// Command to manage the selected item changed event
+        /// </summary>
+        public ICommand SelectedItemChanged
+        {
+            get { return (ICommand) GetValue(SelectedItemChangedProperty); }
+            set { SetValue(SelectedItemChangedProperty,value);}
         }
 
         #endregion

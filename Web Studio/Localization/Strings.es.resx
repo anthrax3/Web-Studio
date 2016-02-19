@@ -213,4 +213,7 @@
 	<data name="WizardSocialCheckAvailability" xml:space="preserve">
 		<value>Comprobar la disponibilidad del nombre</value>
 	</data>
+	<data name="FileExplorer" xml:space="preserve">
+		<value>Explorador de archivos</value>
+	</data>
 </root>

@@ -213,4 +213,7 @@
 	<data name="WizardSocialCheckAvailability" xml:space="preserve">
 		<value>Check name availability</value>
 	</data>
+	<data name="FileExplorer" xml:space="preserve">
+		<value>File explorer</value>
+	</data>
 </root>
