@@ -1,6 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Linq;
+﻿using System.Globalization;
 using System.Threading;
 using System.Windows;
 using Web_Studio.Properties;
@@ -15,7 +13,7 @@ namespace Web_Studio
     public partial class App : Application
     {
         /// <summary>
-        /// Config startup language
+        ///     Config startup language
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -32,7 +30,7 @@ namespace Web_Studio
         }
 
         /// <summary>
-        /// Save data before close
+        ///     Save data before close
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

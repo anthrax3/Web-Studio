@@ -1,9 +1,4 @@
-﻿using System.IO;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Forms;
-
-namespace Web_Studio
+﻿namespace Web_Studio
 {
     /// <summary>
     ///     Lógica de interacción para NewProject.xaml
@@ -17,8 +12,5 @@ namespace Web_Studio
         {
             InitializeComponent();
         }
-
-     
-        
     }
 }

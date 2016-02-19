@@ -1,13 +1,13 @@
 ﻿namespace Web_Studio.Events
 {
     /// <summary>
-    /// Font size changed event
+    ///     Font size changed event
     /// </summary>
     public class FontSizeChanged
     {
         /// <summary>
-        /// New font size
+        ///     New font size
         /// </summary>
-         public int FontSize { get; set; }
+        public int FontSize { get; set; }
     }
 }

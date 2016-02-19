@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using Microsoft.Win32;
 using Web_Studio.Models;
 using Web_Studio.ViewModels;
@@ -26,7 +25,7 @@ namespace Web_Studio
         /// <param name="e"></param>
         private void Options_OnClick(object sender, RoutedEventArgs e)
         {
-            var optionWindow = new Options ();
+            var optionWindow = new Options();
             optionWindow.Show();
         }
 
@@ -59,10 +58,9 @@ namespace Web_Studio
 
             if (openFile.ShowDialog() == true)
             {
-                ProjectModel projectModel = new ProjectModel();
+                var projectModel = new ProjectModel();
                 projectModel.Open(openFile.FileName);
-                ((MainWindowViewModel) this.DataContext).ProjectPath = projectModel.FullPath;
-
+                ((MainWindowViewModel) DataContext).ProjectPath = projectModel.FullPath;
             }
         }
 

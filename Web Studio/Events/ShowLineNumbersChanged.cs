@@ -1,13 +1,13 @@
 ﻿namespace Web_Studio.Events
 {
     /// <summary>
-    /// Show line numbers event
+    ///     Show line numbers event
     /// </summary>
     public class ShowLineNumbersChanged
     {
         /// <summary>
-        /// new value
+        ///     new value
         /// </summary>
-        public bool ShowLineNumbers { get; set; } 
+        public bool ShowLineNumbers { get; set; }
     }
 }

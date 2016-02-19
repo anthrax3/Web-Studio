@@ -10,12 +10,12 @@ using Web_Studio.Models;
 namespace Web_Studio.ViewModels
 {
     /// <summary>
-    /// New project view model
+    ///     New project view model
     /// </summary>
     public class NewProjectViewModel : BindableBase
     {
         /// <summary>
-        /// default constructor
+        ///     default constructor
         /// </summary>
         public NewProjectViewModel()
         {
@@ -26,12 +26,12 @@ namespace Web_Studio.ViewModels
         }
 
         /// <summary>
-        /// Command to manage wizard finish event
+        ///     Command to manage wizard finish event
         /// </summary>
         public DelegateCommand WizardFinish { get; private set; }
 
         /// <summary>
-        /// Process wizard finish event
+        ///     Process wizard finish event
         /// </summary>
         private void WizardFinishRun()
         {
@@ -41,8 +41,9 @@ namespace Web_Studio.ViewModels
         }
 
         #region Page 1
+
         /// <summary>
-        /// Browse for project folder
+        ///     Browse for project folder
         /// </summary>
         private void BrowseRun()
         {
@@ -51,7 +52,7 @@ namespace Web_Studio.ViewModels
                 var folderBrowserDialog = new FolderBrowserDialog();
                 var result = folderBrowserDialog.ShowDialog();
 
-                if (result == System.Windows.Forms.DialogResult.OK)
+                if (result == DialogResult.OK)
                 {
                     ProjectPath = folderBrowserDialog.SelectedPath;
                 }
@@ -63,8 +64,9 @@ namespace Web_Studio.ViewModels
         }
 
         private string _projectName;
+
         /// <summary>
-        /// Name of the project
+        ///     Name of the project
         /// </summary>
         public string ProjectName
         {
@@ -74,13 +76,13 @@ namespace Web_Studio.ViewModels
                 SetProperty(ref _projectName, value);
                 ProjectModel.Instance.Name = value;
                 CheckPage1();
-
             }
         }
 
         private string _projectPath;
+
         /// <summary>
-        /// Path to the project
+        ///     Path to the project
         /// </summary>
         public string ProjectPath
         {
@@ -92,7 +94,9 @@ namespace Web_Studio.ViewModels
                 CheckPage1();
             }
         }
+
         private bool _page1IsChecked;
+
         /// <summary>
         ///     Enable next button in wizard from page1 to page2
         /// </summary>
@@ -103,7 +107,7 @@ namespace Web_Studio.ViewModels
         }
 
         /// <summary>
-        /// Check method to enable navigation from page1 to page2
+        ///     Check method to enable navigation from page1 to page2
         /// </summary>
         private void CheckPage1()
         {
@@ -118,34 +122,34 @@ namespace Web_Studio.ViewModels
         }
 
         /// <summary>
-        /// Browse for project's folder
+        ///     Browse for project's folder
         /// </summary>
         public DelegateCommand BrowseButton { get; private set; }
+
         #endregion
 
-
-
         #region Page 2
+
         /// <summary>
-        /// Command to manage social check button click
+        ///     Command to manage social check button click
         /// </summary>
         public DelegateCommand SocialCheckAvailability { get; private set; }
 
         private void SocialCheckAvailabilityRun()
         {
-            GenericMefPluginLoader<ISocialCheck> loader = new GenericMefPluginLoader<ISocialCheck>("Plugins");
-            string name = ProjectName.Replace(" ", String.Empty);
-            foreach (ISocialCheck sc in loader.Plugins)
+            var loader = new GenericMefPluginLoader<ISocialCheck>("Plugins");
+            var name = ProjectName.Replace(" ", string.Empty);
+            foreach (var sc in loader.Plugins)
             {
                 sc.CheckAvailability(name);
                 SocialCheckItems.Add(sc);
             }
-
         }
 
         private ObservableCollection<ISocialCheck> _socialCheckItems;
+
         /// <summary>
-        /// Collection of plugins
+        ///     Collection of plugins
         /// </summary>
         public ObservableCollection<ISocialCheck> SocialCheckItems
         {
@@ -154,6 +158,5 @@ namespace Web_Studio.ViewModels
         }
 
         #endregion
-
     }
 }

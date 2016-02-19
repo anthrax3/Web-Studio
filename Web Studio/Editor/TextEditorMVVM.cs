@@ -1,9 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Media;
-using System.Xml;
 using ICSharpCode.AvalonEdit;
-using ICSharpCode.AvalonEdit.Highlighting;
-using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 
 namespace Web_Studio.Editor
 {
@@ -12,17 +9,6 @@ namespace Web_Studio.Editor
     /// </summary>
     public class TextEditorMvvm : TextEditor
     {
-        /// <summary>
-        ///     Default constructor, it loads custom styles
-        /// </summary>
-        public TextEditorMvvm()
-        {
-            using (var reader = XmlReader.Create("Editor/SyntaxHighlighter/CSS.xshd"))
-            {
-                SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
-            }
-        }
-
         #region NewProperties
 
         /// <summary>

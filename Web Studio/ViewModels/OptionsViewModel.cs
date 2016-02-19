@@ -1,21 +1,25 @@
 ﻿using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Windows.Controls;
 using Prism.Mvvm;
 using Web_Studio.Events;
 using Web_Studio.Properties;
 using WPFLocalizeExtension.Engine;
-using WPFLocalizeExtension.Providers;
 
 namespace Web_Studio.ViewModels
 {
     /// <summary>
-    /// ViewModel for Option Window
+    ///     ViewModel for Option Window
     /// </summary>
     public class OptionsViewModel : BindableBase
     {
+        private int _editorFontSize;
+
+        private bool _editorShowLineNumbers;
+
+        private CultureInfo _selectedLanguage;
+
         /// <summary>
-        /// Default constructor
+        ///     Default constructor
         /// </summary>
         public OptionsViewModel()
         {
@@ -25,33 +29,27 @@ namespace Web_Studio.ViewModels
             Languages = LocalizeDictionary.Instance.MergedAvailableCultures;
         }
 
-        private CultureInfo _selectedLanguage;
-
         /// <summary>
-        /// Property to mange app language
+        ///     Property to mange app language
         /// </summary>
         public CultureInfo SelectedLanguage
         {
             get { return _selectedLanguage; }
             set
             {
-
                 LocalizeDictionary.Instance.SetCurrentThreadCulture = true;
                 LocalizeDictionary.Instance.Culture = value;
                 SetProperty(ref _selectedLanguage, value);
             }
-            
         }
 
         /// <summary>
-        /// Available lenguages
+        ///     Available lenguages
         /// </summary>
-        public ObservableCollection<CultureInfo> Languages { get; set; } 
-
-        private bool _editorShowLineNumbers;
+        public ObservableCollection<CultureInfo> Languages { get; set; }
 
         /// <summary>
-        /// Enable o disable show line numbers in the editor
+        ///     Enable o disable show line numbers in the editor
         /// </summary>
         public bool EditorShowLineNumbers
         {
@@ -62,15 +60,13 @@ namespace Web_Studio.ViewModels
                 {
                     SetProperty(ref _editorShowLineNumbers, value);
                     Settings.Default.EditorShowLineNumbers = EditorShowLineNumbers;
-                    EventSystem.Publish<ShowLineNumbersChanged>(new ShowLineNumbersChanged {ShowLineNumbers = value});
+                    EventSystem.Publish(new ShowLineNumbersChanged {ShowLineNumbers = value});
                 }
             }
         }
 
-        private int _editorFontSize;
-
         /// <summary>
-        /// Manage font size in the editor
+        ///     Manage font size in the editor
         /// </summary>
         public int EditorFontSize
         {
@@ -81,7 +77,7 @@ namespace Web_Studio.ViewModels
                 {
                     SetProperty(ref _editorFontSize, value);
                     Settings.Default.EditorFontSize = EditorFontSize;
-                    EventSystem.Publish<FontSizeChanged>(new FontSizeChanged { FontSize = value });
+                    EventSystem.Publish(new FontSizeChanged {FontSize = value});
                 }
             }
         }

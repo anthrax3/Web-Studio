@@ -19,12 +19,12 @@
     lex:ResxLocalizationProvider.DefaultDictionary="Strings"
     Title="Web Studio" TitleCaps="False" Height="350" Width="525" WindowState="Maximized">
     <controls:MetroWindow.DataContext>
-        <viewModels:MainWindowViewModel></viewModels:MainWindowViewModel>
+        <viewModels:MainWindowViewModel />
     </controls:MetroWindow.DataContext>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <Menu IsMainMenu="True" Grid.Row="0">
             <MenuItem Header="{lex:Loc File}">
@@ -45,39 +45,43 @@
 
             </MenuItem>
             <MenuItem Header="{lex:Loc Edit}">
-                <MenuItem Header="{lex:Loc Options}" Click="Options_OnClick"/>
+                <MenuItem Header="{lex:Loc Options}" Click="Options_OnClick" />
             </MenuItem>
             <MenuItem Header="{lex:Loc View}" />
             <MenuItem Header="{lex:Loc Window}">
-                <MenuItem x:Name="ExplorerMenuItem" Header="{lex:Loc FileExplorer}" IsChecked="{Binding ElementName=ExplorerLayout,Path=IsVisible,Mode=TwoWay}" Click="ExplorerMenuItem_OnClick" >
-                </MenuItem>
+                <MenuItem x:Name="ExplorerMenuItem" Header="{lex:Loc FileExplorer}"
+                          IsChecked="{Binding ElementName=ExplorerLayout,Path=IsVisible,Mode=TwoWay}"
+                          Click="ExplorerMenuItem_OnClick" />
             </MenuItem>
             <MenuItem Header="{lex:Loc Help}" />
         </Menu>
         <avalonDock:DockingManager x:Name="dockingManager" DocumentsSource="{Binding Documents}" Grid.Row="1">
             <avalonDock:DockingManager.Theme>
-                <avalonDock:WebStudioTheme></avalonDock:WebStudioTheme>
+                <avalonDock:WebStudioTheme />
             </avalonDock:DockingManager.Theme>
             <avalonDock:DockingManager.LayoutItemContainerStyle>
                 <Style TargetType="{x:Type avalonDock:LayoutItem}">
-                    <Setter Property="Title" Value="{Binding Model.Title}"></Setter>
-                    <Setter Property="IsSelected" Value="{Binding Model.IsSelected,Mode=TwoWay}"></Setter>
+                    <Setter Property="Title" Value="{Binding Model.Title}" />
+                    <Setter Property="IsSelected" Value="{Binding Model.IsSelected,Mode=TwoWay}" />
                 </Style>
             </avalonDock:DockingManager.LayoutItemContainerStyle>
             <avalonDock:DockingManager.Resources>
                 <!-- View with its vm -->
                 <DataTemplate DataType="{x:Type editor:EditorViewModel}">
-                    <editor:EditorView></editor:EditorView>
+                    <editor:EditorView />
                 </DataTemplate>
             </avalonDock:DockingManager.Resources>
             <avalonDock:LayoutRoot>
                 <avalonDock:LayoutPanel Orientation="Horizontal">
-                    <avalonDock:LayoutDocumentPane>
-
-                    </avalonDock:LayoutDocumentPane>
+                    <avalonDock:LayoutDocumentPane />
                     <avalonDock:LayoutAnchorablePane DockWidth="200">
                         <avalonDock:LayoutAnchorable x:Name="ExplorerLayout" Title="{lex:Loc FileExplorer}">
-                            <treeViewExplorerControl:ExplorerControl SelectedItemChanged="{Binding SelectedItemChanged}" SelectedItemName="{Binding SelectedItemName}" SelectedItemPath="{Binding SelectedItemPath}" SelectedItemIsFolder="{Binding SelectedItemIsFolder}" PathToWatch="{Binding ProjectPath}"></treeViewExplorerControl:ExplorerControl>
+                            <treeViewExplorerControl:ExplorerControl
+                                SelectedItemChanged="{Binding SelectedItemChanged}"
+                                SelectedItemName="{Binding SelectedItemName}"
+                                SelectedItemPath="{Binding SelectedItemPath}"
+                                SelectedItemIsFolder="{Binding SelectedItemIsFolder}"
+                                PathToWatch="{Binding ProjectPath}" />
                         </avalonDock:LayoutAnchorable>
                     </avalonDock:LayoutAnchorablePane>
                 </avalonDock:LayoutPanel>

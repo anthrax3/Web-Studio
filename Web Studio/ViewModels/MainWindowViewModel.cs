@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Media;
 using Prism.Commands;
 using Prism.Mvvm;
 using Web_Studio.Editor;
 using Web_Studio.Events;
-using Web_Studio.Models;
 using Web_Studio.Properties;
 
 namespace Web_Studio.ViewModels
@@ -16,7 +14,21 @@ namespace Web_Studio.ViewModels
     /// </summary>
     public class MainWindowViewModel : BindableBase
     {
-       
+        private int _editorFontSize;
+        private Brush _editorLinkTextForegroundBrush;
+
+
+        private bool _editorShowLineNumbers;
+
+        private string _projectPath;
+
+
+        private bool _selectedItemIsFolder;
+
+        private string _selectedItemName;
+
+        private string _selectedItemPath;
+
 
         /// <summary>
         ///     Default constructor, it loads the values from user config.
@@ -30,24 +42,8 @@ namespace Web_Studio.ViewModels
             EditorShowLineNumbers = Settings.Default.EditorShowLineNumbers;
             EditorFontSize = Settings.Default.EditorFontSize;
             EditorLinkTextForegroundBrush =
-                (SolidColorBrush)new BrushConverter().ConvertFrom(Settings.Default.EditorLinkTextForegroundBrush);
+                (SolidColorBrush) new BrushConverter().ConvertFrom(Settings.Default.EditorLinkTextForegroundBrush);
         }
-      
-
-        private void ChangeShowLineNumbers(ShowLineNumbersChanged obj)
-        {
-            EditorShowLineNumbers = obj.ShowLineNumbers;
-        }
-
-        private void ChangeFont(FontSizeChanged obj)
-        {
-            EditorFontSize = obj.FontSize;
-        }
-
-
-        private bool _editorShowLineNumbers;
-        private Brush _editorLinkTextForegroundBrush;
-        private int _editorFontSize;
 
         /// <summary>
         ///     Enable to show line numbers in editor
@@ -57,7 +53,6 @@ namespace Web_Studio.ViewModels
             get { return _editorShowLineNumbers; }
             set { SetProperty(ref _editorShowLineNumbers, value); }
         }
-
 
 
         /// <summary>
@@ -70,7 +65,6 @@ namespace Web_Studio.ViewModels
         }
 
 
-
         /// <summary>
         ///     Font size in editor
         /// </summary>
@@ -80,27 +74,22 @@ namespace Web_Studio.ViewModels
             set { SetProperty(ref _editorFontSize, value); }
         }
 
-        private string _projectPath;
         /// <summary>
-        /// Path to the loaded project
+        ///     Path to the loaded project
         /// </summary>
         public string ProjectPath
         {
             get { return _projectPath; }
-            set
-            {
-                SetProperty(ref _projectPath, value);
-            }
+            set { SetProperty(ref _projectPath, value); }
         }
 
         /// <summary>
-        /// Collection of Documents, editor tabs
+        ///     Collection of Documents, editor tabs
         /// </summary>
-        public ObservableCollection<EditorViewModel> Documents { get; private set; }
+        public ObservableCollection<EditorViewModel> Documents { get; }
 
-        private string _selectedItemName;
         /// <summary>
-        /// Name of the selected item in the explorer view
+        ///     Name of the selected item in the explorer view
         /// </summary>
         public string SelectedItemName
         {
@@ -108,24 +97,17 @@ namespace Web_Studio.ViewModels
             set { SetProperty(ref _selectedItemName, value); }
         }
 
-        private string _selectedItemPath;
         /// <summary>
-        /// Path to the selected item in the explorer view
+        ///     Path to the selected item in the explorer view
         /// </summary>
         public string SelectedItemPath
         {
             get { return _selectedItemPath; }
-            set
-            {
-                SetProperty(ref _selectedItemPath, value);
-            }
+            set { SetProperty(ref _selectedItemPath, value); }
         }
 
-    
-
-        private bool _selectedItemIsFolder;
         /// <summary>
-        /// Is a folder the selected item in the explorer view
+        ///     Is a folder the selected item in the explorer view
         /// </summary>
         public bool SelectedItemIsFolder
         {
@@ -134,31 +116,50 @@ namespace Web_Studio.ViewModels
         }
 
         /// <summary>
-        /// Command to manage the selected item changed "event"
+        ///     Command to manage the selected item changed "event"
         /// </summary>
         public DelegateCommand SelectedItemChanged { get; private set; }
+
+
+        private void ChangeShowLineNumbers(ShowLineNumbersChanged obj)
+        {
+            EditorShowLineNumbers = obj.ShowLineNumbers;
+            foreach (var editorViewModel in Documents) //Update all editors
+            {
+                editorViewModel.EditorShowLineNumbers = EditorShowLineNumbers;
+            }
+        }
+
+        private void ChangeFont(FontSizeChanged obj)
+        {
+            EditorFontSize = obj.FontSize;
+
+            foreach (var editorViewModel in Documents)
+            {
+                editorViewModel.EditorFontSize = EditorFontSize;
+            }
+        }
 
         private void SelectedItemHasChanged()
         {
             if (!SelectedItemIsFolder)
             {
-                foreach (EditorViewModel doc in Documents)
+                foreach (var doc in Documents)
                 {
                     doc.IsSelected = false;
                 }
-                
-                var editorViewModel  = Documents.Where(doc => doc.ToolTip == SelectedItemPath);
+
+                var editorViewModel = Documents.Where(doc => doc.ToolTip == SelectedItemPath);
                 if (!editorViewModel.Any())
                 {
-                    Documents.Add(new EditorViewModel(SelectedItemName, SelectedItemPath));
+                    Documents.Add(new EditorViewModel(SelectedItemName, SelectedItemPath, EditorShowLineNumbers,
+                        EditorLinkTextForegroundBrush, EditorFontSize));
                 }
                 else
                 {
                     editorViewModel.First().IsSelected = true;
                 }
-
             }
         }
-
     }
 }

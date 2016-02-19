@@ -12,28 +12,29 @@
                       mc:Ignorable="d" TitleCaps="False"
                       Title="{lex:Loc Options}" Height="300" Width="300">
     <controls:MetroWindow.DataContext>
-        <viewModels:OptionsViewModel></viewModels:OptionsViewModel>
+        <viewModels:OptionsViewModel />
     </controls:MetroWindow.DataContext>
-    
+
     <Grid>
         <TabControl Margin="10">
             <TabItem Header="{lex:Loc Editor}">
                 <StackPanel>
-                    <CheckBox IsChecked="{Binding EditorShowLineNumbers}" Content="{lex:Loc ShowLineNumbers }" Margin="5"/>
-                    <TextBlock Text="{lex:Loc FontSize}" Margin="5"/>
-                    <Slider Minimum="10" Maximum="30" Value="{Binding EditorFontSize}" TickFrequency="2" Margin="5" TickPlacement="BottomRight"></Slider>
+                    <CheckBox IsChecked="{Binding EditorShowLineNumbers}" Content="{lex:Loc ShowLineNumbers }"
+                              Margin="5" />
+                    <TextBlock Text="{lex:Loc FontSize}" Margin="5" />
+                    <Slider Minimum="10" Maximum="30" Value="{Binding EditorFontSize}" TickFrequency="2" Margin="5"
+                            TickPlacement="BottomRight" />
                 </StackPanel>
             </TabItem>
             <TabItem Header="{lex:Loc Software}">
                 <StackPanel>
-                    <TextBlock Text="{lex:Loc SelectNewLanguage}" Margin="5"></TextBlock>
-                    <ComboBox x:Name="ComboBoxLanguage" Margin="5" ItemsSource="{Binding Languages}" DisplayMemberPath="NativeName" SelectedItem="{Binding SelectedLanguage}"/>
+                    <TextBlock Text="{lex:Loc SelectNewLanguage}" Margin="5" />
+                    <ComboBox x:Name="ComboBoxLanguage" Margin="5" ItemsSource="{Binding Languages}"
+                              DisplayMemberPath="NativeName" SelectedItem="{Binding SelectedLanguage}" />
                 </StackPanel>
             </TabItem>
         </TabControl>
-       
-        
-       
+
 
     </Grid>
 </controls:MetroWindow>
