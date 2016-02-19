@@ -9,6 +9,9 @@
     xmlns:Reglas="clr-namespace:Web_Studio.Reglas"
     xmlns:viewModels="clr-namespace:Web_Studio.ViewModels"
     xmlns:editor="clr-namespace:Web_Studio.Editor"
+    xmlns:avalonDock="http://schemas.xceed.com/wpf/xaml/avalondock"
+    xmlns:treeViewExplorerControl="clr-namespace:TreeViewExplorerControl;assembly=TreeViewExplorerControl"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     x:Class="Web_Studio.MainWindow"
     mc:Ignorable="d"
     lex:LocalizeDictionary.DesignCulture="es"
@@ -18,9 +21,12 @@
     <controls:MetroWindow.DataContext>
         <viewModels:MainWindowViewModel></viewModels:MainWindowViewModel>
     </controls:MetroWindow.DataContext>
-   
     <Grid>
-        <Menu IsMainMenu="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Menu IsMainMenu="True" Grid.Row="0">
             <MenuItem Header="{lex:Loc File}">
                 <MenuItem Header="{lex:Loc New}">
                     <MenuItem Header="{lex:Loc File}" />
@@ -42,14 +48,40 @@
                 <MenuItem Header="{lex:Loc Options}" Click="Options_OnClick"/>
             </MenuItem>
             <MenuItem Header="{lex:Loc View}" />
-            <MenuItem Header="{lex:Loc Window}" />
+            <MenuItem Header="{lex:Loc Window}">
+                <MenuItem x:Name="ExplorerMenuItem" Header="{lex:Loc FileExplorer}" IsChecked="{Binding ElementName=ExplorerLayout,Path=IsVisible,Mode=TwoWay}" Click="ExplorerMenuItem_OnClick" >
+                </MenuItem>
+            </MenuItem>
             <MenuItem Header="{lex:Loc Help}" />
         </Menu>
-        <editor:TextEditorMvvm
-            FontFamily="Consolas" Margin="120,40,10,0" Foreground="White"
-            ShowLineNumbers="{Binding EditorShowLineNumbers}" FontSize="{Binding EditorFontSize}"
-            HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
-       <!-- TreeView -->
+        <avalonDock:DockingManager x:Name="dockingManager" DocumentsSource="{Binding Documents}" Grid.Row="1">
+            <avalonDock:DockingManager.Theme>
+                <avalonDock:WebStudioTheme></avalonDock:WebStudioTheme>
+            </avalonDock:DockingManager.Theme>
+            <avalonDock:DockingManager.LayoutItemContainerStyle>
+                <Style TargetType="{x:Type avalonDock:LayoutItem}">
+                    <Setter Property="Title" Value="{Binding Model.Title}"></Setter>
+                    <Setter Property="IsSelected" Value="{Binding Model.IsSelected,Mode=TwoWay}"></Setter>
+                </Style>
+            </avalonDock:DockingManager.LayoutItemContainerStyle>
+            <avalonDock:DockingManager.Resources>
+                <!-- View with its vm -->
+                <DataTemplate DataType="{x:Type editor:EditorViewModel}">
+                    <editor:EditorView></editor:EditorView>
+                </DataTemplate>
+            </avalonDock:DockingManager.Resources>
+            <avalonDock:LayoutRoot>
+                <avalonDock:LayoutPanel Orientation="Horizontal">
+                    <avalonDock:LayoutDocumentPane>
 
+                    </avalonDock:LayoutDocumentPane>
+                    <avalonDock:LayoutAnchorablePane DockWidth="200">
+                        <avalonDock:LayoutAnchorable x:Name="ExplorerLayout" Title="{lex:Loc FileExplorer}">
+                            <treeViewExplorerControl:ExplorerControl SelectedItemChanged="{Binding SelectedItemChanged}" SelectedItemName="{Binding SelectedItemName}" SelectedItemPath="{Binding SelectedItemPath}" SelectedItemIsFolder="{Binding SelectedItemIsFolder}" PathToWatch="{Binding ProjectPath}"></treeViewExplorerControl:ExplorerControl>
+                        </avalonDock:LayoutAnchorable>
+                    </avalonDock:LayoutAnchorablePane>
+                </avalonDock:LayoutPanel>
+            </avalonDock:LayoutRoot>
+        </avalonDock:DockingManager>
     </Grid>
 </controls:MetroWindow>

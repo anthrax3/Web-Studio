@@ -53,6 +53,9 @@
   <PropertyGroup>
     <SignManifests>false</SignManifests>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Icono.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.AvalonEdit, Version=5.0.1.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
       <HintPath>..\packages\AvalonEdit.5.0.2\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
@@ -113,10 +116,6 @@
       <HintPath>..\packages\Extended.Wpf.Toolkit.2.6\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=2.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.2.6\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=2.6.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
       <HintPath>..\packages\Extended.Wpf.Toolkit.2.6\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
       <Private>True</Private>
@@ -137,6 +136,10 @@
     </ApplicationDefinition>
     <Compile Include="Converters\BooleanConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Editor\EditorView.xaml.cs">
+      <DependentUpon>EditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Editor\EditorViewModel.cs" />
     <Compile Include="Editor\TextEditorMVVM.cs" />
     <Compile Include="Events\EventSystem.cs" />
     <Compile Include="Events\FontSizeChanged.cs" />
@@ -171,6 +174,10 @@
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\NewProjectViewModel.cs" />
     <Compile Include="ViewModels\OptionsViewModel.cs" />
+    <Page Include="Editor\EditorView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -256,10 +263,21 @@
     <Folder Include="Managers\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AvalonDock.Themes.WebStudio\Xceed.Wpf.AvalonDock.Themes.WebStudio.csproj">
+      <Project>{89286eb4-b4a1-418c-839a-067b00f442d8}</Project>
+      <Name>Xceed.Wpf.AvalonDock.Themes.WebStudio</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SocialCheckInterface\SocialCheckInterface.csproj">
       <Project>{ee4e6c9a-5fc8-4897-9ae8-321ef92f17da}</Project>
       <Name>SocialCheckInterface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TreeViewExplorerControl\TreeViewExplorerControl.csproj">
+      <Project>{c9a42623-7ccb-406b-bb6c-1990caa8cd02}</Project>
+      <Name>TreeViewExplorerControl</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icono.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

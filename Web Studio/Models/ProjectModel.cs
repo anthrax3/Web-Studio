@@ -1,6 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
+using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
+using Prism.Mvvm;
+using Web_Studio.Annotations;
 using Web_Studio.Utils;
 
 namespace Web_Studio.Models
@@ -13,9 +17,9 @@ namespace Web_Studio.Models
         /// <summary>
         ///     Default constructor (Singleton pattern)
         /// </summary>
-        private ProjectModel()
-        {
-        }
+    //    private ProjectModel()
+     //   {
+     //   }
 
         /// <summary>
         ///     Singleton pattern
@@ -27,7 +31,18 @@ namespace Web_Studio.Models
         ///     Project full path
         /// </summary>
         [JsonIgnore]
-        public string FullPath { get; set; }
+
+        private string _fullPath;
+        public string FullPath
+        {
+            get { return _fullPath; }
+            set
+            {
+                _fullPath=value;
+            }
+        }
+
+      //  public string FullPath { get; set; }
 
         /// <summary>
         ///     Name of project
@@ -80,12 +95,12 @@ namespace Web_Studio.Models
         ///     Open a project, load project config and enable project UI
         /// </summary>
         /// <param name="path"></param>
-        public static void Open(string path)
+        public void Open(string path)
         {
             //Load instance
-            Instance = (ProjectModel) Json.FileToObject(Instance, path);
-            Instance.FullPath = Path.GetDirectoryName(path);
-            //TreeViewManager.Create(Path.GetDirectoryName(path));
+           // Instance = (ProjectModel) Json.FileToObject(Instance, path);
+           // Instance.FullPath = Path.GetDirectoryName(path);
+           FullPath = Path.GetDirectoryName(path);
         }
     }
 }

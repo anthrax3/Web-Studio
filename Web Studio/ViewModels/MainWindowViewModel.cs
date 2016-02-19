@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Media;
 using Prism.Commands;
 using Prism.Mvvm;
+using Web_Studio.Editor;
 using Web_Studio.Events;
+using Web_Studio.Models;
 using Web_Studio.Properties;
 
 namespace Web_Studio.ViewModels
@@ -19,6 +23,8 @@ namespace Web_Studio.ViewModels
         /// </summary>
         public MainWindowViewModel()
         {
+            Documents = new ObservableCollection<EditorViewModel>();
+            SelectedItemChanged = new DelegateCommand(SelectedItemHasChanged);
             EventSystem.Subscribe<FontSizeChanged>(ChangeFont);
             EventSystem.Subscribe<ShowLineNumbersChanged>(ChangeShowLineNumbers);
             EditorShowLineNumbers = Settings.Default.EditorShowLineNumbers;
@@ -26,6 +32,7 @@ namespace Web_Studio.ViewModels
             EditorLinkTextForegroundBrush =
                 (SolidColorBrush)new BrushConverter().ConvertFrom(Settings.Default.EditorLinkTextForegroundBrush);
         }
+      
 
         private void ChangeShowLineNumbers(ShowLineNumbersChanged obj)
         {
@@ -37,7 +44,6 @@ namespace Web_Studio.ViewModels
             EditorFontSize = obj.FontSize;
         }
 
-        #region Properties
 
         private bool _editorShowLineNumbers;
         private Brush _editorLinkTextForegroundBrush;
@@ -52,7 +58,7 @@ namespace Web_Studio.ViewModels
             set { SetProperty(ref _editorShowLineNumbers, value); }
         }
 
-        
+
 
         /// <summary>
         ///     Color for links
@@ -63,7 +69,7 @@ namespace Web_Studio.ViewModels
             set { SetProperty(ref _editorLinkTextForegroundBrush, value); }
         }
 
-       
+
 
         /// <summary>
         ///     Font size in editor
@@ -74,7 +80,85 @@ namespace Web_Studio.ViewModels
             set { SetProperty(ref _editorFontSize, value); }
         }
 
-        #endregion
+        private string _projectPath;
+        /// <summary>
+        /// Path to the loaded project
+        /// </summary>
+        public string ProjectPath
+        {
+            get { return _projectPath; }
+            set
+            {
+                SetProperty(ref _projectPath, value);
+            }
+        }
+
+        /// <summary>
+        /// Collection of Documents, editor tabs
+        /// </summary>
+        public ObservableCollection<EditorViewModel> Documents { get; private set; }
+
+        private string _selectedItemName;
+        /// <summary>
+        /// Name of the selected item in the explorer view
+        /// </summary>
+        public string SelectedItemName
+        {
+            get { return _selectedItemName; }
+            set { SetProperty(ref _selectedItemName, value); }
+        }
+
+        private string _selectedItemPath;
+        /// <summary>
+        /// Path to the selected item in the explorer view
+        /// </summary>
+        public string SelectedItemPath
+        {
+            get { return _selectedItemPath; }
+            set
+            {
+                SetProperty(ref _selectedItemPath, value);
+            }
+        }
+
+    
+
+        private bool _selectedItemIsFolder;
+        /// <summary>
+        /// Is a folder the selected item in the explorer view
+        /// </summary>
+        public bool SelectedItemIsFolder
+        {
+            get { return _selectedItemIsFolder; }
+            set { SetProperty(ref _selectedItemIsFolder, value); }
+        }
+
+        /// <summary>
+        /// Command to manage the selected item changed "event"
+        /// </summary>
+        public DelegateCommand SelectedItemChanged { get; private set; }
+
+        private void SelectedItemHasChanged()
+        {
+            if (!SelectedItemIsFolder)
+            {
+                foreach (EditorViewModel doc in Documents)
+                {
+                    doc.IsSelected = false;
+                }
+                
+                var editorViewModel  = Documents.Where(doc => doc.ToolTip == SelectedItemPath);
+                if (!editorViewModel.Any())
+                {
+                    Documents.Add(new EditorViewModel(SelectedItemName, SelectedItemPath));
+                }
+                else
+                {
+                    editorViewModel.First().IsSelected = true;
+                }
+
+            }
+        }
 
     }
 }

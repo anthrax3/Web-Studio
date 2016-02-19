@@ -1,6 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using Microsoft.Win32;
 using Web_Studio.Models;
+using Web_Studio.ViewModels;
 
 namespace Web_Studio
 {
@@ -57,8 +59,16 @@ namespace Web_Studio
 
             if (openFile.ShowDialog() == true)
             {
-                ProjectModel.Open(openFile.FileName);
+                ProjectModel projectModel = new ProjectModel();
+                projectModel.Open(openFile.FileName);
+                ((MainWindowViewModel) this.DataContext).ProjectPath = projectModel.FullPath;
+
             }
+        }
+
+        private void ExplorerMenuItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            ExplorerLayout.Show();
         }
     }
 }
