@@ -18,6 +18,11 @@ namespace Web_Studio.Models
         /// <summary>
         ///     Default constructor (Singleton pattern)
         /// </summary>
+        private ProjectModel()
+        {
+            ///Do nothing
+        }
+        
         /// <summary>
         ///     Singleton pattern
         /// </summary>
@@ -83,12 +88,12 @@ namespace Web_Studio.Models
         ///     Open a project, load project config and enable project UI
         /// </summary>
         /// <param name="path"></param>
-        public void Open(string path)
+        public static void Open(string path)
         {
             //Load instance
             // Instance = (ProjectModel) Json.FileToObject(Instance, path);
             // Instance.FullPath = Path.GetDirectoryName(path);
-            FullPath = Path.GetDirectoryName(path);
+            Instance.FullPath = Path.GetDirectoryName(path);
         }
     }
 }

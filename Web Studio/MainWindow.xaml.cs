@@ -58,9 +58,8 @@ namespace Web_Studio
 
             if (openFile.ShowDialog() == true)
             {
-                var projectModel = new ProjectModel();
-                projectModel.Open(openFile.FileName);
-                ((MainWindowViewModel) DataContext).ProjectPath = projectModel.FullPath;
+                ProjectModel.Open(openFile.FileName);
+                ((MainWindowViewModel) DataContext).ProjectPath = ProjectModel.Instance.FullPath;
             }
         }
 

@@ -5,6 +5,7 @@ using Prism.Commands;
 using Prism.Mvvm;
 using Web_Studio.Editor;
 using Web_Studio.Events;
+using Web_Studio.Models;
 using Web_Studio.Properties;
 
 namespace Web_Studio.ViewModels
@@ -35,6 +36,11 @@ namespace Web_Studio.ViewModels
         /// </summary>
         public MainWindowViewModel()
         {
+            if (ProjectModel.Instance.FullPath != null)
+            {
+                ProjectPath = ProjectModel.Instance.FullPath;
+            }
+
             Documents = new ObservableCollection<EditorViewModel>();
             SelectedItemChanged = new DelegateCommand(SelectedItemHasChanged);
             EventSystem.Subscribe<FontSizeChanged>(ChangeFont);
