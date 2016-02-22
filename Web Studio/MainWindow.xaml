@@ -12,6 +12,8 @@
     xmlns:avalonDock="http://schemas.xceed.com/wpf/xaml/avalondock"
     xmlns:treeViewExplorerControl="clr-namespace:TreeViewExplorerControl;assembly=TreeViewExplorerControl"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:interactionRequest="http://prismlibrary.com/"
+    xmlns:webStudio="clr-namespace:Web_Studio"
     x:Class="Web_Studio.MainWindow"
     mc:Ignorable="d"
     lex:LocalizeDictionary.DesignCulture="es"
@@ -21,6 +23,15 @@
     <controls:MetroWindow.DataContext>
         <viewModels:MainWindowViewModel />
     </controls:MetroWindow.DataContext>
+    <i:Interaction.Triggers>
+        <interactionRequest:InteractionRequestTrigger SourceObject="{Binding OptionWindowRequest, Mode=OneWay}">
+            <interactionRequest:PopupWindowAction>
+                <interactionRequest:PopupWindowAction.WindowContent>
+                    <webStudio:Options></webStudio:Options>
+                </interactionRequest:PopupWindowAction.WindowContent>
+            </interactionRequest:PopupWindowAction>
+        </interactionRequest:InteractionRequestTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -34,7 +45,7 @@
                 </MenuItem>
                 <MenuItem Header="{lex:Loc Open}">
                     <MenuItem Header="{lex:Loc File}" />
-                    <MenuItem Header="{lex:Loc Project}" x:Name="FileOpenProject" Click="FileOpenProject_OnClick" />
+                    <MenuItem Header="{lex:Loc Project}" x:Name="FileOpenProject" Command="{Binding OpenProjectCommand}" />
                 </MenuItem>
                 <MenuItem Header="{lex:Loc AddFile}" />
                 <MenuItem Header="{lex:Loc CloseFile}" />
@@ -45,7 +56,7 @@
 
             </MenuItem>
             <MenuItem Header="{lex:Loc Edit}">
-                <MenuItem Header="{lex:Loc Options}" Click="Options_OnClick" />
+                <MenuItem Header="{lex:Loc Options}" Command="{Binding OptionWindowCommand}" />
             </MenuItem>
             <MenuItem Header="{lex:Loc View}" />
             <MenuItem Header="{lex:Loc Window}">
@@ -78,7 +89,7 @@
                     <avalonDock:LayoutAnchorablePane DockWidth="200">
                         <avalonDock:LayoutAnchorable x:Name="ExplorerLayout" Title="{lex:Loc FileExplorer}">
                             <treeViewExplorerControl:ExplorerControl
-                                SelectedItemChanged="{Binding SelectedItemChanged}"
+                                SelectedItemChanged="{Binding SelectedItemChangedCommand}"
                                 SelectedItemName="{Binding SelectedItemName}"
                                 SelectedItemPath="{Binding SelectedItemPath}"
                                 SelectedItemIsFolder="{Binding SelectedItemIsFolder}"

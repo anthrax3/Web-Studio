@@ -1,10 +1,13 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Media;
+using Microsoft.Win32;
 using Prism.Commands;
+using Prism.Interactivity.InteractionRequest;
 using Prism.Mvvm;
 using Web_Studio.Editor;
 using Web_Studio.Events;
+using Web_Studio.Localization;
 using Web_Studio.Models;
 using Web_Studio.Properties;
 
@@ -30,6 +33,8 @@ namespace Web_Studio.ViewModels
 
         private string _selectedItemPath;
 
+        public InteractionRequest<INotification> OptionWindowRequest { get; set; } 
+
 
         /// <summary>
         ///     Default constructor, it loads the values from user config.
@@ -48,8 +53,12 @@ namespace Web_Studio.ViewModels
             EditorLinkTextForegroundBrush =
                 (SolidColorBrush)new BrushConverter().ConvertFrom(Settings.Default.EditorLinkTextForegroundBrush);
 
+            OptionWindowRequest = new InteractionRequest<INotification>();
+
             //Manage commands
-            SelectedItemChanged = new DelegateCommand(SelectedItemHasChanged);
+            SelectedItemChangedCommand = new DelegateCommand(SelectedItemChanged);
+            OpenProjectCommand = new DelegateCommand(OpenProject);
+            OptionWindowCommand = new DelegateCommand(OptionWindow);
 
             //Manage events
             EventSystem.Subscribe<FontSizeChangedEvent>(ManageChangeFont);
@@ -58,6 +67,43 @@ namespace Web_Studio.ViewModels
 
         }
 
+        /// <summary>
+        /// Raise OptionWindowRequest
+        /// </summary>
+        private void OptionWindow()
+        {
+            OptionWindowRequest.Raise( new Notification {Title = Strings.Options});
+        }
+
+        /// <summary>
+        /// Display a dialog to select a project
+        /// </summary>
+        private void OpenProject()
+        {
+            //Config
+            var openFile = new OpenFileDialog
+            {
+                Multiselect = false,
+                CheckFileExists = true,
+                CheckPathExists = true,
+                Filter = "Web Studio (*.ws)|*.ws"
+            };
+
+            if (openFile.ShowDialog() == true)
+            {
+                ProjectModel.Open(openFile.FileName);
+                ProjectPath = ProjectModel.Instance.FullPath;
+            }
+        }
+
+        public DelegateCommand OpenProjectCommand { get; private set; }
+
+        public DelegateCommand OptionWindowCommand { get; private set; } 
+
+        /// <summary>
+        /// Remove closed document
+        /// </summary>
+        /// <param name="obj"></param>
         private void ManageDocumentClosed(ClosedDocumentEvent obj)
         {
             Documents.Remove(obj.ClosedDocument);
@@ -136,7 +182,7 @@ namespace Web_Studio.ViewModels
         /// <summary>
         ///     Command to manage the selected item changed "event"
         /// </summary>
-        public DelegateCommand SelectedItemChanged { get; private set; }
+        public DelegateCommand SelectedItemChangedCommand { get; private set; }
 
 
         private void ManageChangeShowLineNumbers(ShowLineNumbersEvent obj)
@@ -158,7 +204,10 @@ namespace Web_Studio.ViewModels
             }
         }
 
-        private void SelectedItemHasChanged()
+        /// <summary>
+        /// Open the selected file and display it
+        /// </summary>
+        private void SelectedItemChanged()
         {
             if (!SelectedItemIsFolder)
             {

@@ -25,8 +25,8 @@ namespace Web_Studio
         /// <param name="e"></param>
         private void Options_OnClick(object sender, RoutedEventArgs e)
         {
-            var optionWindow = new Options();
-            optionWindow.Show();
+          //  var optionWindow = new Options();
+           // optionWindow.Show();
         }
 
         /// <summary>
@@ -38,29 +38,6 @@ namespace Web_Studio
         {
             var newProjectWindow = new NewProject {Owner = this};
             newProjectWindow.ShowDialog();
-        }
-
-        /// <summary>
-        ///     Display a dialog to select a project
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void FileOpenProject_OnClick(object sender, RoutedEventArgs e)
-        {
-            //Config
-            var openFile = new OpenFileDialog
-            {
-                Multiselect = false,
-                CheckFileExists = true,
-                CheckPathExists = true,
-                Filter = "Web Studio (*.ws)|*.ws"
-            };
-
-            if (openFile.ShowDialog() == true)
-            {
-                ProjectModel.Open(openFile.FileName);
-                ((MainWindowViewModel) DataContext).ProjectPath = ProjectModel.Instance.FullPath;
-            }
         }
 
         private void ExplorerMenuItem_OnClick(object sender, RoutedEventArgs e)

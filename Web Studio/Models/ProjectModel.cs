@@ -29,14 +29,14 @@ namespace Web_Studio.Models
         [JsonIgnore]
         public static ProjectModel Instance { get; set; } = new ProjectModel();
 
+        /// <summary>
+        /// Full path of project folder
+        /// </summary>
         public string FullPath
         {
             get { return _fullPath; }
             set { _fullPath = value; }
         }
-
-        //  public string FullPath { get; set; }
-
         /// <summary>
         ///     Name of project
         /// </summary>
