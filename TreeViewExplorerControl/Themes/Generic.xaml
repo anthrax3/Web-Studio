@@ -10,6 +10,9 @@
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
                         <TreeView Name="myTreeView">
+                            <TreeView.Resources>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#FF003BB0" /> <!-- Selected item background color -->
+                            </TreeView.Resources>
                             <TreeView.ItemContainerStyle>
                                 <Style TargetType="{x:Type TreeViewItem}">
                                     <Setter Property="IsExpanded" Value="True" />
@@ -20,7 +23,12 @@
                             </TreeView.DataContext>
                             <TreeView.ItemTemplate>
                                 <HierarchicalDataTemplate ItemsSource="{Binding Nodes}">
-                                    <TextBlock Text="{Binding Name}" />
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Image}" VerticalAlignment="Center" HorizontalAlignment="Left" FontFamily="Segoe MDL2 Assets"></TextBlock>
+                                        <TextBlock Text="   "></TextBlock>
+                                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+
+                                    </StackPanel>
                                 </HierarchicalDataTemplate>
                             </TreeView.ItemTemplate>
                         </TreeView>

@@ -13,6 +13,7 @@ namespace TreeViewExplorerControl
         public FolderNode()
         {
             Nodes = new ObservableCollection<INode>();
+            Image = "";
         }
 
         /// <summary>
@@ -24,6 +25,11 @@ namespace TreeViewExplorerControl
         ///     Folder name
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// MLD2 image code
+        /// </summary>
+        public string Image { get; set; }
 
         /// <summary>
         ///     Files and folders inside this folder

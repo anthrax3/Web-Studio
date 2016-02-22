@@ -13,6 +13,7 @@ namespace TreeViewExplorerControl
         public FileNode()
         {
             Nodes = new ObservableCollection<INode>();
+            Image = "";
         }
 
         /// <summary>
@@ -24,6 +25,11 @@ namespace TreeViewExplorerControl
         ///     File name
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// MLD2 imagen code
+        /// </summary>
+        public string Image { get; set; } 
 
         /// <summary>
         ///     We need it for treeview implementation, always 0 elements

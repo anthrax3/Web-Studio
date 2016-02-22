@@ -18,6 +18,11 @@ namespace TreeViewExplorerControl
         string Name { get; set; }
 
         /// <summary>
+        /// MLD2 image code
+        /// </summary>
+        string Image { get; set; }
+
+        /// <summary>
         ///     Other nodes inside this node
         /// </summary>
         ObservableCollection<INode> Nodes { get; set; }
