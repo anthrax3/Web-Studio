@@ -41,6 +41,16 @@ namespace Web_Studio.Editor
 
         private string _toolTip;
 
+        private bool _editorIsModified;
+        /// <summary>
+        /// the document is modified
+        /// </summary>
+        public bool EditorIsModified
+        {
+            get { return _editorIsModified; }
+            set { SetProperty(ref _editorIsModified, value); }
+        }
+
         /// <summary>
         ///     Default constructor
         /// </summary>
@@ -69,22 +79,28 @@ namespace Web_Studio.Editor
 
         private void CloseCommandMethod()
         {
-            TextBlock contenTextBox = new TextBlock()
+            if (EditorIsModified)
             {
-                Text = Strings.SaveChangesDescription,
-                Foreground = new SolidColorBrush(Colors.White)
-            };
+                TextBlock contenTextBox = new TextBlock()
+                {
+                    Text = Strings.SaveChangesDescription,
+                    Foreground = new SolidColorBrush(Colors.White)
+                };
 
-            SaveChangesConfirmationRequest.Raise(
-                 new Confirmation { Content = contenTextBox, Title = Strings.SaveChanges },
-                 c =>
-                 {
-                     if (c.Confirmed) //Exit without save changes
-                     {
-                         EventSystem.Publish(new ClosedDocumentEvent {ClosedDocument = this});
-                     }
-                 });
-
+                SaveChangesConfirmationRequest.Raise(
+                    new Confirmation {Content = contenTextBox, Title = Strings.SaveChanges},
+                    c =>
+                    {
+                        if (c.Confirmed) //Exit without save changes
+                        {
+                            EventSystem.Publish(new ClosedDocumentEvent {ClosedDocument = this});
+                        }
+                    });
+            }
+            else
+            {
+                EventSystem.Publish(new ClosedDocumentEvent { ClosedDocument = this });
+            }
         }
 
         /// <summary>

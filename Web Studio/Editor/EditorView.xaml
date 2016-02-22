@@ -19,6 +19,6 @@
         <editor:TextEditorMvvm Document="{Binding Document}" SyntaxHighlighting="{Binding SyntaxHighlighting}"
                                FontFamily="Consolas" Margin="0" Foreground="White"
                                ShowLineNumbers="{Binding EditorShowLineNumbers}" FontSize="{Binding EditorFontSize}"
-                               HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
+                               HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsModified="{Binding EditorIsModified,Mode=TwoWay}" />
     </Grid>
 </UserControl>
