@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Prism.Commands;
 using Prism.Mvvm;
 using SocialCheckInterface;
+using Web_Studio.Events;
 using Web_Studio.Models;
 
 namespace Web_Studio.ViewModels
@@ -38,6 +39,7 @@ namespace Web_Studio.ViewModels
             var fullPath = Path.Combine(ProjectModel.Instance.FullPath, ProjectModel.Instance.Name);
             ProjectModel.Instance.FullPath = fullPath;
             ProjectModel.Instance.Create();
+            EventSystem.Publish(new ChangedProjectEvent());
         }
 
         #region Page 1

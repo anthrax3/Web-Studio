@@ -22,7 +22,7 @@ namespace Web_Studio.Models
         {
             ///Do nothing
         }
-        
+
         /// <summary>
         ///     Singleton pattern
         /// </summary>
@@ -30,13 +30,14 @@ namespace Web_Studio.Models
         public static ProjectModel Instance { get; set; } = new ProjectModel();
 
         /// <summary>
-        /// Full path of project folder
+        ///     Full path of project folder
         /// </summary>
         public string FullPath
         {
             get { return _fullPath; }
             set { _fullPath = value; }
         }
+
         /// <summary>
         ///     Name of project
         /// </summary>
@@ -73,8 +74,6 @@ namespace Web_Studio.Models
 
                 //Create index file
                 File.Create(Path.Combine(srcPath, "index.html"));
-
-                Open(Instance.FullPath);
 
                 return true;
             }

@@ -22,7 +22,9 @@ namespace Web_Studio.Editor.SyntaxHighlighter
         {
             if (_cssDefinition == null)
             {
-                using (var reader = XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory+"Editor/SyntaxHighlighter/CSS.xshd"))
+                using (
+                    var reader =
+                        XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory + "Editor/SyntaxHighlighter/CSS.xshd"))
                 {
                     _cssDefinition = HighlightingLoader.Load(reader, HighlightingManager.Instance);
                 }
@@ -30,14 +32,18 @@ namespace Web_Studio.Editor.SyntaxHighlighter
 
             if (_jsDefinition == null)
             {
-                using (var reader = XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory+"Editor/SyntaxHighlighter/JS.xshd"))
+                using (
+                    var reader =
+                        XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory + "Editor/SyntaxHighlighter/JS.xshd"))
                 {
                     _jsDefinition = HighlightingLoader.Load(reader, HighlightingManager.Instance);
                 }
             }
             if (_htmlDefinition == null)
             {
-                using (var reader = XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory+"Editor/SyntaxHighlighter/HTML.xshd"))
+                using (
+                    var reader =
+                        XmlReader.Create(AppDomain.CurrentDomain.BaseDirectory + "Editor/SyntaxHighlighter/HTML.xshd"))
                 {
                     _htmlDefinition = HighlightingLoader.Load(reader, HighlightingManager.Instance);
                 }

@@ -18,23 +18,7 @@ namespace Web_Studio.ViewModels
     /// </summary>
     public class MainWindowViewModel : BindableBase
     {
-        private int _editorFontSize;
-        private Brush _editorLinkTextForegroundBrush;
-
-
-        private bool _editorShowLineNumbers;
-
         private string _projectPath;
-
-
-        private bool _selectedItemIsFolder;
-
-        private string _selectedItemName;
-
-        private string _selectedItemPath;
-
-        public InteractionRequest<INotification> OptionWindowRequest { get; set; } 
-
 
         /// <summary>
         ///     Default constructor, it loads the values from user config.
@@ -51,32 +35,88 @@ namespace Web_Studio.ViewModels
             EditorShowLineNumbers = Settings.Default.EditorShowLineNumbers;
             EditorFontSize = Settings.Default.EditorFontSize;
             EditorLinkTextForegroundBrush =
-                (SolidColorBrush)new BrushConverter().ConvertFrom(Settings.Default.EditorLinkTextForegroundBrush);
+                (SolidColorBrush) new BrushConverter().ConvertFrom(Settings.Default.EditorLinkTextForegroundBrush);
 
             OptionWindowRequest = new InteractionRequest<INotification>();
+            NewProjectRequest = new InteractionRequest<INotification>();
 
             //Manage commands
             SelectedItemChangedCommand = new DelegateCommand(SelectedItemChanged);
             OpenProjectCommand = new DelegateCommand(OpenProject);
             OptionWindowCommand = new DelegateCommand(OptionWindow);
+            NewProjectCommand = new DelegateCommand(NewProject);
 
             //Manage events
             EventSystem.Subscribe<FontSizeChangedEvent>(ManageChangeFont);
             EventSystem.Subscribe<ShowLineNumbersEvent>(ManageChangeShowLineNumbers);
             EventSystem.Subscribe<ClosedDocumentEvent>(ManageDocumentClosed);
-
+            EventSystem.Subscribe<ChangedProjectEvent>(ManageChangeProject);
         }
 
         /// <summary>
-        /// Raise OptionWindowRequest
+        ///     Path to the loaded project
+        /// </summary>
+        public string ProjectPath
+        {
+            get { return _projectPath; }
+            set { SetProperty(ref _projectPath, value); }
+        }
+
+        /// <summary>
+        ///     Collection of Documents, editor tabs
+        /// </summary>
+        public ObservableCollection<EditorViewModel> Documents { get; }
+
+        private void ManageChangeProject(ChangedProjectEvent obj)
+        {
+            ProjectPath = ProjectModel.Instance.FullPath;
+        }
+
+        #region Menu
+
+        /// <summary>
+        ///     It request the view to open the option window
+        /// </summary>
+        public InteractionRequest<INotification> OptionWindowRequest { get; set; }
+
+        /// <summary>
+        ///     It request the view to open the new project window
+        /// </summary>
+        public InteractionRequest<INotification> NewProjectRequest { get; set; }
+
+        /// <summary>
+        ///     New project menu option command
+        /// </summary>
+        public DelegateCommand NewProjectCommand { get; private set; }
+
+        /// <summary>
+        ///     Open project menu command
+        /// </summary>
+        public DelegateCommand OpenProjectCommand { get; private set; }
+
+        /// <summary>
+        ///     Option menu command
+        /// </summary>
+        public DelegateCommand OptionWindowCommand { get; private set; }
+
+        /// <summary>
+        ///     Raise new project request
+        /// </summary>
+        private void NewProject()
+        {
+            NewProjectRequest.Raise(new Notification {Title = Strings.WizardCreateNewProject});
+        }
+
+        /// <summary>
+        ///     Raise option window request
         /// </summary>
         private void OptionWindow()
         {
-            OptionWindowRequest.Raise( new Notification {Title = Strings.Options});
+            OptionWindowRequest.Raise(new Notification {Title = Strings.Options});
         }
 
         /// <summary>
-        /// Display a dialog to select a project
+        ///     Display a dialog to select a project
         /// </summary>
         private void OpenProject()
         {
@@ -96,18 +136,13 @@ namespace Web_Studio.ViewModels
             }
         }
 
-        public DelegateCommand OpenProjectCommand { get; private set; }
+        #endregion
 
-        public DelegateCommand OptionWindowCommand { get; private set; } 
+        #region Editor
 
-        /// <summary>
-        /// Remove closed document
-        /// </summary>
-        /// <param name="obj"></param>
-        private void ManageDocumentClosed(ClosedDocumentEvent obj)
-        {
-            Documents.Remove(obj.ClosedDocument);
-        }
+        private int _editorFontSize;
+        private Brush _editorLinkTextForegroundBrush;
+        private bool _editorShowLineNumbers;
 
         /// <summary>
         ///     Enable to show line numbers in editor
@@ -139,18 +174,48 @@ namespace Web_Studio.ViewModels
         }
 
         /// <summary>
-        ///     Path to the loaded project
+        ///     Remove closed document
         /// </summary>
-        public string ProjectPath
+        /// <param name="obj"></param>
+        private void ManageDocumentClosed(ClosedDocumentEvent obj)
         {
-            get { return _projectPath; }
-            set { SetProperty(ref _projectPath, value); }
+            Documents.Remove(obj.ClosedDocument);
         }
 
         /// <summary>
-        ///     Collection of Documents, editor tabs
+        ///     Method to manage the chage show line numbers event
         /// </summary>
-        public ObservableCollection<EditorViewModel> Documents { get; }
+        /// <param name="obj"></param>
+        private void ManageChangeShowLineNumbers(ShowLineNumbersEvent obj)
+        {
+            EditorShowLineNumbers = obj.ShowLineNumbers;
+            foreach (var editorViewModel in Documents) //Update all editors
+            {
+                editorViewModel.EditorShowLineNumbers = EditorShowLineNumbers;
+            }
+        }
+
+        /// <summary>
+        ///     Method to manage the change font event
+        /// </summary>
+        /// <param name="obj"></param>
+        private void ManageChangeFont(FontSizeChangedEvent obj)
+        {
+            EditorFontSize = obj.FontSize;
+
+            foreach (var editorViewModel in Documents)
+            {
+                editorViewModel.EditorFontSize = EditorFontSize;
+            }
+        }
+
+        #endregion
+
+        #region Explorer control
+
+        private bool _selectedItemIsFolder;
+        private string _selectedItemName;
+        private string _selectedItemPath;
 
         /// <summary>
         ///     Name of the selected item in the explorer view
@@ -184,28 +249,8 @@ namespace Web_Studio.ViewModels
         /// </summary>
         public DelegateCommand SelectedItemChangedCommand { get; private set; }
 
-
-        private void ManageChangeShowLineNumbers(ShowLineNumbersEvent obj)
-        {
-            EditorShowLineNumbers = obj.ShowLineNumbers;
-            foreach (var editorViewModel in Documents) //Update all editors
-            {
-                editorViewModel.EditorShowLineNumbers = EditorShowLineNumbers;
-            }
-        }
-
-        private void ManageChangeFont(FontSizeChangedEvent obj)
-        {
-            EditorFontSize = obj.FontSize;
-
-            foreach (var editorViewModel in Documents)
-            {
-                editorViewModel.EditorFontSize = EditorFontSize;
-            }
-        }
-
         /// <summary>
-        /// Open the selected file and display it
+        ///     Open the selected file and display it
         /// </summary>
         private void SelectedItemChanged()
         {
@@ -228,5 +273,7 @@ namespace Web_Studio.ViewModels
                 }
             }
         }
+
+        #endregion
     }
 }

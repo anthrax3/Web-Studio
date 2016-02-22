@@ -10,15 +10,17 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <i:Interaction.Triggers>
         <!-- Trigger listening for the "Raised" event on the source object (of type IInteractionRequest) -->
-        <interactionRequest:InteractionRequestTrigger SourceObject="{Binding SaveChangesConfirmationRequest, Mode=OneWay}">
+        <interactionRequest:InteractionRequestTrigger
+            SourceObject="{Binding SaveChangesConfirmationRequest, Mode=OneWay}">
             <!-- That window will be show as a modal dialog and centered over this window -->
-            <interactionRequest:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True"/>
+            <interactionRequest:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True" />
         </interactionRequest:InteractionRequestTrigger>
     </i:Interaction.Triggers>
     <Grid>
         <editor:TextEditorMvvm Document="{Binding Document}" SyntaxHighlighting="{Binding SyntaxHighlighting}"
                                FontFamily="Consolas" Margin="0" Foreground="White"
                                ShowLineNumbers="{Binding EditorShowLineNumbers}" FontSize="{Binding EditorFontSize}"
-                               HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsModified="{Binding EditorIsModified,Mode=TwoWay}" />
+                               HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                               IsModified="{Binding EditorIsModified,Mode=TwoWay}" />
     </Grid>
 </UserControl>

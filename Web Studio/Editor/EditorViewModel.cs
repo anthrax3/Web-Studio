@@ -1,10 +1,8 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Windows.Controls;
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
-using MahApps.Metro.Controls.Dialogs;
 using Prism.Commands;
 using Prism.Interactivity.InteractionRequest;
 using Prism.Mvvm;
@@ -19,14 +17,10 @@ namespace Web_Studio.Editor
     /// </summary>
     public class EditorViewModel : BindableBase
     {
-        /// <summary>
-        /// Confirmation event popup
-        /// </summary>
-        public InteractionRequest<IConfirmation> SaveChangesConfirmationRequest { get; private set; }
-
-
         private TextDocument _document;
         private int _editorFontSize;
+
+        private bool _editorIsModified;
         private Brush _editorLinkTextForegroundBrush;
 
         private bool _editorShowLineNumbers;
@@ -40,16 +34,6 @@ namespace Web_Studio.Editor
         private string _title;
 
         private string _toolTip;
-
-        private bool _editorIsModified;
-        /// <summary>
-        /// the document is modified
-        /// </summary>
-        public bool EditorIsModified
-        {
-            get { return _editorIsModified; }
-            set { SetProperty(ref _editorIsModified, value); }
-        }
 
         /// <summary>
         ///     Default constructor
@@ -77,36 +61,24 @@ namespace Web_Studio.Editor
             SyntaxHighlighting = syntaxHighlighterTool.SyntaxHighlightingMode(path);
         }
 
-        private void CloseCommandMethod()
-        {
-            if (EditorIsModified)
-            {
-                TextBlock contenTextBox = new TextBlock()
-                {
-                    Text = Strings.SaveChangesDescription,
-                    Foreground = new SolidColorBrush(Colors.White)
-                };
+        /// <summary>
+        ///     Confirmation event popup
+        /// </summary>
+        public InteractionRequest<IConfirmation> SaveChangesConfirmationRequest { get; }
 
-                SaveChangesConfirmationRequest.Raise(
-                    new Confirmation {Content = contenTextBox, Title = Strings.SaveChanges},
-                    c =>
-                    {
-                        if (c.Confirmed) //Exit without save changes
-                        {
-                            EventSystem.Publish(new ClosedDocumentEvent {ClosedDocument = this});
-                        }
-                    });
-            }
-            else
-            {
-                EventSystem.Publish(new ClosedDocumentEvent { ClosedDocument = this });
-            }
+        /// <summary>
+        ///     the document is modified
+        /// </summary>
+        public bool EditorIsModified
+        {
+            get { return _editorIsModified; }
+            set { SetProperty(ref _editorIsModified, value); }
         }
 
         /// <summary>
-        /// Command to manage the close document event
+        ///     Command to manage the close document event
         /// </summary>
-        public DelegateCommand CloseCommand { get; private set; } 
+        public DelegateCommand CloseCommand { get; private set; }
 
         /// <summary>
         ///     The Syntax highlighting configuration
@@ -189,6 +161,32 @@ namespace Web_Studio.Editor
         {
             get { return _editorFontSize; }
             set { SetProperty(ref _editorFontSize, value); }
+        }
+
+        private void CloseCommandMethod()
+        {
+            if (EditorIsModified)
+            {
+                var contenTextBox = new TextBlock
+                {
+                    Text = Strings.SaveChangesDescription,
+                    Foreground = new SolidColorBrush(Colors.White)
+                };
+
+                SaveChangesConfirmationRequest.Raise(
+                    new Confirmation {Content = contenTextBox, Title = Strings.SaveChanges},
+                    c =>
+                    {
+                        if (c.Confirmed) //Exit without save changes
+                        {
+                            EventSystem.Publish(new ClosedDocumentEvent {ClosedDocument = this});
+                        }
+                    });
+            }
+            else
+            {
+                EventSystem.Publish(new ClosedDocumentEvent {ClosedDocument = this});
+            }
         }
     }
 }

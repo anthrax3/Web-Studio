@@ -1,9 +1,7 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.IO;
 using System.Threading;
 using System.Windows;
-using MahApps.Metro.Controls.Dialogs;
 using Web_Studio.Models;
 using Web_Studio.Properties;
 using WPFLocalizeExtension.Engine;
@@ -32,11 +30,10 @@ namespace Web_Studio
             Thread.CurrentThread.CurrentUICulture = cultureInfo;
             Thread.CurrentThread.CurrentCulture = cultureInfo;
             //Open with file as argument
-            if (e.Args.Length > 0 && File.Exists(e.Args[0]) && Path.GetExtension(e.Args[0])==".ws")
+            if (e.Args.Length > 0 && File.Exists(e.Args[0]) && Path.GetExtension(e.Args[0]) == ".ws")
             {
                 ProjectModel.Instance.FullPath = Path.GetDirectoryName(e.Args[0]);
             }
-
         }
 
         /// <summary>

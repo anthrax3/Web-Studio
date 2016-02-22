@@ -3,12 +3,12 @@
 namespace Web_Studio.Events
 {
     /// <summary>
-    /// Manage the document closed event. Raised in a EditorView and caught in MainWindowViewModel 
+    ///     Manage the document closed event. Raised in a EditorView and caught in MainWindowViewModel
     /// </summary>
     public class ClosedDocumentEvent
     {
         /// <summary>
-        /// The document
+        ///     The document
         /// </summary>
         public EditorViewModel ClosedDocument { get; set; }
     }
