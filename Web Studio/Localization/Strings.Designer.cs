@@ -133,6 +133,15 @@ namespace Web_Studio.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Editor.
+        /// </summary>
+        public static string Editor {
+            get {
+                return ResourceManager.GetString("Editor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Exit.
         /// </summary>
         public static string Exit {
@@ -151,11 +160,29 @@ namespace Web_Studio.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a File explorer.
+        /// </summary>
+        public static string FileExplorer {
+            get {
+                return ResourceManager.GetString("FileExplorer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Finish.
         /// </summary>
         public static string Finish {
             get {
                 return ResourceManager.GetString("Finish", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Font size.
+        /// </summary>
+        public static string FontSize {
+            get {
+                return ResourceManager.GetString("FontSize", resourceCulture);
             }
         }
         
@@ -214,6 +241,24 @@ namespace Web_Studio.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Save changes.
+        /// </summary>
+        public static string SaveChanges {
+            get {
+                return ResourceManager.GetString("SaveChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a You have modified the document, are you sure that you want to close it without saving the changes?.
+        /// </summary>
+        public static string SaveChangesDescription {
+            get {
+                return ResourceManager.GetString("SaveChangesDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Save File.
         /// </summary>
         public static string SaveFile {
@@ -228,6 +273,33 @@ namespace Web_Studio.Localization {
         public static string SaveProject {
             get {
                 return ResourceManager.GetString("SaveProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Select the software&apos;s language.
+        /// </summary>
+        public static string SelectNewLanguage {
+            get {
+                return ResourceManager.GetString("SelectNewLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Show line numbers.
+        /// </summary>
+        public static string ShowLineNumbers {
+            get {
+                return ResourceManager.GetString("ShowLineNumbers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Sofware.
+        /// </summary>
+        public static string Software {
+            get {
+                return ResourceManager.GetString("Software", resourceCulture);
             }
         }
         
@@ -268,7 +340,7 @@ namespace Web_Studio.Localization {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Path.
+        ///   Busca una cadena traducida similar a Path:.
         /// </summary>
         public static string WizardPath {
             get {
@@ -277,11 +349,29 @@ namespace Web_Studio.Localization {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Project name.
+        ///   Busca una cadena traducida similar a Project name:.
         /// </summary>
         public static string WizardProjectName {
             get {
                 return ResourceManager.GetString("WizardProjectName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Social settings.
+        /// </summary>
+        public static string WizardSocial {
+            get {
+                return ResourceManager.GetString("WizardSocial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Check name availability.
+        /// </summary>
+        public static string WizardSocialCheckAvailability {
+            get {
+                return ResourceManager.GetString("WizardSocialCheckAvailability", resourceCulture);
             }
         }
     }

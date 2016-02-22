@@ -60,7 +60,7 @@ namespace Web_Studio.ViewModels
                 {
                     SetProperty(ref _editorShowLineNumbers, value);
                     Settings.Default.EditorShowLineNumbers = EditorShowLineNumbers;
-                    EventSystem.Publish(new ShowLineNumbersChanged {ShowLineNumbers = value});
+                    EventSystem.Publish(new ShowLineNumbersEvent {ShowLineNumbers = value});
                 }
             }
         }
@@ -77,7 +77,7 @@ namespace Web_Studio.ViewModels
                 {
                     SetProperty(ref _editorFontSize, value);
                     Settings.Default.EditorFontSize = EditorFontSize;
-                    EventSystem.Publish(new FontSizeChanged {FontSize = value});
+                    EventSystem.Publish(new FontSizeChangedEvent {FontSize = value});
                 }
             }
         }

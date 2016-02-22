@@ -3,7 +3,7 @@
     /// <summary>
     ///     Show line numbers event
     /// </summary>
-    public class ShowLineNumbersChanged
+    public class ShowLineNumbersEvent
     {
         /// <summary>
         ///     new value

@@ -4,8 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:editor="clr-namespace:Web_Studio.Editor"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:interactionRequest="http://prismlibrary.com/"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
+    <i:Interaction.Triggers>
+        <!-- Trigger listening for the "Raised" event on the source object (of type IInteractionRequest) -->
+        <interactionRequest:InteractionRequestTrigger SourceObject="{Binding SaveChangesConfirmationRequest, Mode=OneWay}">
+            <!-- That window will be show as a modal dialog and centered over this window -->
+            <interactionRequest:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True"/>
+        </interactionRequest:InteractionRequestTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <editor:TextEditorMvvm Document="{Binding Document}" SyntaxHighlighting="{Binding SyntaxHighlighting}"
                                FontFamily="Consolas" Margin="0" Foreground="White"

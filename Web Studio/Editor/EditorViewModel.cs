@@ -1,9 +1,16 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Windows.Controls;
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
+using MahApps.Metro.Controls.Dialogs;
+using Prism.Commands;
+using Prism.Interactivity.InteractionRequest;
 using Prism.Mvvm;
 using Web_Studio.Editor.SyntaxHighlighter;
+using Web_Studio.Events;
+using Web_Studio.Localization;
 
 namespace Web_Studio.Editor
 {
@@ -12,6 +19,12 @@ namespace Web_Studio.Editor
     /// </summary>
     public class EditorViewModel : BindableBase
     {
+        /// <summary>
+        /// Confirmation event popup
+        /// </summary>
+        public InteractionRequest<IConfirmation> SaveChangesConfirmationRequest { get; private set; }
+
+
         private TextDocument _document;
         private int _editorFontSize;
         private Brush _editorLinkTextForegroundBrush;
@@ -33,18 +46,51 @@ namespace Web_Studio.Editor
         /// </summary>
         public EditorViewModel(string title, string path, bool showLineNumbers, Brush linkTextForeground, int fontSize)
         {
+            //Config editor
             Title = title;
             ToolTip = path;
             IsSelected = true;
             EditorShowLineNumbers = showLineNumbers;
             EditorLinkTextForegroundBrush = linkTextForeground;
             EditorFontSize = fontSize;
+            CloseCommand = new DelegateCommand(CloseCommandMethod);
+            SaveChangesConfirmationRequest = new InteractionRequest<IConfirmation>();
+
+
+            //Load file
             var streamReader = File.OpenText(ToolTip);
             _document = new TextDocument(streamReader.ReadToEnd());
             streamReader.Close();
+
+            //Load SyntaxHighlighting
             var syntaxHighlighterTool = new SyntaxHighlighterTool();
             SyntaxHighlighting = syntaxHighlighterTool.SyntaxHighlightingMode(path);
         }
+
+        private void CloseCommandMethod()
+        {
+            TextBlock contenTextBox = new TextBlock()
+            {
+                Text = Strings.SaveChangesDescription,
+                Foreground = new SolidColorBrush(Colors.White)
+            };
+
+            SaveChangesConfirmationRequest.Raise(
+                 new Confirmation { Content = contenTextBox, Title = Strings.SaveChanges },
+                 c =>
+                 {
+                     if (c.Confirmed) //Exit without save changes
+                     {
+                         EventSystem.Publish(new ClosedDocumentEvent {ClosedDocument = this});
+                     }
+                 });
+
+        }
+
+        /// <summary>
+        /// Command to manage the close document event
+        /// </summary>
+        public DelegateCommand CloseCommand { get; private set; } 
 
         /// <summary>
         ///     The Syntax highlighting configuration

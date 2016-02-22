@@ -41,14 +41,26 @@ namespace Web_Studio.ViewModels
                 ProjectPath = ProjectModel.Instance.FullPath;
             }
 
+            //Initialize properties
             Documents = new ObservableCollection<EditorViewModel>();
-            SelectedItemChanged = new DelegateCommand(SelectedItemHasChanged);
-            EventSystem.Subscribe<FontSizeChanged>(ChangeFont);
-            EventSystem.Subscribe<ShowLineNumbersChanged>(ChangeShowLineNumbers);
             EditorShowLineNumbers = Settings.Default.EditorShowLineNumbers;
             EditorFontSize = Settings.Default.EditorFontSize;
             EditorLinkTextForegroundBrush =
-                (SolidColorBrush) new BrushConverter().ConvertFrom(Settings.Default.EditorLinkTextForegroundBrush);
+                (SolidColorBrush)new BrushConverter().ConvertFrom(Settings.Default.EditorLinkTextForegroundBrush);
+
+            //Manage commands
+            SelectedItemChanged = new DelegateCommand(SelectedItemHasChanged);
+
+            //Manage events
+            EventSystem.Subscribe<FontSizeChangedEvent>(ManageChangeFont);
+            EventSystem.Subscribe<ShowLineNumbersEvent>(ManageChangeShowLineNumbers);
+            EventSystem.Subscribe<ClosedDocumentEvent>(ManageDocumentClosed);
+
+        }
+
+        private void ManageDocumentClosed(ClosedDocumentEvent obj)
+        {
+            Documents.Remove(obj.ClosedDocument);
         }
 
         /// <summary>
@@ -127,7 +139,7 @@ namespace Web_Studio.ViewModels
         public DelegateCommand SelectedItemChanged { get; private set; }
 
 
-        private void ChangeShowLineNumbers(ShowLineNumbersChanged obj)
+        private void ManageChangeShowLineNumbers(ShowLineNumbersEvent obj)
         {
             EditorShowLineNumbers = obj.ShowLineNumbers;
             foreach (var editorViewModel in Documents) //Update all editors
@@ -136,7 +148,7 @@ namespace Web_Studio.ViewModels
             }
         }
 
-        private void ChangeFont(FontSizeChanged obj)
+        private void ManageChangeFont(FontSizeChangedEvent obj)
         {
             EditorFontSize = obj.FontSize;
 

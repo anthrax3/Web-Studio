@@ -3,7 +3,7 @@
     /// <summary>
     ///     Font size changed event
     /// </summary>
-    public class FontSizeChanged
+    public class FontSizeChangedEvent
     {
         /// <summary>
         ///     New font size

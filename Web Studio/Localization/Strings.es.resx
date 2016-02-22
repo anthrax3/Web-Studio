@@ -216,4 +216,10 @@
 	<data name="FileExplorer" xml:space="preserve">
 		<value>Explorador de archivos</value>
 	</data>
+	<data name="SaveChanges" xml:space="preserve">
+		<value>Guardar cambios</value>
+	</data>
+	<data name="SaveChangesDescription" xml:space="preserve">
+		<value>Has modificado el documento, ¿estas seguro que quieres salir sin guardar los cambios?</value>
+	</data>
 </root>
