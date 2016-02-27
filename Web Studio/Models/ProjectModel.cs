@@ -20,7 +20,7 @@ namespace Web_Studio.Models
         /// </summary>
         private ProjectModel()
         {
-            ///Do nothing
+            //Do nothing
         }
 
         /// <summary>

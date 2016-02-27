@@ -34,6 +34,7 @@ namespace Web_Studio
             {
                 ProjectModel.Instance.FullPath = Path.GetDirectoryName(e.Args[0]);
             }
+
         }
 
         /// <summary>
