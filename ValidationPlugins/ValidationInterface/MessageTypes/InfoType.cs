@@ -13,7 +13,7 @@
         /// <summary>
         ///     Color of the information message (blue)
         /// </summary>
-        public string HexColor { get; } = "0099ff";
+        public string HexColor { get; } = "#0099ff";
 
         /// <summary>
         ///     Symbol (i) of the information message

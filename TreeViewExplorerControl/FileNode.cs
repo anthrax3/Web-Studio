@@ -13,7 +13,7 @@ namespace TreeViewExplorerControl
         public FileNode()
         {
             Nodes = new ObservableCollection<INode>();
-            Image = "";
+            Image = "";
         }
 
         /// <summary>
