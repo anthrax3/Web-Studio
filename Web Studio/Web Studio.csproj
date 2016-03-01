@@ -287,6 +287,14 @@
       <Project>{89286eb4-b4a1-418c-839a-067b00f442d8}</Project>
       <Name>Xceed.Wpf.AvalonDock.Themes.WebStudio</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FastObservableCollection\FastObservableCollection.csproj">
+      <Project>{1d97ecda-d9e1-4fe0-981b-c865a4373ea9}</Project>
+      <Name>FastObservableCollection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MessageListControl\MessageListControl.csproj">
+      <Project>{bedc618f-2497-4142-85b6-3b686b853dc1}</Project>
+      <Name>MessageListControl</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SocialCheckInterface\SocialCheckInterface.csproj">
       <Project>{ee4e6c9a-5fc8-4897-9ae8-321ef92f17da}</Project>
       <Name>SocialCheckInterface</Name>
@@ -294,6 +302,10 @@
     <ProjectReference Include="..\TreeViewExplorerControl\TreeViewExplorerControl.csproj">
       <Project>{c9a42623-7ccb-406b-bb6c-1990caa8cd02}</Project>
       <Name>TreeViewExplorerControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ValidationPlugins\ValidationInterface\ValidationInterface.csproj">
+      <Project>{303eec5a-af5e-40b5-8cc8-546d42ec168b}</Project>
+      <Name>ValidationInterface</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

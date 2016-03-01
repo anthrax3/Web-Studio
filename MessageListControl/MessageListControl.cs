@@ -1,59 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using MessageListControl.Annotations;
-using Prism.Commands;
-using Prism.Mvvm;
 using ValidationInterface;
-using ValidationInterface.MessageTypes;
 using FastObservableCollection;
 
 namespace MessageListControl
 {
-    /// <summary>
-    /// Realice los pasos 1a o 1b y luego 2 para usar este control personalizado en un archivo XAML.
-    ///
-    /// Paso 1a) Usar este control personalizado en un archivo XAML existente en el proyecto actual.
-    /// Agregue este atributo XmlNamespace al elemento raíz del archivo de marcado en el que 
-    /// se va a utilizar:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:MessageListControl"
-    ///
-    ///
-    /// Paso 1b) Usar este control personalizado en un archivo XAML existente en otro proyecto.
-    /// Agregue este atributo XmlNamespace al elemento raíz del archivo de marcado en el que 
-    /// se va a utilizar:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:MessageListControl;assembly=MessageListControl"
-    ///
-    /// Tendrá también que agregar una referencia de proyecto desde el proyecto en el que reside el archivo XAML
-    /// hasta este proyecto y recompilar para evitar errores de compilación:
-    ///
-    ///     Haga clic con el botón secundario del mouse en el proyecto de destino en el Explorador de soluciones y seleccione
-    ///     "Agregar referencia"->"Proyectos"->[seleccione este proyecto]
-    ///
-    ///
-    /// Paso 2)
-    /// Prosiga y utilice el control en el archivo XAML.
-    ///
-    ///     <MyNamespace:CustomControl1/>
-    ///
-    /// </summary>
+   /// <summary>
+   /// Control to display an advanced list of messages
+   /// </summary>
     public class MessageListControl : Control,INotifyPropertyChanged
     {
        static MessageListControl()
@@ -74,6 +33,9 @@ namespace MessageListControl
         #region Stadistics
         private int _errors;
 
+        /// <summary>
+        /// Errors number
+        /// </summary>
         public int Errors
         {
             get { return _errors; }
@@ -86,6 +48,9 @@ namespace MessageListControl
 
         private int _warnings;
 
+        /// <summary>
+        /// Warnings number
+        /// </summary>
         public int Warnings
         {
             get { return _warnings; }
@@ -98,6 +63,9 @@ namespace MessageListControl
 
         private int _informations;
 
+        /// <summary>
+        /// Number of information messages
+        /// </summary>
         public int Informations
         {
             get { return _informations; }
@@ -109,7 +77,9 @@ namespace MessageListControl
         }
 
         private bool _showErrors;
-
+        /// <summary>
+        /// show error messages
+        /// </summary>
         public bool ShowErrors
         {
             get { return _showErrors; }
@@ -122,6 +92,9 @@ namespace MessageListControl
 
         private bool _showWarnings;
 
+        /// <summary>
+        /// Show warning messages
+        /// </summary>
         public bool ShowWarnings
         {
             get { return _showWarnings; }
@@ -134,7 +107,9 @@ namespace MessageListControl
         }
 
         private bool _showInformations;
-
+        /// <summary>
+        /// Show information messages
+        /// </summary>
         public bool ShowInformations
         {
             get { return _showInformations; }
@@ -222,7 +197,11 @@ namespace MessageListControl
        
 
         #region Dependency Properties
+
         // Using a DependencyProperty as the backing store for Results.  This enables animation, styling, binding, etc...
+        /// <summary>
+        /// Item Source property, Collection of Results
+        /// </summary>
         public static readonly DependencyProperty ItemsSourceProperty =
             DependencyProperty.Register("ItemsSource", typeof(FastObservableCollection<AnalysisResult>), typeof(MessageListControl),
                 new FrameworkPropertyMetadata(null, ResultsChanged));
@@ -264,8 +243,15 @@ namespace MessageListControl
 
         #endregion
 
+        /// <summary>
+        /// Handler of the event for updating the UI
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Event for updating the UI
+        /// </summary>
+        /// <param name="propertyName"></param>
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

@@ -15,6 +15,8 @@
     xmlns:ei="schemas.microsoft.com/expression/2010/interactions"
     xmlns:interactionRequest="http://prismlibrary.com/"
     xmlns:webStudio="clr-namespace:Web_Studio"
+    xmlns:messageListControl="clr-namespace:MessageListControl;assembly=MessageListControl"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     x:Class="Web_Studio.MainWindow"
     mc:Ignorable="d"
     lex:LocalizeDictionary.DesignCulture="es"
@@ -69,6 +71,7 @@
                 <MenuItem Header="{lex:Loc Options}" Command="{Binding OptionWindowCommand}" />
             </MenuItem>
             <MenuItem Header="{lex:Loc View}" />
+            <MenuItem Header="{lex:Loc Generate}" Command="{Binding GenerateCommand}"></MenuItem>
             <MenuItem Header="{lex:Loc Window}">
                 <MenuItem x:Name="ExplorerMenuItem" Header="{lex:Loc FileExplorer}"
                           IsChecked="{Binding ElementName=ExplorerLayout,Path=IsVisible,Mode=TwoWay}"
@@ -106,7 +109,25 @@
                                 PathToWatch="{Binding ProjectPath}" />
                         </avalonDock:LayoutAnchorable>
                     </avalonDock:LayoutAnchorablePane>
+                    <avalonDock:LayoutAnchorablePane >
+                        
+                    </avalonDock:LayoutAnchorablePane>
                 </avalonDock:LayoutPanel>
+                <avalonDock:LayoutRoot.BottomSide>
+                    <avalonDock:LayoutAnchorSide>
+                        <avalonDock:LayoutAnchorGroup>
+                            <avalonDock:LayoutAnchorable Title="{lex:Loc Messages}" CanClose="False" AutoHideHeight="250">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                    </Grid.RowDefinitions>
+                                    <messageListControl:MessageListControl ItemsSource="{Binding Results}" Grid.Row="1"></messageListControl:MessageListControl>
+                                </Grid>
+                            </avalonDock:LayoutAnchorable>
+                        </avalonDock:LayoutAnchorGroup>
+                    </avalonDock:LayoutAnchorSide>
+                </avalonDock:LayoutRoot.BottomSide>
             </avalonDock:LayoutRoot>
         </avalonDock:DockingManager>
     </Grid>

@@ -222,4 +222,7 @@
 	<data name="SaveChangesDescription" xml:space="preserve">
 		<value>Has modificado el documento, ¿estas seguro que quieres salir sin guardar los cambios?</value>
 	</data>
+	<data name="Messages" xml:space="preserve">
+		<value>Mensajes</value>
+	</data>
 </root>
