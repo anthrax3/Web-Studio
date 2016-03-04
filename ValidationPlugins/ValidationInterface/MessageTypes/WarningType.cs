@@ -6,9 +6,14 @@
     public class WarningType : IMessageType
     {
         /// <summary>
+        ///     Sigleton pattern
+        /// </summary>
+        public static IMessageType Instance { get; } = new WarningType();
+
+        /// <summary>
         ///     Name of the warning type
         /// </summary>
-        public string Name { get; } = "Warning";
+        public string Name => Strings.Warning;
 
         /// <summary>
         ///     Color of the warning type (orange)
@@ -19,10 +24,5 @@
         ///     Symbol (!) of the warning type
         /// </summary>
         public string Symbol { get; } = "";
-
-        /// <summary>
-        /// Sigleton pattern
-        /// </summary>
-        public static IMessageType Instance { get; } = new WarningType();
     }
 }

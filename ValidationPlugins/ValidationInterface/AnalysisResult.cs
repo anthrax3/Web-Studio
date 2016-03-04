@@ -26,5 +26,10 @@ namespace ValidationInterface
         ///     File where the validator produced a message
         /// </summary>
         public string File { get; set; }
+
+        /// <summary>
+        ///     Name of the plugin that it generated this result
+        /// </summary>
+        public string PluginName { get; set; }
     }
 }

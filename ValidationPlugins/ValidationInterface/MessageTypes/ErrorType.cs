@@ -3,12 +3,17 @@
     /// <summary>
     ///     Error message
     /// </summary>
-    public  class ErrorType : IMessageType
+    public class ErrorType : IMessageType
     {
+        /// <summary>
+        ///     Sigleton pattern
+        /// </summary>
+        public static IMessageType Instance { get; } = new ErrorType();
+
         /// <summary>
         ///     Name of the error type
         /// </summary>
-        public string Name { get; } = "Error";
+        public string Name => Strings.Error;
 
         /// <summary>
         ///     Color of the error type (red)
@@ -19,10 +24,5 @@
         ///     Symbol (X) of the error type
         /// </summary>
         public string Symbol { get; } = "";
-
-        /// <summary>
-        /// Sigleton pattern
-        /// </summary>
-        public static IMessageType Instance { get; } = new ErrorType();
     }
 }
