@@ -4,26 +4,26 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using MessageListControl.Annotations;
-using ValidationInterface;
 using FastObservableCollection;
+using MessageListControl.Annotations;
 using MessageListControl.Properties;
-using WPFLocalizeExtension.Providers;
+using ValidationInterface;
 
 namespace MessageListControl
 {
-   /// <summary>
-   /// Control to display an advanced list of messages
-   /// </summary>
-    public class MessageListControl : Control,INotifyPropertyChanged
+    /// <summary>
+    ///     Control to display an advanced list of messages
+    /// </summary>
+    public class MessageListControl : Control, INotifyPropertyChanged
     {
-       static MessageListControl()
+        static MessageListControl()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(MessageListControl), new FrameworkPropertyMetadata(typeof(MessageListControl)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof (MessageListControl),
+                new FrameworkPropertyMetadata(typeof (MessageListControl)));
         }
 
         /// <summary>
-        /// Default constructor
+        ///     Default constructor
         /// </summary>
         public MessageListControl()
         {
@@ -32,25 +32,49 @@ namespace MessageListControl
             ShowWarnings = true;
         }
 
+        /// <summary>
+        ///     Results to show
+        /// </summary>
+        public FastObservableCollection<AnalysisResult> ItemsSource
+        {
+            get { return (FastObservableCollection<AnalysisResult>) GetValue(ItemsSourceProperty); }
+            set { SetValue(ItemsSourceProperty, value); }
+        }
+
+        /// <summary>
+        ///     Handler of the event for updating the UI
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        ///     Event for updating the UI
+        /// </summary>
+        /// <param name="propertyName"></param>
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         #region Stadistics
 
         /// <summary>
-        /// Show Error if there is only one error or error if there is more 
+        ///     Show Error if there is only one error or error if there is more
         /// </summary>
-       public string ErrorText
-       {
-           get
-           {
-               if (Errors == 1)
-               {
-                   return Strings.Error;
-               }
-               return Strings.Errors;
-           }
-       }
+        public string ErrorText
+        {
+            get
+            {
+                if (Errors == 1)
+                {
+                    return Strings.Error;
+                }
+                return Strings.Errors;
+            }
+        }
 
         /// <summary>
-        /// Show Warning if there is only one warning and warnings if there is more
+        ///     Show Warning if there is only one warning and warnings if there is more
         /// </summary>
         public string WarningText
         {
@@ -65,7 +89,7 @@ namespace MessageListControl
         }
 
         /// <summary>
-        /// Show Information if there is only one information msg and informations if there is more
+        ///     Show Information if there is only one information msg and informations if there is more
         /// </summary>
         public string InformationText
         {
@@ -82,7 +106,7 @@ namespace MessageListControl
         private int _errors;
 
         /// <summary>
-        /// Errors number
+        ///     Errors number
         /// </summary>
         public int Errors
         {
@@ -98,7 +122,7 @@ namespace MessageListControl
         private int _warnings;
 
         /// <summary>
-        /// Warnings number
+        ///     Warnings number
         /// </summary>
         public int Warnings
         {
@@ -114,7 +138,7 @@ namespace MessageListControl
         private int _informations;
 
         /// <summary>
-        /// Number of information messages
+        ///     Number of information messages
         /// </summary>
         public int Informations
         {
@@ -128,8 +152,9 @@ namespace MessageListControl
         }
 
         private bool _showErrors;
+
         /// <summary>
-        /// show error messages
+        ///     show error messages
         /// </summary>
         public bool ShowErrors
         {
@@ -144,7 +169,7 @@ namespace MessageListControl
         private bool _showWarnings;
 
         /// <summary>
-        /// Show warning messages
+        ///     Show warning messages
         /// </summary>
         public bool ShowWarnings
         {
@@ -153,13 +178,13 @@ namespace MessageListControl
             {
                 _showWarnings = value;
                 FilterMessages();
-
             }
         }
 
         private bool _showInformations;
+
         /// <summary>
-        /// Show information messages
+        ///     Show information messages
         /// </summary>
         public bool ShowInformations
         {
@@ -168,52 +193,52 @@ namespace MessageListControl
             {
                 _showInformations = value;
                 FilterMessages();
-
             }
         }
 
         /// <summary>
-        /// Filter message types.
+        ///     Filter message types.
         /// </summary>
         private void FilterMessages()
         {
             if (ItemsSource != null)
             {
-                CollectionViewSource.GetDefaultView(ItemsSource).Filter = o => //Return true if that type is going to show
-                {
-                    var data = o as AnalysisResult;
-                    if (data != null)
+                CollectionViewSource.GetDefaultView(ItemsSource).Filter =
+                    o => //Return true if that type is going to show
                     {
-                        string type = data.Type.Name;
-                        if (type.Equals("Error") && ShowErrors)
+                        var data = o as AnalysisResult;
+                        if (data != null)
                         {
-                            return true;
+                            var type = data.Type.Name;
+                            if (type.Equals("Error") && ShowErrors)
+                            {
+                                return true;
+                            }
+                            if (type.Equals("Warning") && ShowWarnings)
+                            {
+                                return true;
+                            }
+                            if (type.Equals("Information") && ShowInformations)
+                            {
+                                return true;
+                            }
                         }
-                        if (type.Equals("Warning") && ShowWarnings)
-                        {
-                            return true;
-                        }
-                        if (type.Equals("Information") && ShowInformations)
-                        {
-                            return true;
-                        }
-                    }
-                    return false;
-                };
+                        return false;
+                    };
             }
         }
 
 
         /// <summary>
-        /// Calculate the number of error warning and information messages
+        ///     Calculate the number of error warning and information messages
         /// </summary>
         private void GenerateStatistics()
         {
             int errors = 0, warnings = 0, informations = 0;
 
-            foreach (AnalysisResult analysisResult in ItemsSource)
+            foreach (var analysisResult in ItemsSource)
             {
-                string type = analysisResult.Type.Name;
+                var type = analysisResult.Type.Name;
                 switch (type)
                 {
                     case "Error":
@@ -231,33 +256,22 @@ namespace MessageListControl
             Warnings = warnings;
             Informations = informations;
         }
+
         #endregion
-
-        /// <summary>
-        /// Results to show
-        /// </summary>
-        public FastObservableCollection<AnalysisResult> ItemsSource
-        {
-            get { return (FastObservableCollection<AnalysisResult>)GetValue(ItemsSourceProperty); }
-            set
-            {
-                SetValue(ItemsSourceProperty, value);
-            }
-        }
-
-       
 
         #region Dependency Properties
 
         // Using a DependencyProperty as the backing store for Results.  This enables animation, styling, binding, etc...
         /// <summary>
-        /// Item Source property, Collection of Results
+        ///     Item Source property, Collection of Results
         /// </summary>
         public static readonly DependencyProperty ItemsSourceProperty =
-            DependencyProperty.Register("ItemsSource", typeof(FastObservableCollection<AnalysisResult>), typeof(MessageListControl),
+            DependencyProperty.Register("ItemsSource", typeof (FastObservableCollection<AnalysisResult>),
+                typeof (MessageListControl),
                 new FrameworkPropertyMetadata(null, ResultsChanged));
+
         /// <summary>
-        /// Results changed handler
+        ///     Results changed handler
         /// </summary>
         /// <param name="d"></param>
         /// <param name="e"></param>
@@ -268,46 +282,33 @@ namespace MessageListControl
             {
                 if (e.OldValue != null)
                 {
-                    var myCollection = (INotifyCollectionChanged)e.OldValue;
-                    myCollection.CollectionChanged -= messageListControl.OnItemsSourceCollectionChanged; //unsubscribe to collection changed event
+                    var myCollection = (INotifyCollectionChanged) e.OldValue;
+                    myCollection.CollectionChanged -= messageListControl.OnItemsSourceCollectionChanged;
+                        //unsubscribe to collection changed event
                 }
                 if (e.NewValue != null)
                 {
-                    var collection = (FastObservableCollection<AnalysisResult>)e.NewValue;
-                    CollectionViewSource.GetDefaultView(collection).GroupDescriptions.Add(new PropertyGroupDescription("PluginName")); //Group Property
+                    var collection = (FastObservableCollection<AnalysisResult>) e.NewValue;
+                    CollectionViewSource.GetDefaultView(collection)
+                        .GroupDescriptions.Add(new PropertyGroupDescription("PluginName")); //Group Property
                     messageListControl.ItemsSource = collection;
-                    var myCollection = (INotifyCollectionChanged)e.NewValue;
-                    myCollection.CollectionChanged += messageListControl.OnItemsSourceCollectionChanged; //subscribe to collection changed event
+                    var myCollection = (INotifyCollectionChanged) e.NewValue;
+                    myCollection.CollectionChanged += messageListControl.OnItemsSourceCollectionChanged;
+                        //subscribe to collection changed event
                 }
             }
-               
         }
 
         /// <summary>
-        /// Handler for collection changed event of Items Source
+        ///     Handler for collection changed event of Items Source
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void OnItemsSourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-          GenerateStatistics();
+            GenerateStatistics();
         }
 
         #endregion
-
-        /// <summary>
-        /// Handler of the event for updating the UI
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        /// Event for updating the UI
-        /// </summary>
-        /// <param name="propertyName"></param>
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

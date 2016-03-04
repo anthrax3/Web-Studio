@@ -12,80 +12,106 @@
                             BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"></RowDefinition>
-                                <RowDefinition></RowDefinition>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition />
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0"> <!-- Options -->
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition></ColumnDefinition>
-                                    <ColumnDefinition></ColumnDefinition>
-                                    <ColumnDefinition></ColumnDefinition>
-                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
                                 <!-- Error -->
-                                <ToggleButton Grid.Column="0" Margin="10" IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent},Path=ShowErrors}"> <!-- Error -->
-                                    <StackPanel Orientation="Horizontal">  
+                                <ToggleButton Grid.Column="0" Margin="10"
+                                              IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent},Path=ShowErrors}"> <!-- Error -->
+                                    <StackPanel Orientation="Horizontal">
                                         <StackPanel.Resources>
                                             <Style TargetType="{x:Type TextBlock}">
-                                                <Setter Property="Margin" Value="10,0,0,0"/>
+                                                <Setter Property="Margin" Value="10,0,0,0" />
                                             </Style>
                                         </StackPanel.Resources>
-                                        <Border Background="#ff3300" BorderThickness="1" CornerRadius="50" Padding="1" Height="15" Width="15">
-                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="" FontFamily="Segoe MDL2 Assets" Margin="0"></TextBlock>
+                                        <Border Background="#ff3300" BorderThickness="1" CornerRadius="50" Padding="1"
+                                                Height="15" Width="15">
+                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text=""
+                                                       FontFamily="Segoe MDL2 Assets" Margin="0" />
                                         </Border>
-                                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Errors}"></TextBlock>
-                                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=ErrorText}"></TextBlock>
+                                        <TextBlock
+                                            Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Errors}" />
+                                        <TextBlock
+                                            Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=ErrorText}" />
                                     </StackPanel>
-                                    </ToggleButton>
-                                
+                                </ToggleButton>
+
                                 <!-- Warning -->
-                                <ToggleButton Grid.Column="1" Margin="10" IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent},Path=ShowWarnings}">
+                                <ToggleButton Grid.Column="1" Margin="10"
+                                              IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent},Path=ShowWarnings}">
                                     <StackPanel Orientation="Horizontal">
                                         <StackPanel.Resources>
                                             <Style TargetType="{x:Type TextBlock}">
-                                                <Setter Property="Margin" Value="10,0,0,0"/>
+                                                <Setter Property="Margin" Value="10,0,0,0" />
                                             </Style>
                                         </StackPanel.Resources>
-                                        <Border Background="#ff8000" BorderThickness="1" CornerRadius="50" Padding="1" Height="15" Width="15">
-                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="" FontFamily="Segoe MDL2 Assets" Margin="0"></TextBlock>
+                                        <Border Background="#ff8000" BorderThickness="1" CornerRadius="50" Padding="1"
+                                                Height="15" Width="15">
+                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text=""
+                                                       FontFamily="Segoe MDL2 Assets" Margin="0" />
                                         </Border>
-                                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Warnings}"></TextBlock>
-                                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=WarningText}"></TextBlock>
+                                        <TextBlock
+                                            Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Warnings}" />
+                                        <TextBlock
+                                            Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=WarningText}" />
                                     </StackPanel>
-                                 </ToggleButton>
-                                
+                                </ToggleButton>
+
                                 <!-- Information -->
-                                <ToggleButton Grid.Column="2" Margin="10" IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent},Path=ShowInformations}">
+                                <ToggleButton Grid.Column="2" Margin="10"
+                                              IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent},Path=ShowInformations}">
                                     <StackPanel Orientation="Horizontal">
                                         <StackPanel.Resources>
                                             <Style TargetType="{x:Type TextBlock}">
-                                                <Setter Property="Margin" Value="10,0,0,0"/>
+                                                <Setter Property="Margin" Value="10,0,0,0" />
                                             </Style>
                                         </StackPanel.Resources>
-                                        <Border Background="#0099ff" BorderThickness="1" CornerRadius="50" Padding="1" Height="15" Width="15">
-                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="" FontFamily="Segoe MDL2 Assets" Margin="0"></TextBlock>
+                                        <Border Background="#0099ff" BorderThickness="1" CornerRadius="50" Padding="1"
+                                                Height="15" Width="15">
+                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text=""
+                                                       FontFamily="Segoe MDL2 Assets" Margin="0" />
                                         </Border>
-                                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Informations}"></TextBlock>
-                                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=InformationText}"></TextBlock>
+                                        <TextBlock
+                                            Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Informations}" />
+                                        <TextBlock
+                                            Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=InformationText}" />
                                     </StackPanel>
                                 </ToggleButton>
                             </Grid>
-                            
+
                             <!-- Data -->
-                            <DataGrid ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent},Path=ItemsSource}" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" EnableRowVirtualization="False">
+                            <DataGrid
+                                ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent},Path=ItemsSource}"
+                                Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True"
+                                EnableRowVirtualization="False">
                                 <DataGrid.Columns>
-                                    <DataGridTemplateColumn Header="{lex:Loc MessageListControl:Strings:Type}" SortMemberPath="Type.Name" CanUserSort="True">
+                                    <DataGridTemplateColumn Header="{lex:Loc MessageListControl:Strings:Type}"
+                                                            SortMemberPath="Type.Name" CanUserSort="True">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Border Background="{Binding Type.HexColor}" BorderThickness="1" CornerRadius="50" Padding="1" Height="15" Width="15">
-                                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Type.Symbol}" ToolTip="{Binding Type.Name}" FontFamily="Segoe MDL2 Assets"></TextBlock>
+                                                <Border Background="{Binding Type.HexColor}" BorderThickness="1"
+                                                        CornerRadius="50" Padding="1" Height="15" Width="15">
+                                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                               Text="{Binding Type.Symbol}"
+                                                               ToolTip="{Binding Type.Name}"
+                                                               FontFamily="Segoe MDL2 Assets" />
                                                 </Border>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
-                                    <DataGridTextColumn Header="{lex:Loc MessageListControl:Strings:Line}"  Binding="{Binding Line}"></DataGridTextColumn>
-                                    <DataGridTextColumn Header="{lex:Loc MessageListControl:Strings:Message}"  Binding="{Binding Message}"></DataGridTextColumn>
-                                    <DataGridTextColumn Header="{lex:Loc MessageListControl:Strings:File}"  Binding="{Binding File}"></DataGridTextColumn>
+                                    <DataGridTextColumn Header="{lex:Loc MessageListControl:Strings:Line}"
+                                                        Binding="{Binding Line}" />
+                                    <DataGridTextColumn Header="{lex:Loc MessageListControl:Strings:Message}"
+                                                        Binding="{Binding Message}" />
+                                    <DataGridTextColumn Header="{lex:Loc MessageListControl:Strings:File}"
+                                                        Binding="{Binding File}" />
                                 </DataGrid.Columns>
                                 <DataGrid.GroupStyle>
                                     <GroupStyle>
@@ -99,13 +125,13 @@
                                                                     <TextBlock>
                                                                         <TextBlock.Text>
                                                                             <MultiBinding StringFormat="{}{0} - {1}">
-                                                                                <Binding Path="Name"></Binding>
-                                                                                <Binding Path="ItemCount"></Binding>
+                                                                                <Binding Path="Name" />
+                                                                                <Binding Path="ItemCount" />
                                                                             </MultiBinding>
                                                                         </TextBlock.Text>
                                                                     </TextBlock>
                                                                 </Expander.Header>
-                                                                <ItemsPresenter></ItemsPresenter> <!-- Items in this group -->
+                                                                <ItemsPresenter /> <!-- Items in this group -->
                                                             </Expander>
                                                         </ControlTemplate>
                                                     </Setter.Value>
