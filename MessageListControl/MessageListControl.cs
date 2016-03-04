@@ -273,8 +273,9 @@ namespace MessageListControl
                 }
                 if (e.NewValue != null)
                 {
-
-                    messageListControl.ItemsSource = ((FastObservableCollection<AnalysisResult>)e.NewValue);
+                    var collection = (FastObservableCollection<AnalysisResult>)e.NewValue;
+                    CollectionViewSource.GetDefaultView(collection).GroupDescriptions.Add(new PropertyGroupDescription("PluginName")); //Group Property
+                    messageListControl.ItemsSource = collection;
                     var myCollection = (INotifyCollectionChanged)e.NewValue;
                     myCollection.CollectionChanged += messageListControl.OnItemsSourceCollectionChanged; //subscribe to collection changed event
                 }
