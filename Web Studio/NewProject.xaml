@@ -48,15 +48,15 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Label Content="{lex:Loc WizardProjectName}" Grid.Row="0" Grid.Column="0" Margin="0,0,0,10" />
+                    <Label Content="{lex:Loc WizardProjectName}" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" />
                     <TextBox Grid.Row="0" Grid.Column="1"
                              Text="{Binding ProjectName, Mode=TwoWay , UpdateSourceTrigger=PropertyChanged}"
                              VerticalContentAlignment="Center" />
-                    <Label Content="{lex:Loc WizardPath}" Grid.Row="1" Grid.Column="0" />
-                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ProjectPath}" />
+                    <Label Content="{lex:Loc WizardPath}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ProjectPath}" Foreground="White" VerticalAlignment="Center" />
                     <Button Content="{lex:Loc Browse}" Grid.Row="1" Grid.Column="2" Command="{Binding BrowseButton}"
                             Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
                 </Grid>
