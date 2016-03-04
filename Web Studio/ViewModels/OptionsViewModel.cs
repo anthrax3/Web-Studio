@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Threading;
 using Prism.Mvvm;
 using Web_Studio.Events;
 using Web_Studio.Properties;
@@ -25,8 +26,10 @@ namespace Web_Studio.ViewModels
         {
             EditorShowLineNumbers = Settings.Default.EditorShowLineNumbers;
             EditorFontSize = Settings.Default.EditorFontSize;
+
             LocalizeDictionary.Instance.IncludeInvariantCulture = false;
             Languages = LocalizeDictionary.Instance.MergedAvailableCultures;
+            SelectedLanguage = CultureInfo.CurrentUICulture;
         }
 
         /// <summary>
@@ -37,8 +40,7 @@ namespace Web_Studio.ViewModels
             get { return _selectedLanguage; }
             set
             {
-                LocalizeDictionary.Instance.SetCurrentThreadCulture = true;
-                LocalizeDictionary.Instance.Culture = value;
+                Localization.Localization.ChangeLanguage(value);
                 SetProperty(ref _selectedLanguage, value);
             }
         }
