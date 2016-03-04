@@ -7,6 +7,8 @@ using System.Windows.Data;
 using MessageListControl.Annotations;
 using ValidationInterface;
 using FastObservableCollection;
+using MessageListControl.Properties;
+using WPFLocalizeExtension.Providers;
 
 namespace MessageListControl
 {
@@ -31,6 +33,52 @@ namespace MessageListControl
         }
 
         #region Stadistics
+
+        /// <summary>
+        /// Show Error if there is only one error or error if there is more 
+        /// </summary>
+       public string ErrorText
+       {
+           get
+           {
+               if (Errors == 1)
+               {
+                   return Strings.Error;
+               }
+               return Strings.Errors;
+           }
+       }
+
+        /// <summary>
+        /// Show Warning if there is only one warning and warnings if there is more
+        /// </summary>
+        public string WarningText
+        {
+            get
+            {
+                if (Warnings == 1)
+                {
+                    return Strings.Warning;
+                }
+                return Strings.Warnings;
+            }
+        }
+
+        /// <summary>
+        /// Show Information if there is only one information msg and informations if there is more
+        /// </summary>
+        public string InformationText
+        {
+            get
+            {
+                if (Informations == 1)
+                {
+                    return Strings.Information;
+                }
+                return Strings.Informations;
+            }
+        }
+
         private int _errors;
 
         /// <summary>
@@ -43,6 +91,7 @@ namespace MessageListControl
             {
                 _errors = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(ErrorText));
             }
         }
 
@@ -58,6 +107,7 @@ namespace MessageListControl
             {
                 _warnings = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(WarningText));
             }
         }
 
@@ -73,6 +123,7 @@ namespace MessageListControl
             {
                 _informations = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(InformationText));
             }
         }
 
