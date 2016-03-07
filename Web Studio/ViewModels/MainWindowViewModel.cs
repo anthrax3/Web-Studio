@@ -50,10 +50,10 @@ namespace Web_Studio.ViewModels
             GenerateCommand = new DelegateCommand(Generate);
 
             //Manage events
-            EventSystem.Subscribe<FontSizeChangedEvent>(ManageChangeFont);
-            EventSystem.Subscribe<ShowLineNumbersEvent>(ManageChangeShowLineNumbers);
+            EventSystem.Subscribe<FontSizeChangedEvent>(ManageChangedFont);
+            EventSystem.Subscribe<ShowLineNumbersEvent>(ManageChangedShowLineNumbers);
             EventSystem.Subscribe<ClosedDocumentEvent>(ManageDocumentClosed);
-            EventSystem.Subscribe<ChangedProjectEvent>(ManageChangeProject);
+            EventSystem.Subscribe<ChangedProjectEvent>(ManageChangedProject);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace Web_Studio.ViewModels
 
        
 
-        private void ManageChangeProject(ChangedProjectEvent obj)
+        private void ManageChangedProject(ChangedProjectEvent obj)
         {
             ProjectPath = ProjectModel.Instance.FullPath;
         }
@@ -191,7 +191,7 @@ namespace Web_Studio.ViewModels
         ///     Method to manage the chage show line numbers event
         /// </summary>
         /// <param name="obj"></param>
-        private void ManageChangeShowLineNumbers(ShowLineNumbersEvent obj)
+        private void ManageChangedShowLineNumbers(ShowLineNumbersEvent obj)
         {
             EditorShowLineNumbers = obj.ShowLineNumbers;
             foreach (var editorViewModel in Documents) //Update all editors
@@ -204,7 +204,7 @@ namespace Web_Studio.ViewModels
         ///     Method to manage the change font event
         /// </summary>
         /// <param name="obj"></param>
-        private void ManageChangeFont(FontSizeChangedEvent obj)
+        private void ManageChangedFont(FontSizeChangedEvent obj)
         {
             EditorFontSize = obj.FontSize;
 
