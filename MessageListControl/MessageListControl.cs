@@ -8,6 +8,7 @@ using FastObservableCollection;
 using MessageListControl.Annotations;
 using MessageListControl.Properties;
 using ValidationInterface;
+using ValidationInterface.MessageTypes;
 
 namespace MessageListControl
 {
@@ -16,6 +17,8 @@ namespace MessageListControl
     /// </summary>
     public class MessageListControl : Control, INotifyPropertyChanged
     {
+        private readonly PropertyGroupDescription _groupDescription = new PropertyGroupDescription("PluginName");
+
         static MessageListControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof (MessageListControl),
@@ -209,16 +212,15 @@ namespace MessageListControl
                         var data = o as AnalysisResult;
                         if (data != null)
                         {
-                            var type = data.Type.Name;
-                            if (type.Equals("Error") && ShowErrors)
+                            if (data.Type is ErrorType && ShowErrors)
                             {
                                 return true;
                             }
-                            if (type.Equals("Warning") && ShowWarnings)
+                            if (data.Type is WarningType && ShowWarnings)
                             {
                                 return true;
                             }
-                            if (type.Equals("Information") && ShowInformations)
+                            if (data.Type is InfoType && ShowInformations)
                             {
                                 return true;
                             }
@@ -234,23 +236,13 @@ namespace MessageListControl
         /// </summary>
         private void GenerateStatistics()
         {
-            int errors = 0, warnings = 0, informations = 0;
+            int errors = 0, warnings = 0, informations = 0; //Temp vars for avoid OnPropertyChanged event each time that I change the value.
 
             foreach (var analysisResult in ItemsSource)
             {
-                var type = analysisResult.Type.Name;
-                switch (type)
-                {
-                    case "Error":
-                        errors++;
-                        break;
-                    case "Warning":
-                        warnings++;
-                        break;
-                    case "Information":
-                        informations++;
-                        break;
-                }
+                if (analysisResult.Type is ErrorType) errors++;
+                if (analysisResult.Type is WarningType) warnings++;
+                if (analysisResult.Type is InfoType) informations++;
             }
             Errors = errors;
             Warnings = warnings;
@@ -260,9 +252,6 @@ namespace MessageListControl
         #endregion
 
         #region Dependency Properties
-
-        private PropertyGroupDescription groupDescription = new PropertyGroupDescription("PluginName");
-
         // Using a DependencyProperty as the backing store for Results.  This enables animation, styling, binding, etc...
         /// <summary>
         ///     Item Source property, Collection of Results
@@ -292,7 +281,7 @@ namespace MessageListControl
                 {
                     var collection = (FastObservableCollection<AnalysisResult>) e.NewValue;
                     CollectionViewSource.GetDefaultView(collection)
-                        .GroupDescriptions.Add(messageListControl.groupDescription); //Group Property
+                        .GroupDescriptions.Add(messageListControl._groupDescription); //Group Property
                     messageListControl.ItemsSource = collection;
                     var myCollection = (INotifyCollectionChanged) e.NewValue;
                     myCollection.CollectionChanged += messageListControl.OnItemsSourceCollectionChanged;
@@ -313,6 +302,7 @@ namespace MessageListControl
 
         #endregion
 
+
         /// <summary>
         /// Refresh the User Interface for example because we changed the language
         /// </summary>
@@ -323,7 +313,7 @@ namespace MessageListControl
             OnPropertyChanged(nameof(InformationText));
             var temp = ItemsSource;
             CollectionViewSource.GetDefaultView(ItemsSource)
-                .GroupDescriptions.Remove(groupDescription); //Remove group because when the binding happens it groups the items
+                .GroupDescriptions.Remove(_groupDescription); //Remove group because when the binding happens it groups the items
             ItemsSource = null;
             ItemsSource = temp; //link other time the data so the data grid refresh the data
         }
