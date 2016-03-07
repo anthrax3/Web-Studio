@@ -261,6 +261,8 @@ namespace MessageListControl
 
         #region Dependency Properties
 
+        private PropertyGroupDescription groupDescription = new PropertyGroupDescription("PluginName");
+
         // Using a DependencyProperty as the backing store for Results.  This enables animation, styling, binding, etc...
         /// <summary>
         ///     Item Source property, Collection of Results
@@ -290,7 +292,7 @@ namespace MessageListControl
                 {
                     var collection = (FastObservableCollection<AnalysisResult>) e.NewValue;
                     CollectionViewSource.GetDefaultView(collection)
-                        .GroupDescriptions.Add(new PropertyGroupDescription("PluginName")); //Group Property
+                        .GroupDescriptions.Add(messageListControl.groupDescription); //Group Property
                     messageListControl.ItemsSource = collection;
                     var myCollection = (INotifyCollectionChanged) e.NewValue;
                     myCollection.CollectionChanged += messageListControl.OnItemsSourceCollectionChanged;
@@ -310,5 +312,20 @@ namespace MessageListControl
         }
 
         #endregion
+
+        /// <summary>
+        /// Refresh the User Interface for example because we changed the language
+        /// </summary>
+        public void RefreshUI()
+        {
+            OnPropertyChanged(nameof(ErrorText));
+            OnPropertyChanged(nameof(WarningText));
+            OnPropertyChanged(nameof(InformationText));
+            var temp = ItemsSource;
+            CollectionViewSource.GetDefaultView(ItemsSource)
+                .GroupDescriptions.Remove(groupDescription); //Remove group because when the binding happens it groups the items
+            ItemsSource = null;
+            ItemsSource = temp; //link other time the data so the data grid refresh the data
+        }
     }
 }
