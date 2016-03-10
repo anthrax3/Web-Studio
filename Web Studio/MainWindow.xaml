@@ -124,7 +124,7 @@
                                         <RowDefinition></RowDefinition>
                                     </Grid.RowDefinitions>
                                     <busyControl:BusyControl x:Name="BusyControl"></busyControl:BusyControl>
-                                    <messageListControl:MessageListControl x:Name="MessageListControl"  ItemsSource="{Binding Results}" Grid.Row="1"></messageListControl:MessageListControl>
+                                    <messageListControl:MessageListControl x:Name="MessageListControl"  ItemsSource="{Binding Results}" Grid.Row="1" SelectedItem="{Binding MessageSelected,Mode=OneWayToSource}"></messageListControl:MessageListControl>
                                 </Grid>
                             </avalonDock:LayoutAnchorable>
                         </avalonDock:LayoutAnchorGroup>

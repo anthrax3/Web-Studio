@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Windows.Media;
 using FastObservableCollection;
@@ -266,17 +268,28 @@ namespace Web_Studio.ViewModels
                     doc.IsSelected = false;
                 }
 
-                var editorViewModel = Documents.Where(doc => doc.ToolTip == SelectedItemPath);
-                if (!editorViewModel.Any())
-                {
-                    Documents.Add(new EditorViewModel(SelectedItemName, SelectedItemPath, EditorShowLineNumbers,
-                        EditorLinkTextForegroundBrush, EditorFontSize));
-                }
-                else
-                {
-                    editorViewModel.First().IsSelected = true;
-                }
+                EditorViewModel myEditor = SearchOrCreateDocument(SelectedItemPath, SelectedItemName);
+                myEditor.IsSelected = true;
             }
+        }
+
+        /// <summary>
+        /// Search for a document if it finds it, it returns it, else it creates a new Document and return it
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        private EditorViewModel SearchOrCreateDocument(string path, string name)
+        {
+            var editorViewModel = Documents.Where(doc => doc.ToolTip == path);
+            if (!editorViewModel.Any())
+            {
+                EditorViewModel myEditor = new EditorViewModel(name, path, EditorShowLineNumbers,
+                    EditorLinkTextForegroundBrush, EditorFontSize);
+                Documents.Add(myEditor);
+                return myEditor;
+            }
+            return editorViewModel.First();
         }
 
         #endregion
@@ -308,6 +321,35 @@ namespace Web_Studio.ViewModels
                 }
             }
         }
+
+        private AnalysisResult _messageSelected;
+        /// <summary>
+        /// Selected message in message list control
+        /// </summary>
+        public AnalysisResult MessageSelected
+        {
+            get { return _messageSelected; }
+            set
+            {
+                SetProperty(ref _messageSelected, value);
+                GoToMessageLine();
+            }
+        }
+
+        /// <summary>
+        /// When a message is selected, open the document of the message and go to the line
+        /// </summary>
+        private void GoToMessageLine()
+        {
+            foreach (var doc in Documents)     //put select property to false
+            {
+                doc.IsSelected = false;
+            }
+            var myEditor = SearchOrCreateDocument(MessageSelected.File, Path.GetFileName(MessageSelected.File));
+            myEditor.IsSelected = true;
+            myEditor.ScrollToLine = MessageSelected.Line;
+        }
+
         #endregion
     }
 }
