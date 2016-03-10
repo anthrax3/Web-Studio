@@ -73,7 +73,7 @@ namespace Web_Studio.Models
                 Directory.CreateDirectory(Path.Combine(srcPath, "img"));
 
                 //Create index file
-                File.Create(Path.Combine(srcPath, "index.html"));
+                File.WriteAllText(Path.Combine(srcPath, "index.html"),Templates.Html5Template());
 
                 return true;
             }

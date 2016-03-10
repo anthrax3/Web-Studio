@@ -113,7 +113,7 @@ namespace Web_Studio.ViewModels
         /// </summary>
         private void CheckPage1()
         {
-            if (ProjectName.Length != 0 && ProjectPath.Length != 0)
+            if (!string.IsNullOrWhiteSpace(ProjectName)  && !string.IsNullOrWhiteSpace(ProjectPath))
             {
                 Page1IsChecked = true;
             }

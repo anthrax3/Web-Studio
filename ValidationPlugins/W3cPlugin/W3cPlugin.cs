@@ -3,28 +3,29 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using ValidationInterface;
 using ValidationInterface.MessageTypes;
 
 namespace W3cPlugin
 {
+    /// <summary>
+    ///     Plugin that check the html files with the W3C specification
+    /// </summary>
     [Export(typeof (IValidation))]
     public class W3cPlugin : IValidation
     {
         /// <summary>
         ///     Name of the plugin
         /// </summary>
-        public string Name { get; } = "W3C Validator";
+        public string Name => Strings.Name;
 
         /// <summary>
         ///     Description
         /// </summary>
-        public string Description { get; } = "This validator checks the markup validity of Web documents";
+        public string Description => Strings.Description;
 
         /// <summary>
         ///     Category of the plugin
@@ -34,7 +35,7 @@ namespace W3cPlugin
         /// <summary>
         ///     Results of the check method.
         /// </summary>
-        public List<AnalysisResult> AnalysisResults { get; private set; } = new List<AnalysisResult>();
+        public List<AnalysisResult> AnalysisResults { get; } = new List<AnalysisResult>();
 
         /// <summary>
         ///     can we automatically fix some errors?
@@ -54,17 +55,17 @@ namespace W3cPlugin
         public List<AnalysisResult> Check(string projectPath)
         {
             //Get the html files in the folder and subfolder
-            string [] filesToCheck =Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
+            var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
             Console.WriteLine(filesToCheck.ToString());
 
-            foreach (string file in filesToCheck)
+            foreach (var file in filesToCheck)
             {
-                string output = string.Empty;
-                string directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                
+                var output = string.Empty;
+                var directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
                 if (directory != null)
                 {
-                    ProcessStartInfo processStartInfo = new ProcessStartInfo("cmd", "/c java -jar vnu.jar --format json " + file)
+                    var processStartInfo = new ProcessStartInfo("cmd", "/c java -jar vnu.jar --format json " + file)
                     {
                         RedirectStandardError = true,
                         RedirectStandardInput = true,
@@ -75,16 +76,16 @@ namespace W3cPlugin
                         WorkingDirectory = directory
                     };
 
-                    Process process = Process.Start(processStartInfo);
+                    var process = Process.Start(processStartInfo);
 
                     if (process != null)
                     {
-                        using (StreamReader streamReader = process.StandardError)
+                        using (var streamReader = process.StandardError)
                         {
                             output = streamReader.ReadToEnd();
                         }
-                        W3cResult account = JsonConvert.DeserializeObject<W3cResult>(output);
-                        foreach (MessageClass message in account.Messages)
+                        var account = JsonConvert.DeserializeObject<W3cResult>(output);
+                        foreach (var message in account.Messages)
                         {
                             AnalysisResults.Add(GenerateResult(file, message));
                         }
@@ -94,13 +95,23 @@ namespace W3cPlugin
             return AnalysisResults;
         }
 
+        /// <summary>
+        ///     Method to fix automatically some errors
+        /// </summary>
+        /// <param name="projectPath"></param>
+        public void Fix(string projectPath)
+        {
+            //Do nothing
+        }
+
         private AnalysisResult GenerateResult(string file, MessageClass message)
         {
-            AnalysisResult analysisResult = new AnalysisResult
+            var analysisResult = new AnalysisResult
             {
                 File = file,
                 Line = message.LastLine,
-                Message = message.Message
+                Message = message.Message,
+                PluginName = Name
             };
 
             //Type
@@ -123,15 +134,6 @@ namespace W3cPlugin
                 }
             }
             return analysisResult;
-        }
-
-        /// <summary>
-        ///     Method to fix automatically some errors
-        /// </summary>
-        /// <param name="projectPath"></param>
-        public void Fix(string projectPath)
-        {
-            //Do nothing
         }
     }
 }

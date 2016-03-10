@@ -58,7 +58,7 @@ namespace Web_Studio.Editor
 
             //Load SyntaxHighlighting
             var syntaxHighlighterTool = new SyntaxHighlighterTool();
-            SyntaxHighlighting = syntaxHighlighterTool.SyntaxHighlightingMode(path);
+            SyntaxHighlighting = syntaxHighlighterTool.SyntaxHighlightingMode(path); 
         }
 
         /// <summary>
@@ -187,6 +187,16 @@ namespace Web_Studio.Editor
             {
                 EventSystem.Publish(new ClosedDocumentEvent {ClosedDocument = this});
             }
+        }
+
+        private int _scrollToLine;
+        /// <summary>
+        /// Move the scroll to a line
+        /// </summary>
+        public int ScrollToLine
+        {
+            get { return _scrollToLine; }
+            set { SetProperty(ref _scrollToLine, value); }
         }
     }
 }

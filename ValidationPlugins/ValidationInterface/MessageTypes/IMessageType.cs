@@ -3,7 +3,7 @@
     /// <summary>
     ///     Message type interface
     /// </summary>
-    public interface  IMessageType
+    public interface IMessageType
     {
         /// <summary>
         ///     Name of the message type
