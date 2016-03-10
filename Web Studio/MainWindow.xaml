@@ -25,7 +25,6 @@
         Left="{Binding Source={x:Static properties:Settings.Default},Path=Left,Mode=TwoWay}"
         Top="{Binding Source={x:Static properties:Settings.Default},Path=Top,Mode=TwoWay}"
     WindowState="{Binding Source={x:Static properties:Settings.Default},Path=WindowState,Mode=TwoWay}">
-    <!-- WindowState="Maximized" -->
     <controls:MetroWindow.DataContext>
         <viewModels:MainWindowViewModel />
     </controls:MetroWindow.DataContext>
