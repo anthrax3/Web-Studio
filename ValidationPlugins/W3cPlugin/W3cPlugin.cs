@@ -8,6 +8,7 @@ using System.Text;
 using Newtonsoft.Json;
 using ValidationInterface;
 using ValidationInterface.MessageTypes;
+using W3cPlugin.Properties;
 
 namespace W3cPlugin
 {
