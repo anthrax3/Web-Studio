@@ -3,27 +3,29 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:localization="clr-namespace:Web_Studio.Localization"
     xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     xmlns:lex="http://wpflocalizeextension.codeplex.com"
-    xmlns:Reglas="clr-namespace:Web_Studio.Reglas"
     xmlns:viewModels="clr-namespace:Web_Studio.ViewModels"
     xmlns:editor="clr-namespace:Web_Studio.Editor"
     xmlns:avalonDock="http://schemas.xceed.com/wpf/xaml/avalondock"
     xmlns:treeViewExplorerControl="clr-namespace:TreeViewExplorerControl;assembly=TreeViewExplorerControl"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-    xmlns:ei="schemas.microsoft.com/expression/2010/interactions"
     xmlns:interactionRequest="http://prismlibrary.com/"
     xmlns:webStudio="clr-namespace:Web_Studio"
     xmlns:messageListControl="clr-namespace:MessageListControl;assembly=MessageListControl"
-    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     xmlns:busyControl="clr-namespace:BusyControl;assembly=BusyControl"
+    xmlns:properties="clr-namespace:Web_Studio.Properties"
     x:Class="Web_Studio.MainWindow"
     mc:Ignorable="d"
     lex:LocalizeDictionary.DesignCulture="es"
     lex:ResxLocalizationProvider.DefaultAssembly="Web Studio"
     lex:ResxLocalizationProvider.DefaultDictionary="Strings"
-    Title="Web Studio" TitleCaps="False" Height="350" Width="525" WindowState="Maximized">
+    Title="Web Studio" TitleCaps="False" Height="{Binding Source={x:Static properties:Settings.Default},Path=Height,Mode=TwoWay}"
+        Width="{Binding Source={x:Static properties:Settings.Default},Path=Width,Mode=TwoWay}"
+        Left="{Binding Source={x:Static properties:Settings.Default},Path=Left,Mode=TwoWay}"
+        Top="{Binding Source={x:Static properties:Settings.Default},Path=Top,Mode=TwoWay}"
+    WindowState="{Binding Source={x:Static properties:Settings.Default},Path=WindowState,Mode=TwoWay}">
+    <!-- WindowState="Maximized" -->
     <controls:MetroWindow.DataContext>
         <viewModels:MainWindowViewModel />
     </controls:MetroWindow.DataContext>
