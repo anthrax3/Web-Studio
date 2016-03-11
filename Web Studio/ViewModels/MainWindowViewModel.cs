@@ -309,7 +309,7 @@ namespace Web_Studio.ViewModels
         public DelegateCommand GenerateCommand { get; private set; }
 
         /// <summary>
-        /// Generate the new proyecto
+        /// Generate the new project
         /// </summary>
         private void Generate()
         {
@@ -319,6 +319,9 @@ namespace Web_Studio.ViewModels
                 NumberOfRulesProcessed = 0;
                 NumberOfRules = ValidationPluginManager.Plugins.Count;
                 IsGeneratingProject = true;
+                CopySourceToRelease();
+                string releasePath = Path.Combine(ProjectPath, "release");
+
 
                 BackgroundWorker worker = new BackgroundWorker();
 
@@ -336,7 +339,7 @@ namespace Web_Studio.ViewModels
 
                     foreach (Lazy<IValidation, IValidationMetadata> plugin in ValidationPluginManager.Plugins)
                     {
-                        Results.AddRange(plugin.Value.Check(ProjectPath));
+                        Results.AddRange(plugin.Value.Check(releasePath));
                     }
                 };
 
@@ -346,11 +349,31 @@ namespace Web_Studio.ViewModels
                 };
 
                 worker.RunWorkerAsync();
-
-
-                 
-
             }
+        }
+        /// <summary>
+        /// Method to copy all files in source to release
+        /// </summary>
+        private void CopySourceToRelease()
+        {
+            string srcPath = Path.Combine(ProjectPath, "src");
+            string releasePath = Path.Combine(ProjectPath, "release");
+
+            if (Directory.Exists(releasePath))     //Remove old release
+            {
+                Directory.Delete(releasePath,true);
+            }
+            Directory.CreateDirectory(releasePath);
+
+            foreach (string dirPath in Directory.GetDirectories(srcPath, "*", SearchOption.AllDirectories)) //Crete all directories
+            {
+                Directory.CreateDirectory(dirPath.Replace(srcPath, releasePath));
+            }
+
+            foreach (string newPath in Directory.GetFiles(srcPath, "*.*", SearchOption.AllDirectories))
+            {
+                File.Copy(newPath, newPath.Replace(srcPath, releasePath), true); 
+            } 
         }
 
         private AnalysisResult _messageSelected;
