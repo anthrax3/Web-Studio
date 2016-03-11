@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Media;
+using System.Windows.Threading;
 using FastObservableCollection;
 using Microsoft.Win32;
 using Prism.Commands;
@@ -311,10 +313,43 @@ namespace Web_Studio.ViewModels
         /// </summary>
         private void Generate()
         {
-            if (ProjectPath != null)
+            if (ProjectPath != null && !IsGeneratingProject)
             {
                 Results.Clear();
-                Results.AddRange(ValidationPluginManager.Run());
+                NumberOfRulesProcessed = 0;
+                NumberOfRules = ValidationPluginManager.Plugins.Count;
+                IsGeneratingProject = true;
+
+                BackgroundWorker worker = new BackgroundWorker();
+
+                worker.DoWork += (o, ea) =>
+                {
+                    for (int i = 0; i < ValidationPluginManager.Plugins.Count; i++)
+                    {
+                        var tempResults = ValidationPluginManager.Plugins[i].Value.Check(ProjectPath);
+                        System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
+                        {
+                            Results.AddRange(tempResults);
+                            NumberOfRulesProcessed++;
+                        });
+                    }
+
+                    foreach (Lazy<IValidation, IValidationMetadata> plugin in ValidationPluginManager.Plugins)
+                    {
+                        Results.AddRange(plugin.Value.Check(ProjectPath));
+                    }
+                };
+
+                worker.RunWorkerCompleted += (sender, args) => //Finished
+                {
+                    IsGeneratingProject = false;
+                };
+
+                worker.RunWorkerAsync();
+
+
+                 
+
             }
         }
 
@@ -345,6 +380,40 @@ namespace Web_Studio.ViewModels
             myEditor.IsSelected = true;
             myEditor.ScrollToLine = MessageSelected.Line;
         }
+
+        #endregion
+
+        #region BusyControl
+        private bool _isGeneratingProject;
+        /// <summary>
+        /// True if we are generating the project => enable busycontrol
+        /// </summary>
+        public bool IsGeneratingProject
+        {
+            get { return _isGeneratingProject; }
+            set { SetProperty(ref _isGeneratingProject, value); }
+        }
+
+        private int _numberOfRules;
+        /// <summary>
+        /// Total number of rules to process
+        /// </summary>
+        public int NumberOfRules
+        {
+            get { return _numberOfRules; }
+            set { SetProperty(ref _numberOfRules, value); }
+        }
+
+        private int _numberOfRulesProcessed;
+        /// <summary>
+        /// Number of rules that we have already processed
+        /// </summary>
+        public int NumberOfRulesProcessed
+        {
+            get { return _numberOfRulesProcessed; }
+            set { SetProperty(ref _numberOfRulesProcessed, value); }
+        }
+
 
         #endregion
     }

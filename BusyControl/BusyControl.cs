@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -126,7 +127,16 @@ namespace BusyControl
         ///     Register minvalue property
         /// </summary>
         public static readonly DependencyProperty MinValueProperty =
-            DependencyProperty.Register("MinValue", typeof (int), typeof (BusyControl), new PropertyMetadata(0));
+            DependencyProperty.Register("MinValue", typeof (int), typeof (BusyControl), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnMinValueChanged));
+
+        private static void OnMinValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            BusyControl busyControl = d as BusyControl;
+            if (busyControl != null)
+            {
+                busyControl.MinValue = (int)e.NewValue;
+            }
+        }
 
         /// <summary>
         ///     Max value in progress bar
@@ -134,14 +144,27 @@ namespace BusyControl
         public int MaxValue
         {
             get { return (int) GetValue(MaxValueProperty); }
-            set { SetValue(MaxValueProperty, value); }
+            set
+            {
+                SetValue(MaxValueProperty, value);
+                OnPropertyChanged(nameof(Progress));
+            }
         }
 
         /// <summary>
         ///     Register maxvalue property
         /// </summary>
         public static readonly DependencyProperty MaxValueProperty =
-            DependencyProperty.Register("MaxValue", typeof (int), typeof (BusyControl), new PropertyMetadata(0));
+            DependencyProperty.Register("MaxValue", typeof (int), typeof (BusyControl), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,OnMaxValueChanged));
+
+        private static void OnMaxValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            BusyControl busyControl = d as BusyControl;
+            if (busyControl != null)
+            {
+                busyControl.MaxValue = (int)e.NewValue;
+            }
+        }
 
         /// <summary>
         ///     If the program is busy => show the control
@@ -160,7 +183,17 @@ namespace BusyControl
         ///     Register isBusy property
         /// </summary>
         public static readonly DependencyProperty IsBusyProperty =
-            DependencyProperty.Register("IsBusy", typeof (bool), typeof (BusyControl), new PropertyMetadata(true));
+            DependencyProperty.Register("IsBusy", typeof (bool), typeof (BusyControl), new FrameworkPropertyMetadata(true,FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,OnIsBusyChanged));
+
+        private static void OnIsBusyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+             BusyControl busyControl = d as BusyControl;
+            if (busyControl != null)
+            {
+                busyControl.IsBusy = (bool) e.NewValue;
+            }
+
+        }
 
         /// <summary>
         ///     Current value in progress bar
@@ -179,7 +212,16 @@ namespace BusyControl
         ///     Register value property
         /// </summary>
         public static readonly DependencyProperty ValueProperty =
-            DependencyProperty.Register("Value", typeof (int), typeof (BusyControl), new PropertyMetadata(0));
+            DependencyProperty.Register("Value", typeof (int), typeof (BusyControl), new FrameworkPropertyMetadata(0,FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,OnValueChanged));
+
+        private static void OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            BusyControl busyControl = d as BusyControl;
+            if (busyControl != null)
+            {
+                busyControl.Value = (int)e.NewValue;
+            }
+        }
 
         #endregion
     }

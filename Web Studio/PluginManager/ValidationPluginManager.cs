@@ -12,7 +12,20 @@ namespace Web_Studio.PluginManager
     /// </summary>
     public class ValidationPluginManager
     {
-        public static List<Lazy<IValidation, IValidationMetadata>> Plugins;
+        private static List<Lazy<IValidation, IValidationMetadata>> _plugins;
+
+        /// <summary>
+        /// List of plugins that implements IValidation interface
+        /// </summary>
+        public static List<Lazy<IValidation, IValidationMetadata>> Plugins
+        {
+            get
+            {
+                  if(_plugins==null) Load();
+                return _plugins;
+            }
+            private set { _plugins = value; }
+        }
 
         /// <summary>
         /// Load the validation plugins
@@ -53,25 +66,5 @@ namespace Web_Studio.PluginManager
             }
             Plugins = sortedList;
         }
-
-        /// <summary>
-        ///  Run the code analysis
-        /// </summary>
-        /// <returns></returns>
-        public static List<AnalysisResult> Run()
-        {
-            if (Plugins == null)
-            {
-                Load();
-            }
-
-            List<AnalysisResult> results = new List<AnalysisResult>();
-            foreach (Lazy<IValidation, IValidationMetadata> plugin in Plugins)
-            {
-                results.AddRange(plugin.Value.Check(ProjectModel.Instance.FullPath));
-            }
-            return results;
-        } 
-
     }
 }
