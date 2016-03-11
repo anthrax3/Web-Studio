@@ -57,6 +57,7 @@ namespace W3cPlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
+            AnalysisResults.Clear(); //Remove older entries
             //Get the html files in the folder and subfolder
             var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
             Console.WriteLine(filesToCheck.ToString());
