@@ -2,7 +2,7 @@
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 
-namespace Web_Studio
+namespace Web_Studio.PluginManager
 {
     /// <summary>
     ///     Class for loading plugins in MEF arch

@@ -16,6 +16,8 @@ namespace W3cPlugin
     ///     Plugin that check the html files with the W3C specification
     /// </summary>
     [Export(typeof (IValidation))]
+    [ExportMetadata("Name", "W3cValidator")]
+    [ExportMetadata("After","Include")]
     public class W3cPlugin : IValidation
     {
         /// <summary>

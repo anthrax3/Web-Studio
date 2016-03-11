@@ -13,6 +13,7 @@ using Web_Studio.Editor;
 using Web_Studio.Events;
 using Web_Studio.Localization;
 using Web_Studio.Models;
+using Web_Studio.PluginManager;
 using Web_Studio.Properties;
 
 namespace Web_Studio.ViewModels
@@ -313,12 +314,7 @@ namespace Web_Studio.ViewModels
             if (ProjectPath != null)
             {
                 Results.Clear();
-
-                var loader = new GenericMefPluginLoader<IValidation>("Plugins\\Check");
-                foreach (IValidation plugin in loader.Plugins)
-                {
-                    Results.AddRange(plugin.Check(ProjectPath));
-                }
+                Results.AddRange(ValidationPluginManager.Run());
             }
         }
 

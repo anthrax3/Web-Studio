@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalysisResult.cs" />
+    <Compile Include="IValidationMetadata.cs" />
     <Compile Include="IValidation.cs" />
     <Compile Include="MessageTypes\ErrorType.cs" />
     <Compile Include="MessageTypes\InfoType.cs" />
