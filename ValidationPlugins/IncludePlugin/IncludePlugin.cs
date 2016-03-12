@@ -71,11 +71,11 @@ namespace IncludePlugin
             {
                 AnalysisResults.Add(new AnalysisResult
                 {
-                    File = "aaa",
+                    File = "",
                     Line = 2,
                     PluginName = Name,
                     Type = InfoType.Instance,
-                    Message = "hemos realiado " + numIncludes + " correctamente"
+                    Message = Strings.Realised+" " + numIncludes + " " + Strings.Inclusions
                 });
             }
             RemoveIncludeFiles(filesToChecks);

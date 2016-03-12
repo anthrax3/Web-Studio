@@ -120,8 +120,14 @@
   <data name="Description" xml:space="preserve">
     <value>Process the include tag adding all line from source File to destination File</value>
   </data>
+  <data name="Inclusions" xml:space="preserve">
+    <value>inclusions correctly</value>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Include tag</value>
+  </data>
+  <data name="Realised" xml:space="preserve">
+    <value>We have done</value>
   </data>
   <data name="SrcNotFound" xml:space="preserve">
     <value>We have detected a include tag without source attribute</value>

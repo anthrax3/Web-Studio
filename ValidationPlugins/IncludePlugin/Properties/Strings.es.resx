@@ -120,8 +120,14 @@
   <data name="Description" xml:space="preserve">
     <value>Procesa la etiqueta de inclusion, añadiendo todas las lineas del fichero origen al fichero destino</value>
   </data>
+  <data name="Inclusions" xml:space="preserve">
+    <value>inclusiones correctamente</value>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Etiqueta include</value>
+  </data>
+  <data name="Realised" xml:space="preserve">
+    <value>Hemos realizado</value>
   </data>
   <data name="SrcNotFound" xml:space="preserve">
     <value>Hemos detectado el uso de una etiqueta include sin el atributo origen (src)</value>

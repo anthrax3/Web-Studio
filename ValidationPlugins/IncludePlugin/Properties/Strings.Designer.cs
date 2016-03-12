@@ -70,11 +70,29 @@ namespace IncludePlugin.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a inclusions correctly.
+        /// </summary>
+        internal static string Inclusions {
+            get {
+                return ResourceManager.GetString("Inclusions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Include tag.
         /// </summary>
         internal static string Name {
             get {
                 return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a We have done.
+        /// </summary>
+        internal static string Realised {
+            get {
+                return ResourceManager.GetString("Realised", resourceCulture);
             }
         }
         
