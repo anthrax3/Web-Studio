@@ -140,7 +140,7 @@ namespace Web_Studio.ViewModels
 
         private void SocialCheckAvailabilityRun()
         {
-            var loader = new GenericMefPluginLoader<ISocialCheck>("Plugins");
+            var loader = new GenericMefPluginLoader<ISocialCheck>("Plugins\\Social");
             var name = ProjectName.Replace(" ", string.Empty);
             foreach (var sc in loader.Plugins)
             {

@@ -329,17 +329,12 @@ namespace Web_Studio.ViewModels
                 {
                     for (int i = 0; i < ValidationPluginManager.Plugins.Count; i++)
                     {
-                        var tempResults = ValidationPluginManager.Plugins[i].Value.Check(ProjectPath);
+                        var tempResults = ValidationPluginManager.Plugins[i].Value.Check(releasePath);
                         System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
                         {
                             Results.AddRange(tempResults);
                             NumberOfRulesProcessed++;
                         });
-                    }
-
-                    foreach (Lazy<IValidation, IValidationMetadata> plugin in ValidationPluginManager.Plugins)
-                    {
-                        Results.AddRange(plugin.Value.Check(releasePath));
                     }
                 };
 

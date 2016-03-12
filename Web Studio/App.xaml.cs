@@ -21,14 +21,17 @@ namespace Web_Studio
         /// <param name="e"></param>
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            
             ResxLocalizationProvider.Instance.UpdateCultureList(GetType().Assembly.FullName, "Strings");
             LocalizeDictionary.Instance.IncludeInvariantCulture = false;
-
+            /* Creo que no hace falta, probar en un windows con otro idioma
             var cultureInfo = CultureInfo.CurrentUICulture;
 
             LocalizeDictionary.Instance.Culture = cultureInfo;
             Thread.CurrentThread.CurrentUICulture = cultureInfo;
             Thread.CurrentThread.CurrentCulture = cultureInfo;
+            */
+            
             //Open with file as argument
             if (e.Args.Length > 0 && File.Exists(e.Args[0]) && Path.GetExtension(e.Args[0]) == ".ws")
             {

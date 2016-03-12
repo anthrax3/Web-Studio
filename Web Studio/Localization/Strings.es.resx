@@ -225,4 +225,10 @@
 	<data name="Messages" xml:space="preserve">
 		<value>Mensajes</value>
 	</data>
+	<data name="Generate" xml:space="preserve">
+		<value>Generar</value>
+	</data>
+	<data name="Generating" xml:space="preserve">
+		<value>Generando...</value>
+	</data>
 </root>

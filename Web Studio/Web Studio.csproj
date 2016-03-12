@@ -158,12 +158,14 @@
     <Compile Include="Editor\EditorViewModel.cs" />
     <Compile Include="Editor\SyntaxHighlighter\SyntaxHighlighterTool.cs" />
     <Compile Include="Editor\TextEditorMVVM.cs" />
+    <Compile Include="Events\ChangedLanguageEvent.cs" />
     <Compile Include="Events\ChangedProjectEvent.cs" />
     <Compile Include="Events\ClosedDocumentEvent.cs" />
     <Compile Include="Events\EventSystem.cs" />
     <Compile Include="Events\FontSizeChangedEvent.cs" />
     <Compile Include="Events\ShowLineNumbersEvent.cs" />
-    <Compile Include="GenericMEFPluginLoader.cs" />
+    <Compile Include="PluginManager\GenericMEFPluginLoader.cs" />
+    <Compile Include="Localization\Localization.cs" />
     <Compile Include="Localization\Strings.es.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -175,12 +177,14 @@
       <DependentUpon>Strings.es.resx</DependentUpon>
     </Compile>
     <Compile Include="Models\ProjectModel.cs" />
+    <Compile Include="Models\Templates.cs" />
     <Compile Include="NewProject.xaml.cs">
       <DependentUpon>NewProject.xaml</DependentUpon>
     </Compile>
     <Compile Include="Options.xaml.cs">
       <DependentUpon>Options.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PluginManager\ValidationPluginManager.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Rules\Rules.cs" />
     <Compile Include="Rules\RulesLanguage.cs" />
@@ -259,7 +263,7 @@
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
@@ -283,23 +287,27 @@
     <Folder Include="Managers\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AvalonDock.Themes.WebStudio\Xceed.Wpf.AvalonDock.Themes.WebStudio.csproj">
+    <ProjectReference Include="..\Controls\AvalonDock.Themes.WebStudio\Xceed.Wpf.AvalonDock.Themes.WebStudio.csproj">
       <Project>{89286eb4-b4a1-418c-839a-067b00f442d8}</Project>
       <Name>Xceed.Wpf.AvalonDock.Themes.WebStudio</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FastObservableCollection\FastObservableCollection.csproj">
+    <ProjectReference Include="..\Controls\BusyControl\BusyControl.csproj">
+      <Project>{ed4769d3-abfa-4bb5-92b8-c3d0b38f29d1}</Project>
+      <Name>BusyControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CustomClasses\FastObservableCollection\FastObservableCollection.csproj">
       <Project>{1d97ecda-d9e1-4fe0-981b-c865a4373ea9}</Project>
       <Name>FastObservableCollection</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MessageListControl\MessageListControl.csproj">
+    <ProjectReference Include="..\Controls\MessageListControl\MessageListControl.csproj">
       <Project>{bedc618f-2497-4142-85b6-3b686b853dc1}</Project>
       <Name>MessageListControl</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SocialCheckInterface\SocialCheckInterface.csproj">
+    <ProjectReference Include="..\SocialCheckPlugins\SocialCheckInterface\SocialCheckInterface.csproj">
       <Project>{ee4e6c9a-5fc8-4897-9ae8-321ef92f17da}</Project>
       <Name>SocialCheckInterface</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TreeViewExplorerControl\TreeViewExplorerControl.csproj">
+    <ProjectReference Include="..\Controls\TreeViewExplorerControl\TreeViewExplorerControl.csproj">
       <Project>{c9a42623-7ccb-406b-bb6c-1990caa8cd02}</Project>
       <Name>TreeViewExplorerControl</Name>
     </ProjectReference>

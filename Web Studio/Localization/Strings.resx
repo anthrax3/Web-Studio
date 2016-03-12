@@ -228,4 +228,7 @@
 	<data name="Generate" xml:space="preserve">
 		<value>Generate</value>
 	</data>
+	<data name="Generating" xml:space="preserve">
+		<value>Generating...</value>
+	</data>
 </root>
