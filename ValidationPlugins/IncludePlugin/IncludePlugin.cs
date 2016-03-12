@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using HtmlAgilityPack;
 using IncludePlugin.Properties;
 using ValidationInterface;
 using ValidationInterface.MessageTypes;
@@ -14,9 +10,9 @@ using ValidationInterface.MessageTypes;
 namespace IncludePlugin
 {
     /// <summary>
-    /// Plugin to include the content of a html file in other html file
+    ///     Plugin to include the content of a html file in other html file
     /// </summary>
-    [Export(typeof(IValidation))]
+    [Export(typeof (IValidation))]
     [ExportMetadata("Name", "Include")]
     [ExportMetadata("After", "")]
     public class IncludePlugin : IValidation
@@ -34,12 +30,12 @@ namespace IncludePlugin
         /// <summary>
         ///     Category of the plugin
         /// </summary>
-        public Category Type { get; }  = Category.Development;
+        public Category Type { get; } = Category.Development;
 
         /// <summary>
         ///     Results of the check method.
         /// </summary>
-        public List<AnalysisResult> AnalysisResults { get; }  = new List<AnalysisResult>();
+        public List<AnalysisResult> AnalysisResults { get; } = new List<AnalysisResult>();
 
         /// <summary>
         ///     can we automatically fix some errors?
@@ -58,48 +54,32 @@ namespace IncludePlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            int numIncludes = 0;
+            var numIncludes = 0;
             AnalysisResults.Clear(); //Remove older entries
-            List<FileToCheck> filesToChecks = new List<FileToCheck>();
+            var filesToChecks = new List<FileToCheck>();
             //Get the html files in the folder and subfolder
             var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
             foreach (var file in filesToCheck)
             {
-               FileToCheck fileToCheck = new FileToCheck(file);
-               filesToChecks.Add(fileToCheck);
-               numIncludes += fileToCheck.MakeInclusion(AnalysisResults, Name);
+                var fileToCheck = new FileToCheck(file);
+                filesToChecks.Add(fileToCheck);
+                numIncludes += fileToCheck.MakeInclusion(AnalysisResults, Name);
                 fileToCheck.IncludedFile();
             }
 
-            if(numIncludes>0) {
-                    AnalysisResults.Add(new AnalysisResult
+            if (numIncludes > 0)
+            {
+                AnalysisResults.Add(new AnalysisResult
                 {
                     File = "aaa",
                     Line = 2,
                     PluginName = Name,
                     Type = InfoType.Instance,
-                    Message = "hemos realiado "+numIncludes+" correctamente"
+                    Message = "hemos realiado " + numIncludes + " correctamente"
                 });
             }
             RemoveIncludeFiles(filesToChecks);
             return AnalysisResults;
-        }
-
-       
-        private void RemoveIncludeFiles(List<FileToCheck> filesToChecks)
-        {
-            foreach (FileToCheck fileToCheck in filesToChecks.Where(fileToCheck => fileToCheck.IsIncludedFile))
-            {
-                try
-                {
-                    File.Delete(fileToCheck.FilePath);
-                }
-                catch (Exception)
-                {
-                    //EXCEPTION LOG  
-                       
-                }
-            }
         }
 
         /// <summary>
@@ -108,7 +88,22 @@ namespace IncludePlugin
         /// <param name="projectPath"></param>
         public void Fix(string projectPath)
         {
-           
+        }
+
+
+        private void RemoveIncludeFiles(List<FileToCheck> filesToChecks)
+        {
+            foreach (var fileToCheck in filesToChecks.Where(fileToCheck => fileToCheck.IsIncludedFile))
+            {
+                try
+                {
+                    File.Delete(fileToCheck.FilePath);
+                }
+                catch (Exception)
+                {
+                    //EXCEPTION LOG  
+                }
+            }
         }
     }
 }
