@@ -381,7 +381,7 @@ namespace Web_Studio.ViewModels
             set
             {
                 SetProperty(ref _messageSelected, value);
-                if (_messageSelected.Line != 0)  //Project message
+                if (_messageSelected.File != "")  //Project message
                 {
                     GoToMessageLine();  
                 }

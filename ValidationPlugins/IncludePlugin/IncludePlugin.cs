@@ -71,7 +71,7 @@ namespace IncludePlugin
             {
                 AnalysisResults.Add(new AnalysisResult
                 {
-                    File = Strings.Project,
+                    File = "",
                     Line = 0,
                     PluginName = Name,
                     Type = InfoType.Instance,
