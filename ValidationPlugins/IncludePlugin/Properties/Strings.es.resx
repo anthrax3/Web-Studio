@@ -126,6 +126,9 @@
   <data name="Name" xml:space="preserve">
     <value>Etiqueta include</value>
   </data>
+  <data name="Project" xml:space="preserve">
+    <value>Proyecto</value>
+  </data>
   <data name="Realised" xml:space="preserve">
     <value>Hemos realizado</value>
   </data>

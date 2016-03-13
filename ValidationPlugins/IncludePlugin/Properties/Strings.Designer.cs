@@ -88,6 +88,15 @@ namespace IncludePlugin.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Project.
+        /// </summary>
+        internal static string Project {
+            get {
+                return ResourceManager.GetString("Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a We have done.
         /// </summary>
         internal static string Realised {

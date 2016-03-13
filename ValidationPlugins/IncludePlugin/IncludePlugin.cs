@@ -71,8 +71,8 @@ namespace IncludePlugin
             {
                 AnalysisResults.Add(new AnalysisResult
                 {
-                    File = "",
-                    Line = 2,
+                    File = Strings.Project,
+                    Line = 0,
                     PluginName = Name,
                     Type = InfoType.Instance,
                     Message = Strings.Realised+" " + numIncludes + " " + Strings.Inclusions
@@ -101,7 +101,7 @@ namespace IncludePlugin
                 }
                 catch (Exception)
                 {
-                    //EXCEPTION LOG  
+                    //  
                 }
             }
         }
