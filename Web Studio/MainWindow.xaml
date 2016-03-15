@@ -39,6 +39,7 @@
                 </interactionRequest:PopupWindowAction.WindowContent>
             </interactionRequest:PopupWindowAction>
         </interactionRequest:InteractionRequestTrigger>
+        
         <interactionRequest:InteractionRequestTrigger SourceObject="{Binding NewProjectRequest, Mode=OneWay}">
             <interactionRequest:PopupWindowAction IsModal="True">
                 <interactionRequest:PopupWindowAction.WindowContent>
@@ -46,6 +47,15 @@
                 </interactionRequest:PopupWindowAction.WindowContent>
             </interactionRequest:PopupWindowAction>
         </interactionRequest:InteractionRequestTrigger>
+        
+        <interactionRequest:InteractionRequestTrigger SourceObject="{Binding PluginsWindowRequest, Mode=OneWay}">
+            <interactionRequest:PopupWindowAction IsModal="True">
+                <interactionRequest:PopupWindowAction.WindowContent>
+                    <webStudio:ValidationPlugins />
+                </interactionRequest:PopupWindowAction.WindowContent>
+            </interactionRequest:PopupWindowAction>
+        </interactionRequest:InteractionRequestTrigger>
+
     </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
@@ -75,6 +85,7 @@
             </MenuItem>
             <MenuItem Header="{lex:Loc View}" />
             <MenuItem Header="{lex:Loc Generate}" Command="{Binding GenerateCommand}"></MenuItem>
+            <MenuItem Header="Plugins" Command="{Binding PluginsWindowCommand}"></MenuItem>
             <MenuItem Header="{lex:Loc Window}">
                 <MenuItem x:Name="ExplorerMenuItem" Header="{lex:Loc FileExplorer}"
                           IsChecked="{Binding ElementName=ExplorerLayout,Path=IsVisible,Mode=TwoWay}"

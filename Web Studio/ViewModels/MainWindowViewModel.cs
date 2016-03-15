@@ -46,6 +46,7 @@ namespace Web_Studio.ViewModels
 
             OptionWindowRequest = new InteractionRequest<INotification>();
             NewProjectRequest = new InteractionRequest<INotification>();
+            PluginsWindowRequest = new InteractionRequest<INotification>();
 
             //Manage commands
             SelectedItemChangedCommand = new DelegateCommand(SelectedItemChanged);
@@ -53,6 +54,7 @@ namespace Web_Studio.ViewModels
             OptionWindowCommand = new DelegateCommand(OptionWindow);
             NewProjectCommand = new DelegateCommand(NewProject);
             GenerateCommand = new DelegateCommand(Generate);
+            PluginsWindowCommand = new DelegateCommand(PluginsWindow);
 
             //Manage events
             EventSystem.Subscribe<FontSizeChangedEvent>(ManageChangedFont);
@@ -90,6 +92,11 @@ namespace Web_Studio.ViewModels
         public InteractionRequest<INotification> NewProjectRequest { get; set; }
 
         /// <summary>
+        /// It request the view to open the plugins window
+        /// </summary>
+        public InteractionRequest<INotification> PluginsWindowRequest { get; set; } 
+
+        /// <summary>
         ///     New project menu option command
         /// </summary>
         public DelegateCommand NewProjectCommand { get; private set; }
@@ -105,6 +112,11 @@ namespace Web_Studio.ViewModels
         public DelegateCommand OptionWindowCommand { get; private set; }
 
         /// <summary>
+        ///     Plugins menu command
+        /// </summary>
+        public DelegateCommand PluginsWindowCommand { get; private set; }
+
+        /// <summary>
         ///     Raise new project request
         /// </summary>
         private void NewProject()
@@ -118,6 +130,11 @@ namespace Web_Studio.ViewModels
         private void OptionWindow()
         {
             OptionWindowRequest.Raise(new Notification {Title = Strings.Options});
+        }
+
+        private void PluginsWindow()
+        {
+            PluginsWindowRequest.Raise( new Notification {Title = "Plugins"});
         }
 
         /// <summary>
