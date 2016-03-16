@@ -1,11 +1,9 @@
-﻿using System.Windows.Controls;
-
-namespace Web_Studio
+﻿namespace Web_Studio
 {
     /// <summary>
     ///     Lógica de interacción para ValidationPlugins.xaml
     /// </summary>
-    public partial class ValidationPlugins : UserControl
+    public partial class ValidationPlugins
     {
         /// <summary>
         ///     Default constructor
