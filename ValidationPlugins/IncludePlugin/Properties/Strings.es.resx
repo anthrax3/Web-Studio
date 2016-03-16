@@ -119,8 +119,9 @@
   </resheader>
   <data name="Description" xml:space="preserve">
     <value>Procesa la etiqueta de inclusion, añadiendo todas las lineas del fichero origen al fichero destino.
-Para ello se usa una etiqueta especial: &lt;include&gt; que no es del estandar. Esta etiqueta tiene como atributo src en el cual hay que indicar la ruta del fichero que se quiere incluir. Por ejemplo:
-&lt;include src="menu.html" /&gt;</value>
+Para ello se usa una etiqueta especial: &lt;include&gt; que no es del estandar.
+Esta etiqueta tiene como atributo src en el cual hay que indicar la ruta del fichero que se quiere incluir.
+Por ejemplo: &lt;include src="menu.html" /&gt;</value>
   </data>
   <data name="Inclusions" xml:space="preserve">
     <value>inclusiones correctamente</value>
