@@ -61,6 +61,15 @@ namespace RobotPlugin.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Fix automatically.
+        /// </summary>
+        internal static string AutoFix {
+            get {
+                return ResourceManager.GetString("AutoFix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a The robots.txt file has a wrong format.
         /// </summary>
         internal static string BadFormat {
