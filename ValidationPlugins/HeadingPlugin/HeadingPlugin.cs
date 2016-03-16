@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
+using System.Windows.Controls;
 using HeadingPlugin.Properties;
 using ValidationInterface;
+using ValidationInterface.CategoryTypes;
 
 namespace HeadingPlugin
 {
@@ -14,6 +16,19 @@ namespace HeadingPlugin
     [ExportMetadata("After", "Include")]
     public class HeadingPlugin : IValidation
     {
+        /// <summary>
+        ///     Default contructor
+        /// </summary>
+        public HeadingPlugin()
+        {
+            View = new View(this);
+        }
+
+        /// <summary>
+        ///     View showed when you select the plugin
+        /// </summary>
+        public UserControl View { get; }
+
         /// <summary>
         ///     Name of the plugin
         /// </summary>
@@ -27,7 +42,8 @@ namespace HeadingPlugin
         /// <summary>
         ///     Category of the plugin
         /// </summary>
-        public Category Type { get; } = Category.Seo;
+        public ICategoryType Type { get; } = SeoType.Instance;
+
 
         /// <summary>
         ///     Results of the check method.
@@ -52,6 +68,8 @@ namespace HeadingPlugin
         public List<AnalysisResult> Check(string projectPath)
         {
             AnalysisResults.Clear(); //Remove older entries
+            if (!IsEnabled) return AnalysisResults;
+
             //Get the html files in the folder and subfolder
             var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
             var models = new List<HeadingModel>();
