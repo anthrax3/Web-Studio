@@ -5,8 +5,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Windows.Controls;
 using Newtonsoft.Json;
 using ValidationInterface;
+using ValidationInterface.CategoryTypes;
 using ValidationInterface.MessageTypes;
 using W3cPlugin.Properties;
 
@@ -17,9 +19,22 @@ namespace W3cPlugin
     /// </summary>
     [Export(typeof (IValidation))]
     [ExportMetadata("Name", "W3cValidator")]
-    [ExportMetadata("After","Include")]
+    [ExportMetadata("After", "")]
     public class W3cPlugin : IValidation
     {
+        /// <summary>
+        /// Default constructor, it creates the view
+        /// </summary>
+        public W3cPlugin()
+        {
+            View = new View(this);
+        }
+
+        /// <summary>
+        ///     View showed when you select the plugin
+        /// </summary>
+        public UserControl View { get; }
+
         /// <summary>
         ///     Name of the plugin
         /// </summary>
@@ -33,7 +48,7 @@ namespace W3cPlugin
         /// <summary>
         ///     Category of the plugin
         /// </summary>
-        public Category Type { get; } = Category.Development;
+        public ICategoryType Type { get; } = DevelopmentType.Instance;
 
         /// <summary>
         ///     Results of the check method.
@@ -58,18 +73,20 @@ namespace W3cPlugin
         public List<AnalysisResult> Check(string projectPath)
         {
             AnalysisResults.Clear(); //Remove older entries
+
+            if (!IsEnabled) return AnalysisResults;
+
             //Get the html files in the folder and subfolder
             var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
             Console.WriteLine(filesToCheck.ToString());
 
             foreach (var file in filesToCheck)
             {
-                var output = string.Empty;
                 var directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
                 if (directory != null)
                 {
-                    var processStartInfo = new ProcessStartInfo("cmd", "/c java -jar vnu.jar --format json " + file)
+                    var processStartInfo = new ProcessStartInfo("cmd", "/c java -jar vnu.jar --format json " + file)  //Run cmd in background
                     {
                         RedirectStandardError = true,
                         RedirectStandardInput = true,
@@ -84,6 +101,7 @@ namespace W3cPlugin
 
                     if (process != null)
                     {
+                        string output;
                         using (var streamReader = process.StandardError)
                         {
                             output = streamReader.ReadToEnd();

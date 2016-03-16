@@ -118,7 +118,8 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Description" xml:space="preserve">
-    <value>This plugin checks the markup validity of web document with the W3C standard</value>
+    <value>The plugin reads all html files and then use the W3C validator, to check if these files follow the W3C standard. 
+It needs all html files generated to run correctly.</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>W3C Validator</value>

@@ -118,7 +118,8 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Description" xml:space="preserve">
-    <value>Este plugin comprueba la valided de las etiquetas de marcado de un documento web, con el standard W3C</value>
+    <value>Este plugin lee todos los archivos html y después usa el validador de W3C, para comprobar si estos ficheros siguen el estandar W3C.
+Necesita todos los archivos html generados para ejecutarse correctamente.</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Validador de W3C</value>
