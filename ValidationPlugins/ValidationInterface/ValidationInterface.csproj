@@ -31,17 +31,26 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalysisResult.cs" />
+    <Compile Include="CategoryTypes\DevelopmentType.cs" />
+    <Compile Include="CategoryTypes\ICategoryType.cs" />
+    <Compile Include="CategoryTypes\OptimizationType.cs" />
+    <Compile Include="CategoryTypes\SeoType.cs" />
+    <Compile Include="CategoryTypes\StyleType.cs" />
     <Compile Include="IValidationMetadata.cs" />
     <Compile Include="IValidation.cs" />
     <Compile Include="MessageTypes\ErrorType.cs" />

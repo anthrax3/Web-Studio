@@ -117,11 +117,23 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Development" xml:space="preserve">
+    <value>Development</value>
+  </data>
   <data name="Error" xml:space="preserve">
     <value>Error</value>
   </data>
   <data name="Information" xml:space="preserve">
     <value>Information</value>
+  </data>
+  <data name="Optimization" xml:space="preserve">
+    <value>Optimization</value>
+  </data>
+  <data name="Seo" xml:space="preserve">
+    <value>SEO (Search Engine Optimization)</value>
+  </data>
+  <data name="Style" xml:space="preserve">
+    <value>Style</value>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Warning</value>

@@ -61,6 +61,15 @@ namespace ValidationInterface.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Development.
+        /// </summary>
+        internal static string Development {
+            get {
+                return ResourceManager.GetString("Development", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Error.
         /// </summary>
         internal static string Error {
@@ -75,6 +84,33 @@ namespace ValidationInterface.Properties {
         internal static string Information {
             get {
                 return ResourceManager.GetString("Information", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Optimization.
+        /// </summary>
+        internal static string Optimization {
+            get {
+                return ResourceManager.GetString("Optimization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a SEO (Search Engine Optimization).
+        /// </summary>
+        internal static string Seo {
+            get {
+                return ResourceManager.GetString("Seo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Style.
+        /// </summary>
+        internal static string Style {
+            get {
+                return ResourceManager.GetString("Style", resourceCulture);
             }
         }
         
