@@ -1,67 +1,69 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Prism.Mvvm;
 using ValidationInterface;
 using Web_Studio.PluginManager;
-using FastObservableCollection;
-using Prism.Commands;
 
 namespace Web_Studio.ViewModels
 {
     /// <summary>
-    /// View model of ValidationPlugins view
+    ///     View model of ValidationPlugins view
     /// </summary>
     public class ValidationPluginsViewModel : BindableBase
     {
+        private UserControl _configurationUI;
+
+        private IValidation _pluginSelected;
+
         /// <summary>
-        /// Default constructor
+        ///     Default constructor
         /// </summary>
         public ValidationPluginsViewModel()
         {
-        
-            foreach (Lazy<IValidation, IValidationMetadata> plugin in ValidationPluginManager.Plugins)
+            foreach (var plugin in ValidationPluginManager.Plugins)
             {
                 Plugins.Add(plugin.Value);
             }
-            CollectionViewSource.GetDefaultView(Plugins).GroupDescriptions.Add(new PropertyGroupDescription("Type"));  //Grouping
-            ConfigurationCommand = new DelegateCommand<IValidation>(Configuration);
-        
-
+            CollectionViewSource.GetDefaultView(Plugins).GroupDescriptions.Add(new PropertyGroupDescription("Type"));
+                //Grouping   
         }
 
-
         /// <summary>
-        /// Load the configuration UI of the selected plugin
+        ///     Selected plugin in the list
         /// </summary>
-        /// <param name="validation"></param>
-        private void Configuration(IValidation validation)
+        public IValidation PluginSelected
         {
-           //ConfigurationUI = validation.View;
-          
+            get { return _pluginSelected; }
+            set
+            {
+                SetProperty(ref _pluginSelected, value);
+                if (value != null) Configuration(value);
+            }
         }
 
         /// <summary>
-        /// Button configuration command
+        ///     Validation plugins
         /// </summary>
-        public DelegateCommand<IValidation> ConfigurationCommand { get; private set; }
+        public ObservableCollection<IValidation> Plugins { get; set; } = new ObservableCollection<IValidation>();
 
         /// <summary>
-        /// Validation plugins
-        /// </summary>
-        public ObservableCollection<IValidation> Plugins { get; set; }  = new ObservableCollection<IValidation>();
-
-
-        private UserControl _configurationUI;
-        /// <summary>
-        /// Configuration user interface of the plugin
+        ///     Configuration user interface of the plugin
         /// </summary>
         public UserControl ConfigurationUI
         {
             get { return _configurationUI; }
             set { SetProperty(ref _configurationUI, value); }
         }
-       
+
+
+        /// <summary>
+        ///     Load the configuration UI of the selected plugin
+        /// </summary>
+        /// <param name="validation"></param>
+        private void Configuration(IValidation validation)
+        {
+            ConfigurationUI = validation.View;
+        }
     }
 }

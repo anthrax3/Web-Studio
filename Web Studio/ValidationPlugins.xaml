@@ -1,74 +1,70 @@
 ﻿<UserControl x:Class="Web_Studio.ValidationPlugins"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Web_Studio"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:Web_Studio.ViewModels"
              xmlns:lex="http://wpflocalizeextension.codeplex.com"
-             xmlns:converters="clr-namespace:Web_Studio.Converters"
              mc:Ignorable="d"
              lex:LocalizeDictionary.DesignCulture="es"
              lex:ResxLocalizationProvider.DefaultAssembly="Web Studio"
              lex:ResxLocalizationProvider.DefaultDictionary="Strings">
     <UserControl.DataContext>
-        <viewModels:ValidationPluginsViewModel></viewModels:ValidationPluginsViewModel>
-    </UserControl.DataContext>
-    <UserControl.Resources>
-        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" True="Visible" False="Hidden" />
-    </UserControl.Resources>
+        <viewModels:ValidationPluginsViewModel />
+    </UserControl.DataContext> 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <TextBlock Width="400" Foreground="White"></TextBlock>
-        <ListBox Grid.Column="0" ItemsSource="{Binding Plugins}" HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
+        <TextBlock Width="400" Foreground="White" />
+        <ListBox Grid.Column="0" ItemsSource="{Binding Plugins}" HorizontalContentAlignment="Stretch"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single"
+                 SelectedItem="{Binding PluginSelected}">
             <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                <ColumnDefinition></ColumnDefinition>
-                                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <CheckBox Grid.Column="0" Name="Enabled" IsChecked="{Binding IsEnabled}"></CheckBox>
-                            <TextBlock Grid.Column="1" Text="{Binding Name}" ToolTip="{Binding Description}" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
-                        <Button Grid.Column="2" Visibility="{Binding IsAutoFixeable,Converter={StaticResource BoolToVisibilityConverter}}" CommandParameter="{Binding}" Command="{Binding DataContext.ConfigurationCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ValidationPlugins}}}" Content="{lex:Loc Configure}"></Button>
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <CheckBox Grid.Column="0" Name="Enabled" IsChecked="{Binding IsEnabled}" />
+                        <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center"
+                                   HorizontalAlignment="Left" />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
             <ListBox.GroupStyle>
-                    <GroupStyle>
-                        <GroupStyle.ContainerStyle>
-                            <Style TargetType="{x:Type GroupItem}">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="{x:Type GroupItem}">
-                                            <Expander IsExpanded="True">
-                                                <Expander.Header>
-                                                    <TextBlock>
-                                                        <TextBlock.Text>
-                                                            <MultiBinding StringFormat="{}{0} - {1}">
-                                                                <Binding Path="Name" />
-                                                                <Binding Path="ItemCount" />
-                                                            </MultiBinding>
-                                                        </TextBlock.Text>
-                                                    </TextBlock>
-                                                </Expander.Header>
-                                                <ItemsPresenter />
-                                                <!-- Items in this group -->
-                                            </Expander>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </GroupStyle.ContainerStyle>
-                    </GroupStyle>
-                </ListBox.GroupStyle>
-            </ListBox>
+                <GroupStyle>
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                                        <Expander IsExpanded="True">
+                                            <Expander.Header>
+                                                <TextBlock>
+                                                    <TextBlock.Text>
+                                                        <MultiBinding StringFormat="{}{0} - {1}">
+                                                            <Binding Path="Name.Name" />
+                                                            <Binding Path="ItemCount" />
+                                                        </MultiBinding>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                            </Expander.Header>
+                                            <ItemsPresenter />
+                                            <!-- Items in this group -->
+                                        </Expander>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+            </ListBox.GroupStyle>
+        </ListBox>
         <Grid Grid.Column="1">
-            <ContentPresenter Content="{Binding ConfigurationUI}"></ContentPresenter>
+            <ContentPresenter Content="{Binding ConfigurationUI}" />
         </Grid>
     </Grid>
 </UserControl>
