@@ -68,7 +68,7 @@ namespace IncludePlugin
                 {
                     var temp = Document.CreateElement("temp"); //Temporal tag, we use it to load other tags inside it
                     var documentToInclude = File.ReadAllText(Path.Combine(Path.GetDirectoryName(FilePath), htmlSource));
-                        //Relative url
+                    //Relative url
                     temp.InnerHtml = documentToInclude;
                     var current = node;
                     foreach (var childNode in temp.ChildNodes) //Put each tag after the last tag

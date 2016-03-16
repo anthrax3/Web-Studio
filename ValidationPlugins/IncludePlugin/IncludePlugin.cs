@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
+using System.Windows.Controls;
 using IncludePlugin.Properties;
 using ValidationInterface;
+using ValidationInterface.CategoryTypes;
 using ValidationInterface.MessageTypes;
 
 namespace IncludePlugin
@@ -18,6 +20,19 @@ namespace IncludePlugin
     public class IncludePlugin : IValidation
     {
         /// <summary>
+        ///     Default constructor, it creates the view
+        /// </summary>
+        public IncludePlugin()
+        {
+            View = new View(this);
+        }
+
+        /// <summary>
+        ///     View showed when you select the plugin
+        /// </summary>
+        public UserControl View { get; }
+
+        /// <summary>
         ///     Name of the plugin
         /// </summary>
         public string Name => Strings.Name;
@@ -30,7 +45,8 @@ namespace IncludePlugin
         /// <summary>
         ///     Category of the plugin
         /// </summary>
-        public Category Type { get; } = Category.Development;
+        public ICategoryType Type { get; } = DevelopmentType.Instance;
+
 
         /// <summary>
         ///     Results of the check method.
@@ -54,8 +70,10 @@ namespace IncludePlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            var numIncludes = 0;
             AnalysisResults.Clear(); //Remove older entries
+            if (!IsEnabled) return AnalysisResults;
+
+            var numIncludes = 0;
             var filesToChecks = new List<FileToCheck>();
             //Get the html files in the folder and subfolder
             var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
@@ -75,7 +93,7 @@ namespace IncludePlugin
                     Line = 0,
                     PluginName = Name,
                     Type = InfoType.Instance,
-                    Message = Strings.Realised+" " + numIncludes + " " + Strings.Inclusions
+                    Message = Strings.Realised + " " + numIncludes + " " + Strings.Inclusions
                 });
             }
             RemoveIncludeFiles(filesToChecks);
