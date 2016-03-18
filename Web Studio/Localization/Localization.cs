@@ -20,6 +20,8 @@ namespace Web_Studio.Localization
             LocalizeDictionary.Instance.Culture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
             Thread.CurrentThread.CurrentCulture = culture;
+            CultureInfo.DefaultThreadCurrentCulture = culture;    //Other threads
+            CultureInfo.DefaultThreadCurrentUICulture = culture;  // Other threads
             EventSystem.Publish(new ChangedLanguageEvent {CultureInfo = culture});
         }
     }
