@@ -9,7 +9,7 @@
         <StackPanel Margin="10">
             <TextBlock HorizontalAlignment="Center" Text="{Binding Name}" Margin="0,0,0,10" FontSize="21.333" />
             <TextBlock TextWrapping="Wrap" Margin="0,0,0,10" Text="{Binding Description}" />
-            <CheckBox IsChecked="{Binding IsAutoFix}">
+            <CheckBox IsChecked="{Binding IsAutoFixeable}">
                 <TextBlock Text="{Binding AutoFixText}" />
             </CheckBox>
         </StackPanel>

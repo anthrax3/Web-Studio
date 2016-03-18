@@ -59,7 +59,7 @@ namespace RobotPlugin
         /// <summary>
         ///     can we automatically fix some errors?
         /// </summary>
-        public bool IsAutoFixeable { get; } = false;
+        public bool IsAutoFixeable { get; set; } = false;
 
         /// <summary>
         ///     Is enabled this plugin
@@ -118,6 +118,8 @@ namespace RobotPlugin
         /// <param name="projectPath"></param>
         public void Fix(string projectPath)
         {
+            if (!IsAutoFixeable) return;
+
             var robotsPath = Path.Combine(projectPath, "robots.txt");
             File.WriteAllText(robotsPath, @"User-agent: *
 Allow: /");
