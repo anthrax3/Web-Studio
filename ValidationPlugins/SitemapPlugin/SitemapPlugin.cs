@@ -128,6 +128,9 @@ namespace SitemapPlugin
             }
             sitemap.Append(@"</urlset>");
             File.WriteAllText(Path.Combine(projectPath,"sitemap.xml"),sitemap.ToString());
+
+            File.AppendAllText(Path.Combine(projectPath, "robots.txt"),@"Sitemap: "+Domain+@"/sitemap.xml"); //Update robots.txt 
+
         }
 
         #region Custom Properties
