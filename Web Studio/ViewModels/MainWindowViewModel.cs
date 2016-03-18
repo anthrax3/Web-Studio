@@ -334,7 +334,7 @@ namespace Web_Studio.ViewModels
             {
                 Results.Clear();
                 NumberOfRulesProcessed = 0;
-                NumberOfRules = ValidationPluginManager.Plugins.Count;
+                NumberOfRules = ValidationPluginManager.Plugins.Count*2; //Check and fix each plugin
                 IsGeneratingProject = true;
                 CopySourceToRelease();
                 string releasePath = Path.Combine(ProjectPath, "release");
@@ -344,12 +344,23 @@ namespace Web_Studio.ViewModels
 
                 worker.DoWork += (o, ea) =>
                 {
+                    //Check loop
                     for (int i = 0; i < ValidationPluginManager.Plugins.Count; i++)
                     {
                         var tempResults = ValidationPluginManager.Plugins[i].Value.Check(releasePath);
                         System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
                         {
                             Results.AddRange(tempResults);
+                            NumberOfRulesProcessed++;
+                        });
+                    }
+
+                    //Fix loop
+                    for (int i = 0; i < ValidationPluginManager.Plugins.Count; i++)
+                    {
+                        ValidationPluginManager.Plugins[i].Value.Fix(releasePath);
+                        System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
+                        {
                             NumberOfRulesProcessed++;
                         });
                     }
