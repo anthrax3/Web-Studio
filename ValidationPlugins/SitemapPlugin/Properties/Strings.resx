@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AutoFix" xml:space="preserve">
+    <value>Fix automatically</value>
+  </data>
   <data name="Description" xml:space="preserve">
     <value>This plugin checks if a sitemap exits and it can generate one</value>
   </data>
@@ -128,5 +131,8 @@
   </data>
   <data name="NotFound" xml:space="preserve">
     <value>Sitemap file not found</value>
+  </data>
+  <data name="DomainName" xml:space="preserve">
+    <value>Introduce the full path to root folder</value>
   </data>
 </root>

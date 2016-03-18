@@ -61,11 +61,29 @@ namespace SitemapPlugin.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Fix automatically.
+        /// </summary>
+        internal static string AutoFix {
+            get {
+                return ResourceManager.GetString("AutoFix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a This plugin checks if a sitemap exits and it can generate one.
         /// </summary>
         internal static string Description {
             get {
                 return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Introduce the full path to root folder.
+        /// </summary>
+        internal static string DomainName {
+            get {
+                return ResourceManager.GetString("DomainName", resourceCulture);
             }
         }
         

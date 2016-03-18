@@ -1,8 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
+using System.Reflection;
+using System.Text;
+using System.Windows.Controls;
+using System.Xml;
+using System.Xml.Schema;
 using SitemapPlugin.Properties;
 using ValidationInterface;
+using ValidationInterface.CategoryTypes;
 using ValidationInterface.MessageTypes;
 
 namespace SitemapPlugin
@@ -16,6 +23,24 @@ namespace SitemapPlugin
     public class SitemapPlugin : IValidation
     {
         /// <summary>
+        ///     Text of AutoFix for binding
+        /// </summary>
+        public string AutoFixText => Strings.AutoFix;
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public SitemapPlugin()
+        {
+            View = new View(this);
+        }
+         
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        public UserControl View { get; }
+
+        /// <summary>
         ///     Name of the plugin
         /// </summary>
         public string Name => Strings.Name;
@@ -28,7 +53,8 @@ namespace SitemapPlugin
         /// <summary>
         ///     Category of the plugin
         /// </summary>
-        public Category Type { get; } = Category.Development;
+        public ICategoryType Type { get; } = DevelopmentType.Instance;
+
 
         /// <summary>
         ///     Results of the check method.
@@ -38,7 +64,7 @@ namespace SitemapPlugin
         /// <summary>
         ///     can we automatically fix some errors?
         /// </summary>
-        public bool IsAutoFixeable { get; } = true;
+        public bool IsAutoFixeable { get; set; } = false;
 
         /// <summary>
         ///     Is enabled this plugin
@@ -53,6 +79,8 @@ namespace SitemapPlugin
         public List<AnalysisResult> Check(string projectPath)
         {
             AnalysisResults.Clear();
+            if (!IsEnabled) return AnalysisResults;
+
             var filesToCheck = Directory.GetFiles(projectPath, "*sitemap*.xml", SearchOption.AllDirectories);
             if (filesToCheck.Length == 0)
             {
@@ -67,7 +95,7 @@ namespace SitemapPlugin
             }
             else
             {
-                AnalysisResults.Add(new AnalysisResult
+               AnalysisResults.Add(new AnalysisResult
                 {
                     File = "",
                     Line = 0,
@@ -76,7 +104,7 @@ namespace SitemapPlugin
                     Message = string.Format(Strings.HaveFound, filesToCheck.Length)
                 });
             }
-
+           
             return AnalysisResults;
         }
 
@@ -86,7 +114,34 @@ namespace SitemapPlugin
         /// <param name="projectPath"></param>
         public void Fix(string projectPath)
         {
-            //Requiere mas datos, se necesita ruta completa de dominio
+            if (!IsAutoFixeable || String.IsNullOrEmpty(Domain)) return;
+
+            var htmlFiles = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
+
+            StringBuilder sitemap = new StringBuilder();
+            sitemap.AppendLine(@"<?xml version=""1.0"" encoding=""UTF-8""?>"); //Header
+            sitemap.AppendLine(@"<urlset xmlns=""http://www.sitemaps.org/schemas/sitemap/0.9"">");
+            foreach (var file in htmlFiles)
+            {
+                string relativeUrl = (file.Replace(projectPath,String.Empty)).Replace(@"\",@"/"); //change file separator
+                sitemap.AppendLine(@"<url><loc>" + Domain + relativeUrl + @"</loc></url>");
+            }
+            sitemap.Append(@"</urlset>");
+            File.WriteAllText(Path.Combine(projectPath,"sitemap.xml"),sitemap.ToString());
         }
+
+        #region Custom Properties
+
+        /// <summary>
+        /// Display info about domain property
+        /// </summary>
+        public string DomainName => Strings.DomainName;
+
+        /// <summary>
+        /// Full path to root file
+        /// </summary>
+        public string Domain { get; set; }
+
+        #endregion
     }
 }

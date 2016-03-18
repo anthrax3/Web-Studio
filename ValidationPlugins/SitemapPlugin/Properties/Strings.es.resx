@@ -117,8 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AutoFix" xml:space="preserve">
+    <value>Arreglar automáticamente</value>
+  </data>
   <data name="Description" xml:space="preserve">
-    <value>Este plugin busca si existe un archivo sitemap y puede generar uno</value>
+    <value>Este plugin busca si existe un archivo sitemap, mostrando un error en caso contrario.
+Además puede generar un nuevo sitemap, para ello deberás introducir la ruta completa para este proyecto en tu dominio. 
+Por ejemplo http://www.google.es si el index se podrá acceder desde http://www.google.es/index.html</value>
   </data>
   <data name="HaveFound" xml:space="preserve">
     <value>Hemos encontrado {0} sitemaps</value>
@@ -128,5 +133,8 @@
   </data>
   <data name="NotFound" xml:space="preserve">
     <value>No hemos encontrado un archivo sitemap</value>
+  </data>
+  <data name="DomainName" xml:space="preserve">
+    <value>Introduzca la ruta</value>
   </data>
 </root>
