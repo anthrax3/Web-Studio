@@ -326,12 +326,7 @@ namespace MessageListControl
         {
             OnPropertyChanged(nameof(ErrorText));
             OnPropertyChanged(nameof(WarningText));
-            OnPropertyChanged(nameof(InformationText));
-            var temp = ItemsSource;
-            CollectionViewSource.GetDefaultView(ItemsSource)
-                .GroupDescriptions.Remove(_groupDescription); //Remove group because when the binding happens it groups the items
-            ItemsSource = null;
-            ItemsSource = temp; //link other time the data so the data grid refresh the data
+            OnPropertyChanged(nameof(InformationText));  
         }
     }
 }
