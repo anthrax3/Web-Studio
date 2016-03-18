@@ -19,7 +19,7 @@ namespace W3cPlugin
     /// </summary>
     [Export(typeof (IValidation))]
     [ExportMetadata("Name", "W3cValidator")]
-    [ExportMetadata("After", "")]
+    [ExportMetadata("After", "Include")]
     public class W3cPlugin : IValidation
     {
         /// <summary>
