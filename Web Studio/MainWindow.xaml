@@ -132,7 +132,7 @@
                 <avalonDock:LayoutRoot.BottomSide>
                     <avalonDock:LayoutAnchorSide>
                         <avalonDock:LayoutAnchorGroup>
-                            <avalonDock:LayoutAnchorable Title="{lex:Loc Messages}" CanClose="False" AutoHideHeight="250">
+                            <avalonDock:LayoutAnchorable x:Name="messagesContainer" Title="{lex:Loc Messages}" CanHide="False" CanClose="False" AutoHideHeight="250"  >
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"></RowDefinition>

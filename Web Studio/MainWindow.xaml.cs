@@ -15,7 +15,16 @@ namespace Web_Studio
         {
             InitializeComponent();
             EventSystem.Subscribe<ChangedLanguageEvent>(ManageChangedLanguage);
+            EventSystem.Subscribe<MessageContainerVisibilityChangedEvent>(MessageContainerVisibilityChanged);
+        }
 
+        /// <summary>
+        /// Update visiblity of container
+        /// </summary>
+        /// <param name="obj"></param>
+        private void MessageContainerVisibilityChanged(MessageContainerVisibilityChangedEvent obj)
+        {
+            messagesContainer.IsActive = IsVisible;
         }
 
         /// <summary>
