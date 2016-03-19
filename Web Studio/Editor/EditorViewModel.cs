@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Windows.Controls;
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Document;
@@ -72,7 +73,11 @@ namespace Web_Studio.Editor
         public bool EditorIsModified
         {
             get { return _editorIsModified; }
-            set { SetProperty(ref _editorIsModified, value); }
+            set
+            {
+                SetProperty(ref _editorIsModified, value);
+                OnPropertyChanged(nameof(Title));
+            }
         }
 
         /// <summary>
@@ -112,7 +117,7 @@ namespace Web_Studio.Editor
         /// </summary>
         public string Title
         {
-            get { return _title; }
+            get { return _title + (EditorIsModified ? "*" : String.Empty); }
             set { SetProperty(ref _title, value); }
         }
 
