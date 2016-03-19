@@ -6,6 +6,7 @@
              xmlns:editor="clr-namespace:Web_Studio.Editor"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:interactionRequest="http://prismlibrary.com/"
+             xmlns:windowAction="clr-namespace:Web_Studio.WindowAction"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <i:Interaction.Triggers>
@@ -13,7 +14,7 @@
         <interactionRequest:InteractionRequestTrigger
             SourceObject="{Binding SaveChangesConfirmationRequest, Mode=OneWay}">
             <!-- That window will be show as a modal dialog and centered over this window -->
-            <interactionRequest:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True" />
+            <windowAction:MetroPopupWindowAction IsModal="True" CenterOverAssociatedObject="True" />
         </interactionRequest:InteractionRequestTrigger>
     </i:Interaction.Triggers>
     <Grid>
