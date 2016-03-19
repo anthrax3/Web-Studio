@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Documents;
 using ValidationInterface;
@@ -32,8 +33,16 @@ namespace Web_Studio.PluginManager
         /// </summary>
         private  static void Load()
         {
-            GenericMefPluginLoader<Lazy<IValidation, IValidationMetadata>> loader = new GenericMefPluginLoader<Lazy<IValidation, IValidationMetadata>>("Plugins\\Check");
-            Sort(loader.Plugins);
+            try
+            {
+                GenericMefPluginLoader<Lazy<IValidation, IValidationMetadata>> loader = new GenericMefPluginLoader<Lazy<IValidation, IValidationMetadata>>("Plugins\\Check");
+                Sort(loader.Plugins);
+            }
+            catch (Exception)
+            {
+              File.AppendAllText("webStudio.log","Error when it was loading plugins\n");  
+            }
+          
         }
 
         /// <summary>
