@@ -19,6 +19,11 @@ namespace Web_Studio.WindowAction
             return new MetroPopupWindow();
         }
 
+        /// <summary>
+        /// Create 
+        /// </summary>
+        /// <param name="notification"></param>
+        /// <returns></returns>
         private new Window CreateDefaultWindow(INotification notification)
         {
             Window window = null;
