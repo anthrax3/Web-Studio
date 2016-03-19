@@ -48,7 +48,8 @@ namespace Web_Studio.Editor
             EditorShowLineNumbers = showLineNumbers;
             EditorLinkTextForegroundBrush = linkTextForeground;
             EditorFontSize = fontSize;
-            CloseCommand = new DelegateCommand(CloseCommandMethod);
+            CloseCommand = new DelegateCommand(CloseFile);
+            SaveCommand = new DelegateCommand(SaveFile);
             SaveChangesConfirmationRequest = new InteractionRequest<IConfirmation>();
 
 
@@ -60,6 +61,15 @@ namespace Web_Studio.Editor
             //Load SyntaxHighlighting
             var syntaxHighlighterTool = new SyntaxHighlighterTool();
             SyntaxHighlighting = syntaxHighlighterTool.SyntaxHighlightingMode(path); 
+        }
+
+        /// <summary>
+        /// Save file
+        /// </summary>
+        private void SaveFile()
+        {
+           File.WriteAllText(ToolTip,Document.Text);
+            EditorIsModified = false;
         }
 
         /// <summary>
@@ -168,7 +178,7 @@ namespace Web_Studio.Editor
             set { SetProperty(ref _editorFontSize, value); }
         }
 
-        private void CloseCommandMethod()
+        private void CloseFile()
         {
             if (EditorIsModified)
             {
@@ -203,5 +213,10 @@ namespace Web_Studio.Editor
             get { return _scrollToLine; }
             set { SetProperty(ref _scrollToLine, value); }
         }
+
+        /// <summary>
+        /// Command to manage the save event
+        /// </summary>
+        public DelegateCommand SaveCommand { get; private set; }
     }
 }
