@@ -171,6 +171,16 @@ namespace Web_Studio.ViewModels
         private Brush _editorLinkTextForegroundBrush;
         private bool _editorShowLineNumbers;
 
+        private EditorViewModel _activeDocument;
+        /// <summary>
+        /// Active document
+        /// </summary>
+        public EditorViewModel ActiveDocument
+        {
+            get { return _activeDocument; }
+            set { SetProperty(ref _activeDocument, value); }
+        }
+
         /// <summary>
         ///     Enable to show line numbers in editor
         /// </summary>
