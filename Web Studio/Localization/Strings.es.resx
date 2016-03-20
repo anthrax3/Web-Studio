@@ -246,4 +246,7 @@
   <data name="SaveProjectChangesDescription" xml:space="preserve">
     <value>Has modificado algunos documentos, ¿estas seguro que quieres salir sin guardar los cambios hechos?</value>
   </data>
+  <data name="OpenProject" xml:space="preserve">
+    <value>Abrir Proyecto</value>
+  </data>
 </root>

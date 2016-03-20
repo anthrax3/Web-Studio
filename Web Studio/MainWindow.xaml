@@ -79,19 +79,18 @@
                     <MenuItem Header="{lex:Loc File}" />
                     <MenuItem Header="{lex:Loc Project}" Command="{Binding NewProjectCommand}" />
                 </MenuItem>
-                <MenuItem Header="{lex:Loc Open}">
-                    <MenuItem Header="{lex:Loc File}" />
-                    <MenuItem Header="{lex:Loc Project}" Command="{Binding OpenProjectCommand}" />
-                </MenuItem>
-                <MenuItem Header="{lex:Loc AddFile}" />
+                <MenuItem Header="{lex:Loc OpenProject}" Command="{Binding OpenProjectCommand}" />
+                <MenuItem Header="{lex:Loc AddFile}" Command="{Binding AddFileCommand}" />
+                <Separator />
                 <MenuItem Header="{lex:Loc CloseFile}" Command="{Binding ActiveDocument.CloseCommand}"/>
-                <MenuItem Header="{lex:Loc CloseProject}" Command="{Binding CloseProjectCommand}"></MenuItem>
+                <MenuItem Header="{lex:Loc CloseProject}" Command="{Binding CloseProjectCommand}" />
                 <MenuItem Header="{lex:Loc SaveFile}" Command="{Binding ActiveDocument.SaveCommand}"/>
                 <MenuItem Header="{lex:Loc SaveProject}" Command="{Binding SaveProjectCommand}" />
                 <Separator />
                 <MenuItem Header="{lex:Loc Exit}" />
-
             </MenuItem>
+
+            
             <MenuItem Header="{lex:Loc Edit}">
                 <MenuItem Header="{lex:Loc Options}" Command="{Binding OptionWindowCommand}" />
             </MenuItem>

@@ -58,6 +58,7 @@ namespace Web_Studio.ViewModels
             PluginsWindowCommand = new DelegateCommand(PluginsWindow);
             CloseProjectCommand = new DelegateCommand(CloseProject);
             SaveProjectCommand = new DelegateCommand(SaveProject);
+            AddFileCommand = new DelegateCommand(AddFile);
 
             //Manage events
             EventSystem.Subscribe<FontSizeChangedEvent>(ManageChangedFont);
@@ -65,6 +66,8 @@ namespace Web_Studio.ViewModels
             EventSystem.Subscribe<ClosedDocumentEvent>(ManageDocumentClosed);
             EventSystem.Subscribe<ChangedProjectEvent>(ManageChangedProject);
         }
+
+     
 
         /// <summary>
         ///     Path to the loaded project
@@ -100,6 +103,11 @@ namespace Web_Studio.ViewModels
         public InteractionRequest<INotification> PluginsWindowRequest { get; set; } 
 
         /// <summary>
+        /// Add file menu command
+        /// </summary>
+        public DelegateCommand AddFileCommand { get; private set; }
+        
+        /// <summary>
         ///  Close project menu command
         /// </summary>
         public DelegateCommand CloseProjectCommand { get; private set; }
@@ -128,6 +136,28 @@ namespace Web_Studio.ViewModels
         ///     Plugins menu command
         /// </summary>
         public DelegateCommand PluginsWindowCommand { get; private set; }
+
+        /// <summary>
+        /// Select a file and copy it to project src 
+        /// </summary>
+        private void AddFile()
+        {
+            if (ProjectPath != null)
+            {
+                var openFile = new OpenFileDialog
+                {
+                    Multiselect = false,
+                    CheckFileExists = true,
+                    CheckPathExists = true
+                };
+
+                if (openFile.ShowDialog() == true)
+                {
+                    File.Copy(openFile.FileName,Path.Combine(ProjectPath,"src",Path.GetFileName(openFile.FileName))); //Copy file
+                }
+            }
+            
+        }
 
         /// <summary>
         /// Manage the close project event

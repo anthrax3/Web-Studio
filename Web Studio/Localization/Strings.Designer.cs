@@ -286,6 +286,15 @@ namespace Web_Studio.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Open Project.
+        /// </summary>
+        public static string OpenProject {
+            get {
+                return ResourceManager.GetString("OpenProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Options.
         /// </summary>
         public static string Options {

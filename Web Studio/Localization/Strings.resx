@@ -246,4 +246,7 @@
   <data name="SaveProjectChangesDescription" xml:space="preserve">
     <value>You have some document modified, are you sure that you want to close the project without saving the changes?</value>
   </data>
+  <data name="OpenProject" xml:space="preserve">
+    <value>Open Project</value>
+  </data>
 </root>
