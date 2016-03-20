@@ -59,6 +59,7 @@ namespace Web_Studio.ViewModels
             CloseProjectCommand = new DelegateCommand(CloseProject);
             SaveProjectCommand = new DelegateCommand(SaveProject);
             AddFileCommand = new DelegateCommand(AddFile);
+            NewFileCommand = new DelegateCommand(NewFile);
 
             //Manage events
             EventSystem.Subscribe<FontSizeChangedEvent>(ManageChangedFont);
@@ -67,7 +68,8 @@ namespace Web_Studio.ViewModels
             EventSystem.Subscribe<ChangedProjectEvent>(ManageChangedProject);
         }
 
-     
+    
+
 
         /// <summary>
         ///     Path to the loaded project
@@ -123,6 +125,11 @@ namespace Web_Studio.ViewModels
         public DelegateCommand NewProjectCommand { get; private set; }
 
         /// <summary>
+        /// New file menu option
+        /// </summary>
+        public DelegateCommand NewFileCommand { get; private set; }
+
+        /// <summary>
         ///     Open project menu command
         /// </summary>
         public DelegateCommand OpenProjectCommand { get; private set; }
@@ -136,6 +143,28 @@ namespace Web_Studio.ViewModels
         ///     Plugins menu command
         /// </summary>
         public DelegateCommand PluginsWindowCommand { get; private set; }
+
+        /// <summary>
+        /// Create and open a new file
+        /// </summary>
+        private void NewFile()
+        {
+            if (ProjectPath != null)
+            {
+                var saveFile = new SaveFileDialog
+                {
+                    CheckPathExists = true,
+                    InitialDirectory = Path.Combine(ProjectPath,"src"),
+                    Filter = "HTML (*.html)|*.html|CSS (*.css)|*.css|JavaScript (*.js)|*.js|" + Strings.File + " (*.*)|*.*"
+                };
+                if (saveFile.ShowDialog() == true)
+                {
+                   File.WriteAllText(saveFile.FileName,String.Empty); //Create file
+                   SearchOrCreateDocument(saveFile.FileName,Path.GetFileName(saveFile.FileName));  
+                }
+            }
+        }
+            
 
         /// <summary>
         /// Select a file and copy it to project src 

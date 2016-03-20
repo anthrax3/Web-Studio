@@ -76,7 +76,7 @@
         <Menu IsMainMenu="True" Grid.Row="0">
             <MenuItem Header="{lex:Loc File}">
                 <MenuItem Header="{lex:Loc New}">
-                    <MenuItem Header="{lex:Loc File}" />
+                    <MenuItem Header="{lex:Loc File}" Command="{Binding NewFileCommand}"/>
                     <MenuItem Header="{lex:Loc Project}" Command="{Binding NewProjectCommand}" />
                 </MenuItem>
                 <MenuItem Header="{lex:Loc OpenProject}" Command="{Binding OpenProjectCommand}" />
