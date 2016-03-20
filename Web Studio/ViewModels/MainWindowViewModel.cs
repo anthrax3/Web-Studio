@@ -133,37 +133,58 @@ namespace Web_Studio.ViewModels
         /// Manage the close project event
         /// </summary>
         private void CloseProject()
-        {
+        {   
             if (ProjectPath != null) //We have a project open
             {
-                bool fileModified = Documents.Any(document => document.EditorIsModified);
-                bool close = true;
-                if (fileModified)
-                {
-                  SaveChangesInteractionRequest.Raise(new Confirmation {Title = Strings.SaveChanges, Content = Strings.SaveProjectChangesDescription},
-                      c =>
-                      {
-                          if (!c.Confirmed)
-                          {
-                              close = false;
-                            
-                          }
-                      }
-                  
-                  );  
-                }
-
+                var close = CanCloseProject();
                 if (close)
                 {
-                    //Save project
-                    ProjectModel.Instance.Save();
-                    ProjectPath = null;
-                    Documents.Clear();
-                    ProjectModel.Instance.Clear();
-                    Results.Clear();
+                    OrderlyCloseProject();
                 }
+               
             }
         }
+
+        /// <summary>
+        /// Close project orderly
+        /// </summary>
+        private void OrderlyCloseProject()
+        {
+            //Save project
+            ProjectModel.Instance.Save();
+            ProjectPath = null;
+            Documents.Clear();
+            ProjectModel.Instance.Clear();
+            Results.Clear();
+        }
+
+        /// <summary>
+        /// Check if we can close the project
+        /// </summary>
+        /// <returns></returns>
+        private bool CanCloseProject()
+        {
+            bool close = true;
+                bool fileModified = Documents.Any(document => document.EditorIsModified);
+
+                if (fileModified)
+                {
+                    SaveChangesInteractionRequest.Raise(
+                        new Confirmation {Title = Strings.SaveChanges, Content = Strings.SaveProjectChangesDescription},
+                        c =>
+                        {
+                            if (!c.Confirmed)
+                            {
+                                close = false;
+
+                            }
+                        }
+
+                        );
+                }
+           
+            return close;
+        } 
 
         /// <summary>
         /// Save project configuration
@@ -203,6 +224,19 @@ namespace Web_Studio.ViewModels
         /// </summary>
         private void OpenProject()
         {
+            if (ProjectPath != null) //If you have an open project
+            {
+                var close = CanCloseProject();
+                if (close)
+                {
+                    OrderlyCloseProject();
+                }
+                else
+                {
+                    return; //Can not close
+                }
+            }
+
             //Config
             var openFile = new OpenFileDialog
             {
