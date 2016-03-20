@@ -31,7 +31,7 @@
                     <Separator/>
                     <MenuItem Command="Cut" />
                     <MenuItem Command="Copy" />
-                    <MenuItem Command="Paste" />
+                    <MenuItem Command="Paste" /> 
                 </ContextMenu>
             </editor:TextEditorMvvm.ContextMenu>
             </editor:TextEditorMvvm>
