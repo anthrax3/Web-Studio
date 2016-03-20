@@ -48,7 +48,16 @@ namespace TreeViewExplorerControl
         public ExplorerControl()
         {
             Nodes = new ObservableCollection<INode>();
-            _watcher = new FileSystemWatcher
+            _watcher = CreateWatcher();
+        }     
+
+        /// <summary>
+        /// Creat a file system watcher with settings
+        /// </summary>
+        /// <returns></returns>
+        private FileSystemWatcher CreateWatcher()
+        {
+            var _watcher = new FileSystemWatcher
             {
                 IncludeSubdirectories = true,
                 NotifyFilter = NotifyFilters.DirectoryName | NotifyFilters.FileName
@@ -60,8 +69,9 @@ namespace TreeViewExplorerControl
 
             // Begin watching
             _watcher.EnableRaisingEvents = false;
-        }
 
+            return _watcher;
+        }
 
         private ObservableCollection<INode> Nodes { get; }
 
@@ -192,9 +202,15 @@ namespace TreeViewExplorerControl
             get { return (string) GetValue(PathToWatchProperty); }
             set
             {
+                
+
                 SetValue(PathToWatchProperty, value);
                 if (value != null)
                 {
+                    if (_watcher == null)
+                    {
+                        _watcher = CreateWatcher();
+                    }
                     _watcher.Path = value;
                     _watcher.EnableRaisingEvents = true;
                     Nodes.Clear();
@@ -202,7 +218,8 @@ namespace TreeViewExplorerControl
                 }
                 else
                 {
-                    _watcher = new FileSystemWatcher();
+                    _watcher.Dispose(); //Free
+                    _watcher = null;
                     Nodes.Clear();
                 }
             }
