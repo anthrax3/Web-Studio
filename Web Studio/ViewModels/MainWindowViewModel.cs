@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Media;
+using System.Windows.Threading;
 using FastObservableCollection;
 using Microsoft.Win32;
 using Prism.Commands;
@@ -13,6 +15,7 @@ using Web_Studio.Editor;
 using Web_Studio.Events;
 using Web_Studio.Localization;
 using Web_Studio.Models;
+using Web_Studio.PluginManager;
 using Web_Studio.Properties;
 
 namespace Web_Studio.ViewModels
@@ -43,6 +46,8 @@ namespace Web_Studio.ViewModels
 
             OptionWindowRequest = new InteractionRequest<INotification>();
             NewProjectRequest = new InteractionRequest<INotification>();
+            PluginsWindowRequest = new InteractionRequest<INotification>();
+            SaveChangesInteractionRequest = new InteractionRequest<IConfirmation>();
 
             //Manage commands
             SelectedItemChangedCommand = new DelegateCommand(SelectedItemChanged);
@@ -50,6 +55,11 @@ namespace Web_Studio.ViewModels
             OptionWindowCommand = new DelegateCommand(OptionWindow);
             NewProjectCommand = new DelegateCommand(NewProject);
             GenerateCommand = new DelegateCommand(Generate);
+            PluginsWindowCommand = new DelegateCommand(PluginsWindow);
+            CloseProjectCommand = new DelegateCommand(CloseProject);
+            SaveProjectCommand = new DelegateCommand(SaveProject);
+            AddFileCommand = new DelegateCommand(AddFile);
+            NewFileCommand = new DelegateCommand(NewFile);
 
             //Manage events
             EventSystem.Subscribe<FontSizeChangedEvent>(ManageChangedFont);
@@ -57,6 +67,9 @@ namespace Web_Studio.ViewModels
             EventSystem.Subscribe<ClosedDocumentEvent>(ManageDocumentClosed);
             EventSystem.Subscribe<ChangedProjectEvent>(ManageChangedProject);
         }
+
+    
+
 
         /// <summary>
         ///     Path to the loaded project
@@ -87,9 +100,34 @@ namespace Web_Studio.ViewModels
         public InteractionRequest<INotification> NewProjectRequest { get; set; }
 
         /// <summary>
+        /// It request the view to open the plugins window
+        /// </summary>
+        public InteractionRequest<INotification> PluginsWindowRequest { get; set; } 
+
+        /// <summary>
+        /// Add file menu command
+        /// </summary>
+        public DelegateCommand AddFileCommand { get; private set; }
+        
+        /// <summary>
+        ///  Close project menu command
+        /// </summary>
+        public DelegateCommand CloseProjectCommand { get; private set; }
+
+        /// <summary>
+        /// Save project menu command
+        /// </summary>
+        public DelegateCommand SaveProjectCommand { get; private set; }
+
+        /// <summary>
         ///     New project menu option command
         /// </summary>
         public DelegateCommand NewProjectCommand { get; private set; }
+
+        /// <summary>
+        /// New file menu option
+        /// </summary>
+        public DelegateCommand NewFileCommand { get; private set; }
 
         /// <summary>
         ///     Open project menu command
@@ -101,6 +139,124 @@ namespace Web_Studio.ViewModels
         /// </summary>
         public DelegateCommand OptionWindowCommand { get; private set; }
 
+        /// <summary>
+        ///     Plugins menu command
+        /// </summary>
+        public DelegateCommand PluginsWindowCommand { get; private set; }
+
+        /// <summary>
+        /// Create and open a new file
+        /// </summary>
+        private void NewFile()
+        {
+            if (ProjectPath != null)
+            {
+                var saveFile = new SaveFileDialog
+                {
+                    CheckPathExists = true,
+                    InitialDirectory = Path.Combine(ProjectPath,"src"),
+                    Filter = "HTML (*.html)|*.html|CSS (*.css)|*.css|JavaScript (*.js)|*.js|" + Strings.File + " (*.*)|*.*"
+                };
+                if (saveFile.ShowDialog() == true)
+                {
+                   File.WriteAllText(saveFile.FileName,String.Empty); //Create file
+                   SearchOrCreateDocument(saveFile.FileName,Path.GetFileName(saveFile.FileName));  
+                }
+            }
+        }
+            
+
+        /// <summary>
+        /// Select a file and copy it to project src 
+        /// </summary>
+        private void AddFile()
+        {
+            if (ProjectPath != null)
+            {
+                var openFile = new OpenFileDialog
+                {
+                    Multiselect = false,
+                    CheckFileExists = true,
+                    CheckPathExists = true
+                };
+
+                if (openFile.ShowDialog() == true)
+                {
+                    File.Copy(openFile.FileName,Path.Combine(ProjectPath,"src",Path.GetFileName(openFile.FileName))); //Copy file
+                }
+            }
+            
+        }
+
+        /// <summary>
+        /// Manage the close project event
+        /// </summary>
+        private void CloseProject()
+        {   
+            if (ProjectPath != null) //We have a project open
+            {
+                var close = CanCloseProject();
+                if (close)
+                {
+                    OrderlyCloseProject();
+                }
+               
+            }
+        }
+
+        /// <summary>
+        /// Close project orderly
+        /// </summary>
+        private void OrderlyCloseProject()
+        {
+            //Save project
+            ProjectModel.Instance.Save();
+            ProjectPath = null;
+            Documents.Clear();
+            ProjectModel.Instance.Clear();
+            Results.Clear();
+        }
+
+        /// <summary>
+        /// Check if we can close the project
+        /// </summary>
+        /// <returns></returns>
+        private bool CanCloseProject()
+        {
+            bool close = true;
+                bool fileModified = Documents.Any(document => document.EditorIsModified);
+
+                if (fileModified)
+                {
+                    SaveChangesInteractionRequest.Raise(
+                        new Confirmation {Title = Strings.SaveChanges, Content = Strings.SaveProjectChangesDescription},
+                        c =>
+                        {
+                            if (!c.Confirmed)
+                            {
+                                close = false;
+
+                            }
+                        }
+
+                        );
+                }
+           
+            return close;
+        } 
+
+        /// <summary>
+        /// Save project configuration
+        /// </summary>
+        private void SaveProject()
+        {
+            ProjectModel.Instance.Save();
+        }
+
+        /// <summary>
+        /// Request to open save changes window
+        /// </summary>
+        public  InteractionRequest<IConfirmation> SaveChangesInteractionRequest { get; } 
         /// <summary>
         ///     Raise new project request
         /// </summary>
@@ -117,11 +273,29 @@ namespace Web_Studio.ViewModels
             OptionWindowRequest.Raise(new Notification {Title = Strings.Options});
         }
 
+        private void PluginsWindow()
+        {
+            PluginsWindowRequest.Raise( new Notification {Title = "Plugins"});
+        }
+
         /// <summary>
         ///     Display a dialog to select a project
         /// </summary>
         private void OpenProject()
         {
+            if (ProjectPath != null) //If you have an open project
+            {
+                var close = CanCloseProject();
+                if (close)
+                {
+                    OrderlyCloseProject();
+                }
+                else
+                {
+                    return; //Can not close
+                }
+            }
+
             //Config
             var openFile = new OpenFileDialog
             {
@@ -150,6 +324,16 @@ namespace Web_Studio.ViewModels
         private int _editorFontSize;
         private Brush _editorLinkTextForegroundBrush;
         private bool _editorShowLineNumbers;
+
+        private EditorViewModel _activeDocument;
+        /// <summary>
+        /// Active document
+        /// </summary>
+        public EditorViewModel ActiveDocument
+        {
+            get { return _activeDocument; }
+            set { SetProperty(ref _activeDocument, value); }
+        }
 
         /// <summary>
         ///     Enable to show line numbers in editor
@@ -295,6 +479,9 @@ namespace Web_Studio.ViewModels
         #endregion
 
         #region Messages
+
+       
+
         /// <summary>
         /// Collection with the messages generated by the plugins
         /// </summary>
@@ -306,20 +493,78 @@ namespace Web_Studio.ViewModels
         public DelegateCommand GenerateCommand { get; private set; }
 
         /// <summary>
-        /// Generate the new proyecto
+        /// Generate the new project
         /// </summary>
         private void Generate()
         {
-            if (ProjectPath != null)
+            if (ProjectPath != null && !IsGeneratingProject)
             {
                 Results.Clear();
+                NumberOfRulesProcessed = 0;
+                NumberOfRules = ValidationPluginManager.Plugins.Count*2; //Check and fix each plugin
+                IsGeneratingProject = true;
+                CopySourceToRelease();
+                EventSystem.Publish(new MessageContainerVisibilityChangedEvent {IsVisible = true});  //Make visible messages container
+                string releasePath = Path.Combine(ProjectPath, "release");
 
-                var loader = new GenericMefPluginLoader<IValidation>("Plugins\\Check");
-                foreach (IValidation plugin in loader.Plugins)
+
+                BackgroundWorker worker = new BackgroundWorker();
+
+                worker.DoWork += (o, ea) =>
                 {
-                    Results.AddRange(plugin.Check(ProjectPath));
-                }
+                    //Check loop
+                    for (int i = 0; i < ValidationPluginManager.Plugins.Count; i++)
+                    {
+                        var tempResults = ValidationPluginManager.Plugins[i].Value.Check(releasePath);
+                        System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
+                        {
+                            Results.AddRange(tempResults);
+                            NumberOfRulesProcessed++;
+                        });
+                    }
+
+                    //Fix loop
+                    for (int i = 0; i < ValidationPluginManager.Plugins.Count; i++)
+                    {
+                        ValidationPluginManager.Plugins[i].Value.Fix(releasePath);
+                        System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
+                        {
+                            NumberOfRulesProcessed++;
+                        });
+                    }
+                };
+
+                worker.RunWorkerCompleted += (sender, args) => //Finished
+                {
+                    IsGeneratingProject = false;
+                };
+
+                worker.RunWorkerAsync();
             }
+        }
+        /// <summary>
+        /// Method to copy all files in source to release
+        /// </summary>
+        private void CopySourceToRelease()
+        {
+            string srcPath = Path.Combine(ProjectPath, "src");
+            string releasePath = Path.Combine(ProjectPath, "release");
+
+            if (Directory.Exists(releasePath))     //Remove old release
+            {
+                Directory.Delete(releasePath,true);
+            }
+            Directory.CreateDirectory(releasePath);
+
+            foreach (string dirPath in Directory.GetDirectories(srcPath, "*", SearchOption.AllDirectories)) //Crete all directories
+            {
+                Directory.CreateDirectory(dirPath.Replace(srcPath, releasePath));
+            }
+
+            foreach (string newPath in Directory.GetFiles(srcPath, "*.*", SearchOption.AllDirectories))
+            {
+                File.Copy(newPath, newPath.Replace(srcPath, releasePath), true); 
+            } 
         }
 
         private AnalysisResult _messageSelected;
@@ -332,7 +577,10 @@ namespace Web_Studio.ViewModels
             set
             {
                 SetProperty(ref _messageSelected, value);
-                GoToMessageLine();
+                if (_messageSelected.File != "")  //Project message
+                {
+                    GoToMessageLine();  
+                }
             }
         }
 
@@ -349,6 +597,40 @@ namespace Web_Studio.ViewModels
             myEditor.IsSelected = true;
             myEditor.ScrollToLine = MessageSelected.Line;
         }
+
+        #endregion
+
+        #region BusyControl
+        private bool _isGeneratingProject;
+        /// <summary>
+        /// True if we are generating the project => enable busycontrol
+        /// </summary>
+        public bool IsGeneratingProject
+        {
+            get { return _isGeneratingProject; }
+            set { SetProperty(ref _isGeneratingProject, value); }
+        }
+
+        private int _numberOfRules;
+        /// <summary>
+        /// Total number of rules to process
+        /// </summary>
+        public int NumberOfRules
+        {
+            get { return _numberOfRules; }
+            set { SetProperty(ref _numberOfRules, value); }
+        }
+
+        private int _numberOfRulesProcessed;
+        /// <summary>
+        /// Number of rules that we have already processed
+        /// </summary>
+        public int NumberOfRulesProcessed
+        {
+            get { return _numberOfRulesProcessed; }
+            set { SetProperty(ref _numberOfRulesProcessed, value); }
+        }
+
 
         #endregion
     }

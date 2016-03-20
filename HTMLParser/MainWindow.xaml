@@ -4,37 +4,21 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HTMLParser"
+        xmlns:messageListControl="clr-namespace:MessageListControl;assembly=MessageListControl"
+        xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+        xmlns:busyControl="clr-namespace:BusyControl;assembly=BusyControl"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Window.DataContext>
         <local:ViewModel></local:ViewModel>
     </Window.DataContext>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-            <Button Grid.Row="0" Command="{Binding CheckCommand}">Check</Button>
-        <ListView Grid.Row="1" ItemsSource="{Binding Results}">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Type">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Border Background="{Binding Type.HexColor}" BorderThickness="1" CornerRadius="50" Padding="1">
-                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Type.Symbol}" FontFamily="Segoe MDL2 Assets"></TextBlock>
-                                        </Border>
-                                        <TextBlock Text="{Binding Type.Name}"></TextBlock>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Message" DisplayMemberBinding="{Binding Message}"></GridViewColumn>
-                        <GridViewColumn Header="File" DisplayMemberBinding="{Binding File}"></GridViewColumn>
-                        <GridViewColumn Header="Line" DisplayMemberBinding="{Binding Line}"></GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
+       <StackPanel>
+            <busyControl:BusyControl  IsBusy="True" MinValue="0" MaxValue="40" Value="20" Description="Analizando.."
+                                 PauseCommand="{Binding PauseCommand}"></busyControl:BusyControl>
+            <Button Click="Button_Click">Clickame</Button>
+            <Button Click="Button_Click_1">Soy el dos</Button>
+        </StackPanel>
+        
     </Grid>
 </Window>

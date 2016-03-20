@@ -108,6 +108,7 @@
       <Word>IFRAME</Word>
       <Word>IMAGE</Word>
       <Word>IMG</Word>
+      <Word>INCLUDE</Word>
       <Word>INPUT</Word>
       <Word>INS</Word>
       <Word>ISINDEX</Word>

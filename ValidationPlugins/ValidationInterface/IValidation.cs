@@ -1,38 +1,20 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Controls;
+using ValidationInterface.CategoryTypes;
 
 namespace ValidationInterface
 {
-    /// <summary>
-    ///     Plugin category
-    /// </summary>
-    public enum Category
-    {
-        /// <summary>
-        ///     About the code itself
-        /// </summary>
-        Development,
-
-        /// <summary>
-        ///     About Search Engine Optimization (SEO)
-        /// </summary>
-        Seo,
-
-        /// <summary>
-        ///     About the style of a page or a project
-        /// </summary>
-        Style,
-
-        /// <summary>
-        ///     About optimization that reduces the load time of a web
-        /// </summary>
-        Optimization
-    }
-
+   
     /// <summary>
     ///     Plugin validation interface
     /// </summary>
     public interface IValidation
     {
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        UserControl View { get; } 
+
         /// <summary>
         ///     Name of the plugin
         /// </summary>
@@ -46,7 +28,7 @@ namespace ValidationInterface
         /// <summary>
         ///     Category of the plugin
         /// </summary>
-        Category Type { get; }
+        ICategoryType Type { get; }
 
         /// <summary>
         ///     Results of the check method.

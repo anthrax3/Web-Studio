@@ -15,6 +15,10 @@
     xmlns:messageListControl="clr-namespace:MessageListControl;assembly=MessageListControl"
     xmlns:busyControl="clr-namespace:BusyControl;assembly=BusyControl"
     xmlns:properties="clr-namespace:Web_Studio.Properties"
+    xmlns:ei="schemas.microsoft.com/expression/2010/interactions"
+    xmlns:events="clr-namespace:Web_Studio.Events"
+    xmlns:windowAction="clr-namespace:Web_Studio.WindowAction"
+    xmlns:converters="clr-namespace:Web_Studio.Converters"
     x:Class="Web_Studio.MainWindow"
     mc:Ignorable="d"
     lex:LocalizeDictionary.DesignCulture="es"
@@ -25,6 +29,9 @@
         Left="{Binding Source={x:Static properties:Settings.Default},Path=Left,Mode=TwoWay}"
         Top="{Binding Source={x:Static properties:Settings.Default},Path=Top,Mode=TwoWay}"
     WindowState="{Binding Source={x:Static properties:Settings.Default},Path=WindowState,Mode=TwoWay}">
+    <controls:MetroWindow.Resources>
+        <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter"></converters:ActiveDocumentConverter>
+    </controls:MetroWindow.Resources>
     <controls:MetroWindow.DataContext>
         <viewModels:MainWindowViewModel />
     </controls:MetroWindow.DataContext>
@@ -32,19 +39,34 @@
     <!-- Open windows with MVVM  -->
     <i:Interaction.Triggers>
         <interactionRequest:InteractionRequestTrigger SourceObject="{Binding OptionWindowRequest, Mode=OneWay}">
-            <interactionRequest:PopupWindowAction>
-                <interactionRequest:PopupWindowAction.WindowContent>
+            <windowAction:MetroPopupWindowAction>
+                <windowAction:MetroPopupWindowAction.WindowContent>
                     <webStudio:Options />
-                </interactionRequest:PopupWindowAction.WindowContent>
-            </interactionRequest:PopupWindowAction>
+                </windowAction:MetroPopupWindowAction.WindowContent>
+            </windowAction:MetroPopupWindowAction>
         </interactionRequest:InteractionRequestTrigger>
+        
         <interactionRequest:InteractionRequestTrigger SourceObject="{Binding NewProjectRequest, Mode=OneWay}">
-            <interactionRequest:PopupWindowAction IsModal="True">
-                <interactionRequest:PopupWindowAction.WindowContent>
+            <windowAction:MetroPopupWindowAction IsModal="True">
+                <windowAction:MetroPopupWindowAction.WindowContent>
                     <webStudio:NewProject />
-                </interactionRequest:PopupWindowAction.WindowContent>
-            </interactionRequest:PopupWindowAction>
+                </windowAction:MetroPopupWindowAction.WindowContent>
+            </windowAction:MetroPopupWindowAction>
         </interactionRequest:InteractionRequestTrigger>
+        
+        <interactionRequest:InteractionRequestTrigger SourceObject="{Binding PluginsWindowRequest, Mode=OneWay}">
+            <windowAction:MetroPopupWindowAction IsModal="True">
+                <windowAction:MetroPopupWindowAction.WindowContent>
+                    <webStudio:ValidationPlugins />
+                </windowAction:MetroPopupWindowAction.WindowContent>
+            </windowAction:MetroPopupWindowAction>
+        </interactionRequest:InteractionRequestTrigger>
+
+        <interactionRequest:InteractionRequestTrigger
+            SourceObject="{Binding SaveChangesInteractionRequest, Mode=OneWay}">
+            <windowAction:MetroPopupWindowAction IsModal="True" CenterOverAssociatedObject="True" />
+        </interactionRequest:InteractionRequestTrigger>
+
     </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
@@ -54,26 +76,27 @@
         <Menu IsMainMenu="True" Grid.Row="0">
             <MenuItem Header="{lex:Loc File}">
                 <MenuItem Header="{lex:Loc New}">
-                    <MenuItem Header="{lex:Loc File}" />
+                    <MenuItem Header="{lex:Loc File}" Command="{Binding NewFileCommand}"/>
                     <MenuItem Header="{lex:Loc Project}" Command="{Binding NewProjectCommand}" />
                 </MenuItem>
-                <MenuItem Header="{lex:Loc Open}">
-                    <MenuItem Header="{lex:Loc File}" />
-                    <MenuItem Header="{lex:Loc Project}" Command="{Binding OpenProjectCommand}" />
-                </MenuItem>
-                <MenuItem Header="{lex:Loc AddFile}" />
-                <MenuItem Header="{lex:Loc CloseFile}" />
-                <MenuItem Header="{lex:Loc SaveFile}" />
-                <MenuItem Header="{lex:Loc SaveProject}" />
+                <MenuItem Header="{lex:Loc OpenProject}" Command="{Binding OpenProjectCommand}" />
+                <MenuItem Header="{lex:Loc AddFile}" Command="{Binding AddFileCommand}" />
+                <Separator />
+                <MenuItem Header="{lex:Loc CloseFile}" Command="{Binding ActiveDocument.CloseCommand}"/>
+                <MenuItem Header="{lex:Loc CloseProject}" Command="{Binding CloseProjectCommand}" />
+                <MenuItem Header="{lex:Loc SaveFile}" Command="{Binding ActiveDocument.SaveCommand}"/>
+                <MenuItem Header="{lex:Loc SaveProject}" Command="{Binding SaveProjectCommand}" />
                 <Separator />
                 <MenuItem Header="{lex:Loc Exit}" />
-
             </MenuItem>
+
+            
             <MenuItem Header="{lex:Loc Edit}">
                 <MenuItem Header="{lex:Loc Options}" Command="{Binding OptionWindowCommand}" />
             </MenuItem>
             <MenuItem Header="{lex:Loc View}" />
             <MenuItem Header="{lex:Loc Generate}" Command="{Binding GenerateCommand}"></MenuItem>
+            <MenuItem Header="Plugins" Command="{Binding PluginsWindowCommand}"></MenuItem>
             <MenuItem Header="{lex:Loc Window}">
                 <MenuItem x:Name="ExplorerMenuItem" Header="{lex:Loc FileExplorer}"
                           IsChecked="{Binding ElementName=ExplorerLayout,Path=IsVisible,Mode=TwoWay}"
@@ -81,7 +104,7 @@
             </MenuItem>
             <MenuItem Header="{lex:Loc Help}" />
         </Menu>
-        <avalonDock:DockingManager x:Name="dockingManager" DocumentsSource="{Binding Documents}" Grid.Row="1">
+        <avalonDock:DockingManager x:Name="dockingManager" DocumentsSource="{Binding Documents}" Grid.Row="1" ActiveContent="{Binding ActiveDocument, Mode=TwoWay, Converter={StaticResource ActiveDocumentConverter}}">
             <avalonDock:DockingManager.Theme>
                 <avalonDock:WebStudioTheme />
             </avalonDock:DockingManager.Theme>
@@ -118,13 +141,13 @@
                 <avalonDock:LayoutRoot.BottomSide>
                     <avalonDock:LayoutAnchorSide>
                         <avalonDock:LayoutAnchorGroup>
-                            <avalonDock:LayoutAnchorable Title="{lex:Loc Messages}" CanClose="False" AutoHideHeight="250">
+                            <avalonDock:LayoutAnchorable x:Name="messagesContainer" Title="{lex:Loc Messages}" CanHide="False" CanClose="False" AutoHideHeight="250"  >
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"></RowDefinition>
                                         <RowDefinition></RowDefinition>
                                     </Grid.RowDefinitions>
-                                    <busyControl:BusyControl x:Name="BusyControl"></busyControl:BusyControl>
+                                    <busyControl:BusyControl Description="{lex:Loc Generating}" IsBusy="{Binding IsGeneratingProject}" MaxValue="{Binding NumberOfRules}" MinValue="0" Value="{Binding NumberOfRulesProcessed}" x:Name="BusyControl"></busyControl:BusyControl>
                                     <messageListControl:MessageListControl x:Name="MessageListControl"  ItemsSource="{Binding Results}" Grid.Row="1" SelectedItem="{Binding MessageSelected,Mode=OneWayToSource}"></messageListControl:MessageListControl>
                                 </Grid>
                             </avalonDock:LayoutAnchorable>

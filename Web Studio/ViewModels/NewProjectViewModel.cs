@@ -7,6 +7,7 @@ using Prism.Mvvm;
 using SocialCheckInterface;
 using Web_Studio.Events;
 using Web_Studio.Models;
+using Web_Studio.PluginManager;
 
 namespace Web_Studio.ViewModels
 {
@@ -139,7 +140,7 @@ namespace Web_Studio.ViewModels
 
         private void SocialCheckAvailabilityRun()
         {
-            var loader = new GenericMefPluginLoader<ISocialCheck>("Plugins");
+            var loader = new GenericMefPluginLoader<ISocialCheck>("Plugins\\Social");
             var name = ProjectName.Replace(" ", string.Empty);
             foreach (var sc in loader.Plugins)
             {

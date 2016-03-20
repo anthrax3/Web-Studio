@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Windows.Controls;
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Document;
@@ -47,7 +48,8 @@ namespace Web_Studio.Editor
             EditorShowLineNumbers = showLineNumbers;
             EditorLinkTextForegroundBrush = linkTextForeground;
             EditorFontSize = fontSize;
-            CloseCommand = new DelegateCommand(CloseCommandMethod);
+            CloseCommand = new DelegateCommand(CloseFile);
+            SaveCommand = new DelegateCommand(SaveFile);
             SaveChangesConfirmationRequest = new InteractionRequest<IConfirmation>();
 
 
@@ -62,6 +64,15 @@ namespace Web_Studio.Editor
         }
 
         /// <summary>
+        /// Save file
+        /// </summary>
+        private void SaveFile()
+        {
+           File.WriteAllText(ToolTip,Document.Text);
+            EditorIsModified = false;
+        }
+
+        /// <summary>
         ///     Confirmation event popup
         /// </summary>
         public InteractionRequest<IConfirmation> SaveChangesConfirmationRequest { get; }
@@ -72,7 +83,11 @@ namespace Web_Studio.Editor
         public bool EditorIsModified
         {
             get { return _editorIsModified; }
-            set { SetProperty(ref _editorIsModified, value); }
+            set
+            {
+                SetProperty(ref _editorIsModified, value);
+                OnPropertyChanged(nameof(Title));
+            }
         }
 
         /// <summary>
@@ -112,7 +127,7 @@ namespace Web_Studio.Editor
         /// </summary>
         public string Title
         {
-            get { return _title; }
+            get { return _title + (EditorIsModified ? "*" : String.Empty); }
             set { SetProperty(ref _title, value); }
         }
 
@@ -163,7 +178,7 @@ namespace Web_Studio.Editor
             set { SetProperty(ref _editorFontSize, value); }
         }
 
-        private void CloseCommandMethod()
+        private void CloseFile()
         {
             if (EditorIsModified)
             {
@@ -198,5 +213,10 @@ namespace Web_Studio.Editor
             get { return _scrollToLine; }
             set { SetProperty(ref _scrollToLine, value); }
         }
+
+        /// <summary>
+        /// Command to manage the save event
+        /// </summary>
+        public DelegateCommand SaveCommand { get; private set; }
     }
 }

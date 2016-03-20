@@ -73,13 +73,35 @@ namespace Web_Studio.Models
                 Directory.CreateDirectory(Path.Combine(srcPath, "img"));
 
                 //Create index file
-                File.WriteAllText(Path.Combine(srcPath, "index.html"),Templates.Html5Template());
+                File.WriteAllText(Path.Combine(srcPath, "index.html"),Templates.Html5WithIncludeTemplate());
+
+                //Create a footer
+                File.WriteAllText(Path.Combine(srcPath, "footer.html"),Templates.FooterTemplate());
 
                 return true;
             }
             catch (Exception)
             {
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Clear all information of the project and get a new project
+        /// </summary>
+        public void Clear()
+        {
+            Instance = new ProjectModel();
+        }
+
+        /// <summary>
+        /// Save all project configuration
+        /// </summary>
+        public void Save()
+        {
+            if (FullPath != null)
+            {
+                //TODO  
             }
         }
 

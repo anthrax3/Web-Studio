@@ -1,4 +1,6 @@
-﻿namespace ValidationInterface.MessageTypes
+﻿using ValidationInterface.Properties;
+
+namespace ValidationInterface.MessageTypes
 {
     /// <summary>
     ///     Type of the information message
