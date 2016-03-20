@@ -99,7 +99,10 @@ namespace Web_Studio.Models
         /// </summary>
         public void Save()
         {
-            //TODO
+            if (FullPath != null)
+            {
+                //TODO  
+            }
         }
 
         /// <summary>

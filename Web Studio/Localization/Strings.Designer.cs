@@ -124,7 +124,7 @@ namespace Web_Studio.Localization {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Close project.
+        ///   Busca una cadena traducida similar a Close Project.
         /// </summary>
         public static string CloseProject {
             get {

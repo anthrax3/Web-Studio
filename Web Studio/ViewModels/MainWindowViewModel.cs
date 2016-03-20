@@ -57,6 +57,7 @@ namespace Web_Studio.ViewModels
             GenerateCommand = new DelegateCommand(Generate);
             PluginsWindowCommand = new DelegateCommand(PluginsWindow);
             CloseProjectCommand = new DelegateCommand(CloseProject);
+            SaveProjectCommand = new DelegateCommand(SaveProject);
 
             //Manage events
             EventSystem.Subscribe<FontSizeChangedEvent>(ManageChangedFont);
@@ -64,8 +65,6 @@ namespace Web_Studio.ViewModels
             EventSystem.Subscribe<ClosedDocumentEvent>(ManageDocumentClosed);
             EventSystem.Subscribe<ChangedProjectEvent>(ManageChangedProject);
         }
-
-     
 
         /// <summary>
         ///     Path to the loaded project
@@ -104,6 +103,11 @@ namespace Web_Studio.ViewModels
         ///  Close project menu command
         /// </summary>
         public DelegateCommand CloseProjectCommand { get; private set; }
+
+        /// <summary>
+        /// Save project menu command
+        /// </summary>
+        public DelegateCommand SaveProjectCommand { get; private set; }
 
         /// <summary>
         ///     New project menu option command
@@ -162,9 +166,17 @@ namespace Web_Studio.ViewModels
         }
 
         /// <summary>
+        /// Save project configuration
+        /// </summary>
+        private void SaveProject()
+        {
+            ProjectModel.Instance.Save();
+        }
+
+        /// <summary>
         /// Request to open save changes window
         /// </summary>
-         public  InteractionRequest<IConfirmation> SaveChangesInteractionRequest { get; } 
+        public  InteractionRequest<IConfirmation> SaveChangesInteractionRequest { get; } 
         /// <summary>
         ///     Raise new project request
         /// </summary>

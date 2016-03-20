@@ -241,7 +241,7 @@
     <value>Ok</value>
   </data>
   <data name="CloseProject" xml:space="preserve">
-    <value>Cerrar proyecto</value>
+    <value>Cerrar Proyecto</value>
   </data>
   <data name="SaveProjectChangesDescription" xml:space="preserve">
     <value>Has modificado algunos documentos, ¿estas seguro que quieres salir sin guardar los cambios hechos?</value>

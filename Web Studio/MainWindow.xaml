@@ -87,7 +87,7 @@
                 <MenuItem Header="{lex:Loc CloseFile}" Command="{Binding ActiveDocument.CloseCommand}"/>
                 <MenuItem Header="{lex:Loc CloseProject}" Command="{Binding CloseProjectCommand}"></MenuItem>
                 <MenuItem Header="{lex:Loc SaveFile}" Command="{Binding ActiveDocument.SaveCommand}"/>
-                <MenuItem Header="{lex:Loc SaveProject}" />
+                <MenuItem Header="{lex:Loc SaveProject}" Command="{Binding SaveProjectCommand}" />
                 <Separator />
                 <MenuItem Header="{lex:Loc Exit}" />
 
