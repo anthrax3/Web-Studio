@@ -23,6 +23,17 @@
                                ShowLineNumbers="{Binding EditorShowLineNumbers}" FontSize="{Binding EditorFontSize}"
                                HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
                                IsModified="{Binding EditorIsModified,Mode=TwoWay}"
-                               ScrollToLine="{Binding ScrollToLine,Mode=TwoWay}" LinkTextForegroundBrush="{Binding EditorLinkTextForegroundBrush}"/>
+                               ScrollToLine="{Binding ScrollToLine,Mode=TwoWay}" LinkTextForegroundBrush="{Binding EditorLinkTextForegroundBrush}">
+            <editor:TextEditorMvvm.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Command="Undo" />
+                    <MenuItem Command="Redo" />
+                    <Separator/>
+                    <MenuItem Command="Cut" />
+                    <MenuItem Command="Copy" />
+                    <MenuItem Command="Paste" />
+                </ContextMenu>
+            </editor:TextEditorMvvm.ContextMenu>
+            </editor:TextEditorMvvm>
     </Grid>
 </UserControl>
