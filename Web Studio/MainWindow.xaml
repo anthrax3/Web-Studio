@@ -28,7 +28,7 @@
         Width="{Binding Source={x:Static properties:Settings.Default},Path=Width,Mode=TwoWay}"
         Left="{Binding Source={x:Static properties:Settings.Default},Path=Left,Mode=TwoWay}"
         Top="{Binding Source={x:Static properties:Settings.Default},Path=Top,Mode=TwoWay}"
-    WindowState="{Binding Source={x:Static properties:Settings.Default},Path=WindowState,Mode=TwoWay}">
+    WindowState="{Binding Source={x:Static properties:Settings.Default},Path=WindowState,Mode=TwoWay}"  ShowIconOnTitleBar="True" ShowTitleBar="True" Style="{DynamicResource CustomMetroWindow}">
     <controls:MetroWindow.Resources>
         <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter"></converters:ActiveDocumentConverter>
     </controls:MetroWindow.Resources>

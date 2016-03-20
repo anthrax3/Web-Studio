@@ -55,7 +55,7 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Icono.ico</ApplicationIcon>
+    <ApplicationIcon>WebStudio.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>456A819C536EBBA600FE91418102D839CC1494AE</ManifestCertificateThumbprint>
@@ -349,15 +349,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Icono.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <FileAssociation Include=".ws">
       <Visible>False</Visible>
       <Description>Web Studio Project</Description>
       <Progid>ws</Progid>
       <DefaultIcon>Icono.ico</DefaultIcon>
     </FileAssociation>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="webStudio.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
