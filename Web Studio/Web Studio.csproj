@@ -150,6 +150,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\ActiveDocumentConverter.cs" />
     <Compile Include="Converters\BooleanConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Editor\EditorView.xaml.cs">
@@ -163,6 +164,17 @@
     <Compile Include="Events\ClosedDocumentEvent.cs" />
     <Compile Include="Events\EventSystem.cs" />
     <Compile Include="Events\FontSizeChangedEvent.cs" />
+    <Compile Include="Events\MessageContainerVisibilityChangedEvent.cs" />
+    <Compile Include="WindowAction\MetroConfirmationWindow.xaml.cs">
+      <DependentUpon>MetroConfirmationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WindowAction\MetroNotificationWindow.xaml.cs">
+      <DependentUpon>MetroNotificationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WindowAction\MetroPopupWindow.xaml.cs">
+      <DependentUpon>MetroPopupWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WindowAction\MetroPopupWindowAction.cs" />
     <Compile Include="Events\ShowLineNumbersEvent.cs" />
     <Compile Include="PluginManager\GenericMEFPluginLoader.cs" />
     <Compile Include="Localization\Localization.cs" />
@@ -194,12 +206,28 @@
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
     <Compile Include="Utils\Json.cs" />
+    <Compile Include="ValidationPlugins.xaml.cs">
+      <DependentUpon>ValidationPlugins.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\NewProjectViewModel.cs" />
     <Compile Include="ViewModels\OptionsViewModel.cs" />
+    <Compile Include="ViewModels\ValidationPluginsViewModel.cs" />
     <Page Include="Editor\EditorView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WindowAction\MetroConfirmationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WindowAction\MetroNotificationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WindowAction\MetroPopupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -218,6 +246,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Options.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ValidationPlugins.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

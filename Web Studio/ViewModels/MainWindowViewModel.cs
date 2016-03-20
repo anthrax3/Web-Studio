@@ -47,6 +47,7 @@ namespace Web_Studio.ViewModels
             OptionWindowRequest = new InteractionRequest<INotification>();
             NewProjectRequest = new InteractionRequest<INotification>();
             PluginsWindowRequest = new InteractionRequest<INotification>();
+            SaveChangesInteractionRequest = new InteractionRequest<IConfirmation>();
 
             //Manage commands
             SelectedItemChangedCommand = new DelegateCommand(SelectedItemChanged);
@@ -55,6 +56,7 @@ namespace Web_Studio.ViewModels
             NewProjectCommand = new DelegateCommand(NewProject);
             GenerateCommand = new DelegateCommand(Generate);
             PluginsWindowCommand = new DelegateCommand(PluginsWindow);
+            CloseProjectCommand = new DelegateCommand(CloseProject);
 
             //Manage events
             EventSystem.Subscribe<FontSizeChangedEvent>(ManageChangedFont);
@@ -62,6 +64,8 @@ namespace Web_Studio.ViewModels
             EventSystem.Subscribe<ClosedDocumentEvent>(ManageDocumentClosed);
             EventSystem.Subscribe<ChangedProjectEvent>(ManageChangedProject);
         }
+
+     
 
         /// <summary>
         ///     Path to the loaded project
@@ -97,6 +101,11 @@ namespace Web_Studio.ViewModels
         public InteractionRequest<INotification> PluginsWindowRequest { get; set; } 
 
         /// <summary>
+        ///  Close project menu command
+        /// </summary>
+        public DelegateCommand CloseProjectCommand { get; private set; }
+
+        /// <summary>
         ///     New project menu option command
         /// </summary>
         public DelegateCommand NewProjectCommand { get; private set; }
@@ -116,6 +125,46 @@ namespace Web_Studio.ViewModels
         /// </summary>
         public DelegateCommand PluginsWindowCommand { get; private set; }
 
+        /// <summary>
+        /// Manage the close project event
+        /// </summary>
+        private void CloseProject()
+        {
+            if (ProjectPath != null) //We have a project open
+            {
+                bool fileModified = Documents.Any(document => document.EditorIsModified);
+                bool close = true;
+                if (fileModified)
+                {
+                  SaveChangesInteractionRequest.Raise(new Confirmation {Title = Strings.SaveChanges, Content = Strings.SaveProjectChangesDescription},
+                      c =>
+                      {
+                          if (!c.Confirmed)
+                          {
+                              close = false;
+                            
+                          }
+                      }
+                  
+                  );  
+                }
+
+                if (close)
+                {
+                    //Save project
+                    ProjectModel.Instance.Save();
+                    ProjectPath = null;
+                    Documents.Clear();
+                    ProjectModel.Instance.Clear();
+                    Results.Clear();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Request to open save changes window
+        /// </summary>
+         public  InteractionRequest<IConfirmation> SaveChangesInteractionRequest { get; } 
         /// <summary>
         ///     Raise new project request
         /// </summary>

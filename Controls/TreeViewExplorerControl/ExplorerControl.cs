@@ -30,7 +30,7 @@ namespace TreeViewExplorerControl
     /// </summary>
     public class ExplorerControl : Control
     {
-        private readonly FileSystemWatcher _watcher;
+        private FileSystemWatcher _watcher;
         private TreeView _myTreeView;
 
         /// <summary>
@@ -199,6 +199,11 @@ namespace TreeViewExplorerControl
                     _watcher.EnableRaisingEvents = true;
                     Nodes.Clear();
                     GenerateTree(PathToWatch, Nodes);
+                }
+                else
+                {
+                    _watcher = new FileSystemWatcher();
+                    Nodes.Clear();
                 }
             }
         }

@@ -79,6 +79,15 @@ namespace Web_Studio.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Availble plugins.
+        /// </summary>
+        public static string AvailablePlugins {
+            get {
+                return ResourceManager.GetString("AvailablePlugins", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Back.
         /// </summary>
         public static string Back {
@@ -111,6 +120,24 @@ namespace Web_Studio.Localization {
         public static string CloseFile {
             get {
                 return ResourceManager.GetString("CloseFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Close project.
+        /// </summary>
+        public static string CloseProject {
+            get {
+                return ResourceManager.GetString("CloseProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Configure.
+        /// </summary>
+        public static string Configure {
+            get {
+                return ResourceManager.GetString("Configure", resourceCulture);
             }
         }
         
@@ -187,6 +214,24 @@ namespace Web_Studio.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Generate.
+        /// </summary>
+        public static string Generate {
+            get {
+                return ResourceManager.GetString("Generate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Generating....
+        /// </summary>
+        public static string Generating {
+            get {
+                return ResourceManager.GetString("Generating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Help.
         /// </summary>
         public static string Help {
@@ -219,6 +264,15 @@ namespace Web_Studio.Localization {
         public static string Next {
             get {
                 return ResourceManager.GetString("Next", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Ok.
+        /// </summary>
+        public static string Ok {
+            get {
+                return ResourceManager.GetString("Ok", resourceCulture);
             }
         }
         
@@ -282,6 +336,15 @@ namespace Web_Studio.Localization {
         public static string SaveProject {
             get {
                 return ResourceManager.GetString("SaveProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a You have some document modified, are you sure that you want to close the project without saving the changes?.
+        /// </summary>
+        public static string SaveProjectChangesDescription {
+            get {
+                return ResourceManager.GetString("SaveProjectChangesDescription", resourceCulture);
             }
         }
         

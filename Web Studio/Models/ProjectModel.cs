@@ -87,6 +87,22 @@ namespace Web_Studio.Models
         }
 
         /// <summary>
+        /// Clear all information of the project and get a new project
+        /// </summary>
+        public void Clear()
+        {
+            Instance = new ProjectModel();
+        }
+
+        /// <summary>
+        /// Save all project configuration
+        /// </summary>
+        public void Save()
+        {
+            //TODO
+        }
+
+        /// <summary>
         ///     Open a project, load project config and enable project UI
         /// </summary>
         /// <param name="path"></param>
