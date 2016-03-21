@@ -88,6 +88,15 @@ namespace SitemapPlugin.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Sitemap generated correctly.
+        /// </summary>
+        internal static string Generated {
+            get {
+                return ResourceManager.GetString("Generated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a We have found {0} sitemaps.
         /// </summary>
         internal static string HaveFound {

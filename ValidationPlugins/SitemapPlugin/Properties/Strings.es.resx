@@ -137,4 +137,7 @@ Por ejemplo http://www.google.es si el index se podrá acceder desde http://www.
   <data name="DomainName" xml:space="preserve">
     <value>Introduzca la ruta</value>
   </data>
+  <data name="Generated" xml:space="preserve">
+    <value>Sitemap generado correctamente</value>
+  </data>
 </root>

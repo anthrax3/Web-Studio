@@ -131,10 +131,24 @@ namespace SitemapPlugin
 
             File.AppendAllText(Path.Combine(projectPath, "robots.txt"),@"Sitemap: "+Domain+@"/sitemap.xml"); //Update robots.txt
 
-            return null;
+            List<AnalysisResult> list = new List<AnalysisResult> {SitemapGenerated()};
+            return list;
+        }
 
-
-
+        /// <summary>
+        /// Creates the sitemap generated message
+        /// </summary>
+        /// <returns></returns>
+        private AnalysisResult SitemapGenerated()
+        {
+            return new AnalysisResult
+            {
+                File = "",
+                Line = 0,
+                PluginName = Name,
+                Type = InfoType.Instance,
+                Message =   Strings.Generated
+            };
         }
 
         #region Custom Properties
