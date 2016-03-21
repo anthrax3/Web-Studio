@@ -124,8 +124,25 @@ namespace RobotPlugin
             File.WriteAllText(robotsPath, @"User-agent: *
 Allow: /");
 
-            return null;
+            List<AnalysisResult> list = new List<AnalysisResult> {RobotsGenerated(robotsPath)};
+            return list;
+        }
 
+        /// <summary>
+        /// Creates the generated message
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        private AnalysisResult RobotsGenerated(string file)
+        {
+          return   new AnalysisResult
+          {
+              File = file,
+              Line = 0,
+              PluginName = Name,
+              Type = InfoType.Instance,
+              Message =  Strings.Generated
+          };
         }
     }
 }
