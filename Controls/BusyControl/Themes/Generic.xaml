@@ -16,7 +16,6 @@
                                 <ColumnDefinition />
                                 <ColumnDefinition Width="2*" />
                                 <ColumnDefinition />
-                                <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <TextBlock
                                 Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Description}"
@@ -27,12 +26,8 @@
                                 Minimum="{Binding RelativeSource={RelativeSource TemplatedParent},Path=MinValue}"
                                 Grid.Column="2"
                                 Maximum="{Binding RelativeSource={RelativeSource TemplatedParent},Path=MaxValue}"
-                                Value="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Value}" />
-
-                            <Button Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center"
-                                    Content="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Pause}"
-                                    Command="{Binding RelativeSource={RelativeSource TemplatedParent},Path=PauseCommand}" />
-                            <Button Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                Value="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Value}" />  
+                            <Button Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5" Padding="5"
                                     Content="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Cancel}"
                                     Command="{Binding RelativeSource={RelativeSource TemplatedParent},Path=CancelCommand}" />
                         </Grid>

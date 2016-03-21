@@ -315,9 +315,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Managers\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Controls\AvalonDock.Themes.WebStudio\Xceed.Wpf.AvalonDock.Themes.WebStudio.csproj">
       <Project>{89286eb4-b4a1-418c-839a-067b00f442d8}</Project>

@@ -147,7 +147,7 @@
                                         <RowDefinition Height="Auto"></RowDefinition>
                                         <RowDefinition></RowDefinition>
                                     </Grid.RowDefinitions>
-                                    <busyControl:BusyControl Description="{lex:Loc Generating}" IsBusy="{Binding IsGeneratingProject}" MaxValue="{Binding NumberOfRules}" MinValue="0" Value="{Binding NumberOfRulesProcessed}" x:Name="BusyControl"></busyControl:BusyControl>
+                                    <busyControl:BusyControl Description="{lex:Loc Generating}" IsBusy="{Binding IsGeneratingProject}" MaxValue="{Binding NumberOfRules}" MinValue="0" Value="{Binding NumberOfRulesProcessed}" x:Name="BusyControl" CancelCommand="{Binding BusyControlCancelCommand}" ></busyControl:BusyControl>
                                     <messageListControl:MessageListControl x:Name="MessageListControl"  ItemsSource="{Binding Results}" Grid.Row="1" SelectedItem="{Binding MessageSelected,Mode=OneWayToSource}"></messageListControl:MessageListControl>
                                 </Grid>
                             </avalonDock:LayoutAnchorable>

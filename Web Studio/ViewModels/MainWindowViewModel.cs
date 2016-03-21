@@ -60,15 +60,22 @@ namespace Web_Studio.ViewModels
             SaveProjectCommand = new DelegateCommand(SaveProject);
             AddFileCommand = new DelegateCommand(AddFile);
             NewFileCommand = new DelegateCommand(NewFile);
+            BusyControlCancelCommand = new DelegateCommand(BusyControlCancel);
 
             //Manage events
             EventSystem.Subscribe<FontSizeChangedEvent>(ManageChangedFont);
             EventSystem.Subscribe<ShowLineNumbersEvent>(ManageChangedShowLineNumbers);
             EventSystem.Subscribe<ClosedDocumentEvent>(ManageDocumentClosed);
             EventSystem.Subscribe<ChangedProjectEvent>(ManageChangedProject);
+
+            //Worker
+            GenerationWorker = new BackgroundWorker();
+            GenerationWorker.DoWork += GenerationWorkerOnDoWork;
+            GenerationWorker.RunWorkerCompleted += GenerationWorkerOnRunWorkerCompleted;
+            GenerationWorker.WorkerSupportsCancellation = true;
         }
 
-    
+      
 
 
         /// <summary>
@@ -505,43 +512,68 @@ namespace Web_Studio.ViewModels
                 IsGeneratingProject = true;
                 CopySourceToRelease();
                 EventSystem.Publish(new MessageContainerVisibilityChangedEvent {IsVisible = true});  //Make visible messages container
-                string releasePath = Path.Combine(ProjectPath, "release");
-
-
-                BackgroundWorker worker = new BackgroundWorker();
-
-                worker.DoWork += (o, ea) =>
-                {
-                    //Check loop
-                    for (int i = 0; i < ValidationPluginManager.Plugins.Count; i++)
-                    {
-                        var tempResults = ValidationPluginManager.Plugins[i].Value.Check(releasePath);
-                        System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
-                        {
-                            Results.AddRange(tempResults);
-                            NumberOfRulesProcessed++;
-                        });
-                    }
-
-                    //Fix loop
-                    for (int i = 0; i < ValidationPluginManager.Plugins.Count; i++)
-                    {
-                        ValidationPluginManager.Plugins[i].Value.Fix(releasePath);
-                        System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
-                        {
-                            NumberOfRulesProcessed++;
-                        });
-                    }
-                };
-
-                worker.RunWorkerCompleted += (sender, args) => //Finished
-                {
-                    IsGeneratingProject = false;
-                };
-
-                worker.RunWorkerAsync();
+                 
+                GenerationWorker.RunWorkerAsync();
+                
             }
         }
+
+        /// <summary>
+        /// Run plugins and fixes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="doWorkEventArgs"></param>
+        private void GenerationWorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
+        {
+            string releasePath = Path.Combine(ProjectPath, "release");
+
+            //Check loop
+            for (int i = 0; i < ValidationPluginManager.Plugins.Count; i++)
+            {
+                if (GenerationWorker.CancellationPending)  //Manage the cancelation event
+                {
+                    doWorkEventArgs.Cancel = true;
+                    return;
+                }
+                var tempResults = ValidationPluginManager.Plugins[i].Value.Check(releasePath);
+                System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
+                {
+                    Results.AddRange(tempResults);
+                    NumberOfRulesProcessed++;
+                });
+            }
+
+            //Fix loop
+            for (int i = 0; i < ValidationPluginManager.Plugins.Count; i++)
+            {
+                if (GenerationWorker.CancellationPending)  ////Manage the cancelation event
+                {
+                    doWorkEventArgs.Cancel = true;
+                    return;
+                }
+                ValidationPluginManager.Plugins[i].Value.Fix(releasePath);
+                System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
+                {
+                    NumberOfRulesProcessed++;
+                });
+            }
+        }
+
+        /// <summary>
+        ///  When worker finishes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="runWorkerCompletedEventArgs"></param>
+        private void GenerationWorkerOnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs runWorkerCompletedEventArgs)
+        {
+            IsGeneratingProject = false;
+        }
+        
+        /// <summary>
+        /// the worker for project generation
+        /// </summary>
+        private BackgroundWorker GenerationWorker { get; set; }
+
         /// <summary>
         /// Method to copy all files in source to release
         /// </summary>
@@ -629,6 +661,19 @@ namespace Web_Studio.ViewModels
         {
             get { return _numberOfRulesProcessed; }
             set { SetProperty(ref _numberOfRulesProcessed, value); }
+        }
+
+        /// <summary>
+        /// Manage the cancel button
+        /// </summary>
+        public DelegateCommand BusyControlCancelCommand { get; private set; }
+
+        /// <summary>
+        /// Cancel the project generation
+        /// </summary>
+        private void BusyControlCancel()
+        {
+          GenerationWorker.CancelAsync();  
         }
 
 
