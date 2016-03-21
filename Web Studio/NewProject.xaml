@@ -72,9 +72,9 @@
                             <DataTemplate>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition />
-                                        <ColumnDefinition />
-                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition  Width="300"/>
+                                        <ColumnDefinition  Width="20"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center"
                                                Text="{Binding ServiceName}" Grid.Column="0" />
