@@ -133,8 +133,25 @@ namespace Error404PagePlugin
             var source = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "404.html");
             var destination = Path.Combine(projectPath, "404.html");
             File.Copy(source, destination);
+            List<AnalysisResult> list = new List<AnalysisResult> {ErrorPageGenerated(destination)};
+            return list;
+        }
 
-            return null;
+        /// <summary>
+        /// Creates the Error 404 page message
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        private AnalysisResult ErrorPageGenerated(string file)
+        {
+            return new AnalysisResult
+            {
+                File = file,
+                Line = 0,
+                PluginName = Name,
+                Type = InfoType.Instance,
+                Message = Strings.Generated
+            };
         }
 
         #endregion
