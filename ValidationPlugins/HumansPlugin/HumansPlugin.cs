@@ -159,8 +159,26 @@ namespace HumansPlugin
             content.AppendLine(Technology);
 
             File.WriteAllText(humansPath,content.ToString());
+            
+            List<AnalysisResult> list = new List<AnalysisResult> {HumansGenerated(humansPath)};
+            return list;
+        }
 
-            return null;
+        /// <summary>
+        /// Creates the humans generated message
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        private AnalysisResult HumansGenerated(string file)
+        {
+            return new AnalysisResult
+            {
+                File = file,
+                Line = 0,
+                PluginName = Name,
+                Type = InfoType.Instance,
+                Message =  Strings.Generated
+            };
         }
         #endregion
     }

@@ -141,4 +141,7 @@
   <data name="DataNeeded" xml:space="preserve">
     <value>You need to fill all data in plugin config or your may get a bad humans.txt</value>
   </data>
+  <data name="Generated" xml:space="preserve">
+    <value>Humans generated correctly</value>
+  </data>
 </root>
