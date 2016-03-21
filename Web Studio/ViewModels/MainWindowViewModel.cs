@@ -609,7 +609,7 @@ namespace Web_Studio.ViewModels
             set
             {
                 SetProperty(ref _messageSelected, value);
-                if (_messageSelected.File != "")  //Project message
+                if (_messageSelected.File != "" && File.Exists(_messageSelected.File))  //Project message
                 {
                     GoToMessageLine();  
                 }
