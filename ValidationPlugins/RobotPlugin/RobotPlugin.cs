@@ -116,13 +116,16 @@ namespace RobotPlugin
         ///     Method to fix automatically some errors
         /// </summary>
         /// <param name="projectPath"></param>
-        public void Fix(string projectPath)
+        public List<AnalysisResult> Fix(string projectPath)
         {
-            if (!IsAutoFixeable) return;
+            if (!IsAutoFixeable) return null;
 
             var robotsPath = Path.Combine(projectPath, "robots.txt");
             File.WriteAllText(robotsPath, @"User-agent: *
 Allow: /");
+
+            return null;
+
         }
     }
 }

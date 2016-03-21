@@ -551,9 +551,10 @@ namespace Web_Studio.ViewModels
                     doWorkEventArgs.Cancel = true;
                     return;
                 }
-                ValidationPluginManager.Plugins[i].Value.Fix(releasePath);
+                var tempResults = ValidationPluginManager.Plugins[i].Value.Fix(releasePath);
                 System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
                 {
+                    Results.AddRange(tempResults);
                     NumberOfRulesProcessed++;
                 });
             }

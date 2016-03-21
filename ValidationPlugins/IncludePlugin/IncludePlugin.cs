@@ -104,8 +104,9 @@ namespace IncludePlugin
         ///     Method to fix automatically some errors
         /// </summary>
         /// <param name="projectPath"></param>
-        public void Fix(string projectPath)
+        public List<AnalysisResult> Fix(string projectPath)
         {
+            return null;
         }
 
 

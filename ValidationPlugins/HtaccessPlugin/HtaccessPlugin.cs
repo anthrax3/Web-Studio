@@ -98,12 +98,14 @@ namespace HtaccessPlugin
         ///     Method to fix automatically some errors
         /// </summary>
         /// <param name="projectPath"></param>
-        public void Fix(string projectPath)
+        public List<AnalysisResult> Fix(string projectPath)
         {
-            if (!IsAutoFixeable) return;
+            if (!IsAutoFixeable) return null;
             var htaccessPath = Path.Combine(projectPath, ".htaccess");
             var source = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), ".htaccess");
             File.Copy(source, htaccessPath); //Copy a well format .htaccess with all optimizations
+
+            return null;
         }
 
         #endregion

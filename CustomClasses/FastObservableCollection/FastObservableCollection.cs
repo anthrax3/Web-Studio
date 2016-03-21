@@ -18,6 +18,8 @@ namespace FastObservableCollection
         /// <param name="range"></param>
         public void AddRange(IEnumerable<T> range)
         {
+            if(range==null) return;
+
             foreach (var item in range)
             {
                 Items.Add(item);

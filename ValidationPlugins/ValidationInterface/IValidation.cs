@@ -56,6 +56,6 @@ namespace ValidationInterface
         ///     Method to fix automatically some errors
         /// </summary>
         /// <param name="projectPath"></param>
-        void Fix(string projectPath);
+        List<AnalysisResult> Fix(string projectPath);
     }
 }

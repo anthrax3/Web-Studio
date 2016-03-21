@@ -145,9 +145,9 @@ namespace HumansPlugin
         ///     Method to fix automatically some errors
         /// </summary>
         /// <param name="projectPath"></param>
-        public void Fix(string projectPath)
+        public List<AnalysisResult> Fix(string projectPath)
         {
-            if (!IsAutoFixeable) return;
+            if (!IsAutoFixeable) return null;
             var humansPath = Path.Combine(projectPath, "humans.txt");
             StringBuilder content = new StringBuilder();
             content.AppendLine("# Humans.txt file see more in http://humanstxt.org");
@@ -159,6 +159,8 @@ namespace HumansPlugin
             content.AppendLine(Technology);
 
             File.WriteAllText(humansPath,content.ToString());
+
+            return null;
         }
         #endregion
     }

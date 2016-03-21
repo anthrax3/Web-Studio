@@ -112,9 +112,9 @@ namespace SitemapPlugin
         ///     Method to fix automatically some errors
         /// </summary>
         /// <param name="projectPath"></param>
-        public void Fix(string projectPath)
+        public List<AnalysisResult> Fix(string projectPath)
         {
-            if (!IsAutoFixeable || String.IsNullOrEmpty(Domain)) return;
+            if (!IsAutoFixeable || String.IsNullOrEmpty(Domain)) return null;
 
             var htmlFiles = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
 
@@ -129,7 +129,11 @@ namespace SitemapPlugin
             sitemap.Append(@"</urlset>");
             File.WriteAllText(Path.Combine(projectPath,"sitemap.xml"),sitemap.ToString());
 
-            File.AppendAllText(Path.Combine(projectPath, "robots.txt"),@"Sitemap: "+Domain+@"/sitemap.xml"); //Update robots.txt 
+            File.AppendAllText(Path.Combine(projectPath, "robots.txt"),@"Sitemap: "+Domain+@"/sitemap.xml"); //Update robots.txt
+
+            return null;
+
+
 
         }
 

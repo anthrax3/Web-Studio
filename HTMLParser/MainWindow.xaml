@@ -14,8 +14,7 @@
     </Window.DataContext>
     <Grid>
        <StackPanel>
-            <busyControl:BusyControl  IsBusy="True" MinValue="0" MaxValue="40" Value="20" Description="Analizando.."
-                                 PauseCommand="{Binding PauseCommand}"></busyControl:BusyControl>
+            <busyControl:BusyControl  IsBusy="True" MinValue="0" MaxValue="40" Value="20" Description="Analizando.."></busyControl:BusyControl>
             <Button Click="Button_Click">Clickame</Button>
             <Button Click="Button_Click_1">Soy el dos</Button>
         </StackPanel>

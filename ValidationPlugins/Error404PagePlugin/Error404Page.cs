@@ -113,7 +113,7 @@ namespace Error404PagePlugin
         ///     Method to fix automatically some errors
         /// </summary>
         /// <param name="projectPath"></param>
-        public void Fix(string projectPath)
+        public List<AnalysisResult> Fix(string projectPath)
         {
             var configurationContent =
                 @"# ----------------------------------------------------------------------
@@ -125,7 +125,7 @@ namespace Error404PagePlugin
 
 # ErrorDocument 404 /404.html";
 
-            if (!IsAutoFixeable) return;
+            if (!IsAutoFixeable) return null;
             var htaccessPath = Path.Combine(projectPath, ".htaccess");
             File.AppendAllText(htaccessPath, configurationContent);
 
@@ -133,6 +133,8 @@ namespace Error404PagePlugin
             var source = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "404.html");
             var destination = Path.Combine(projectPath, "404.html");
             File.Copy(source, destination);
+
+            return null;
         }
 
         #endregion
