@@ -130,4 +130,7 @@ En el caso de que no exista, el plugin te puede generar uno con las opciones má
   <data name="NotFound" xml:space="preserve">
     <value>No se ha encontrado el fichero .htaccess</value>
   </data>
+  <data name="Generated" xml:space="preserve">
+    <value>El fichero .htaccess generado correctamente</value>
+  </data>
 </root>

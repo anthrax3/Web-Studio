@@ -79,6 +79,15 @@ namespace HtaccessPlugin.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a File .htaccess generated correctly.
+        /// </summary>
+        internal static string Generated {
+            get {
+                return ResourceManager.GetString("Generated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Htaccess.
         /// </summary>
         internal static string Name {

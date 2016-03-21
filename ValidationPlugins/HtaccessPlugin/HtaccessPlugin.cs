@@ -104,8 +104,25 @@ namespace HtaccessPlugin
             var htaccessPath = Path.Combine(projectPath, ".htaccess");
             var source = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), ".htaccess");
             File.Copy(source, htaccessPath); //Copy a well format .htaccess with all optimizations
+            List<AnalysisResult> list = new List<AnalysisResult> {HtaccessGenerated(htaccessPath)};
+            return list; 
+        }
 
-            return null;
+        /// <summary>
+        /// Creates the generated message
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        private AnalysisResult HtaccessGenerated(string file)
+        {
+            return new AnalysisResult
+            {
+                File = file,
+                Line = 0,
+                PluginName = Name,
+                Type = InfoType.Instance,
+                Message = Strings.Generated
+            };
         }
 
         #endregion

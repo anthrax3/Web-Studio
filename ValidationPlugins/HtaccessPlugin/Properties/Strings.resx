@@ -129,4 +129,7 @@
   <data name="NotFound" xml:space="preserve">
     <value>File .htaccess not found</value>
   </data>
+  <data name="Generated" xml:space="preserve">
+    <value>File .htaccess generated correctly</value>
+  </data>
 </root>
