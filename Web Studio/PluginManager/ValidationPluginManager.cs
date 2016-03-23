@@ -38,11 +38,14 @@ namespace Web_Studio.PluginManager
                 GenericMefPluginLoader<Lazy<IValidation, IValidationMetadata>> loader = new GenericMefPluginLoader<Lazy<IValidation, IValidationMetadata>>("Plugins\\Check");
                 Sort(loader.Plugins);
             }
-            catch (Exception)
+            catch (Exception e )
             {
-              File.AppendAllText("webStudio.log","Error when it was loading plugins\n");  
+                 File.AppendAllText("webStudio.log","Error when it was loading plugins\n");
+                 File.AppendAllText("webStudio.log", "Message:" + e.Message +"\n");
+                 File.AppendAllText("webStudio.log", "Stack:" + e.StackTrace + "\n");
+
             }
-          
+
         }
 
         /// <summary>

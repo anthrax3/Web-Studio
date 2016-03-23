@@ -11,12 +11,14 @@ using Prism.Commands;
 using Prism.Interactivity.InteractionRequest;
 using Prism.Mvvm;
 using ValidationInterface;
+using ValidationInterface.MessageTypes;
 using Web_Studio.Editor;
 using Web_Studio.Events;
 using Web_Studio.Localization;
 using Web_Studio.Models;
 using Web_Studio.PluginManager;
 using Web_Studio.Properties;
+using Web_Studio.Utils;
 
 namespace Web_Studio.ViewModels
 {
@@ -568,6 +570,9 @@ namespace Web_Studio.ViewModels
         private void GenerationWorkerOnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs runWorkerCompletedEventArgs)
         {
             IsGeneratingProject = false;
+            int errors = Results.Count(t => t.Type == ErrorType.Instance);
+            int warnings = Results.Count(t => t.Type == WarningType.Instance);
+            Notifications.RaiseGeneratedNotification(errors,warnings);
         }
         
         /// <summary>

@@ -249,4 +249,10 @@
   <data name="OpenProject" xml:space="preserve">
     <value>Abrir Proyecto</value>
   </data>
+  <data name="Errors" xml:space="preserve">
+    <value>Errores</value>
+  </data>
+  <data name="Warnings" xml:space="preserve">
+    <value>Advertencias</value>
+  </data>
 </root>
