@@ -61,7 +61,7 @@ namespace FacebookPlugin
         private AnalysisResult TitleNode()
         {
             var titleTag = _document.DocumentNode.SelectSingleNode("//meta[@property='og:title']");
-            if (titleTag != null)
+            if (titleTag == null) //Add tag
             {
                 var title = _document.DocumentNode.SelectSingleNode("//title");
                 if (title == null)
@@ -77,7 +77,7 @@ namespace FacebookPlugin
         private AnalysisResult TypeNode()
         {
             var tempTag = _document.DocumentNode.SelectSingleNode("//meta[@property='og:type']");
-            if (tempTag != null)
+            if (tempTag == null) //Add tag
             {
                 var metaTag = _document.CreateElement("meta");
                 metaTag.Attributes.Add("property", "og:type");
@@ -90,7 +90,7 @@ namespace FacebookPlugin
         private AnalysisResult DescriptionNode()
         {
             var tempTag = _document.DocumentNode.SelectSingleNode("//meta[@property='og:description']");
-            if (tempTag != null)
+            if (tempTag == null) //Add tag
             {
                 var description = _document.DocumentNode.SelectSingleNode("//meta[@name='description']");
                 var value = description?.GetAttributeValue("content", null);
@@ -107,7 +107,7 @@ namespace FacebookPlugin
         private AnalysisResult ImageNode()
         {
             var tempTag = _document.DocumentNode.SelectSingleNode("//meta[@property='og:image']");
-            if (tempTag != null)
+            if (tempTag == null) //Add tag
             {
                 var image = _document.DocumentNode.SelectSingleNode("//img");
                 var value = image?.GetAttributeValue("src", null);
@@ -124,7 +124,7 @@ namespace FacebookPlugin
         private AnalysisResult UrlNode()
         {
             var tempTag = _document.DocumentNode.SelectSingleNode("//meta[@property='og:url']");
-            if (tempTag != null)
+            if (tempTag == null) //Add tag
             {
                 if (string.IsNullOrWhiteSpace(_domain))
                     return new AnalysisResult(_file, 0, Strings.Name, Strings.DomainMalformated, ErrorType.Instance);
