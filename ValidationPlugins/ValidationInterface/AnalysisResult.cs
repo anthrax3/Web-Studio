@@ -8,6 +8,30 @@ namespace ValidationInterface
     public class AnalysisResult
     {
         /// <summary>
+        /// Constructor with values
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="line"></param>
+        /// <param name="plugin"></param>
+        /// <param name="message"></param>
+        /// <param name="type"></param>
+        public AnalysisResult(string file, int line, string plugin, string message, IMessageType type)
+        {
+            File = file;
+            Line = line;
+            PluginName = plugin;
+            Message = message;
+            Type = type;
+        }
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public AnalysisResult()
+        {
+        }
+
+        /// <summary>
         ///     Line where the error (or warning ...) was found
         /// </summary>
         public int Line { get; set; }
