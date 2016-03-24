@@ -118,7 +118,7 @@ namespace RobotPlugin
         /// <param name="projectPath"></param>
         public List<AnalysisResult> Fix(string projectPath)
         {
-            if (!IsAutoFixeable) return null;
+            if (!IsAutoFixeable || !IsEnabled) return null;
 
             var robotsPath = Path.Combine(projectPath, "robots.txt");
             File.WriteAllText(robotsPath, @"User-agent: *

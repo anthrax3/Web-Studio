@@ -125,7 +125,7 @@ namespace Error404PagePlugin
 
 # ErrorDocument 404 /404.html";
 
-            if (!IsAutoFixeable) return null;
+            if (!IsAutoFixeable || !IsEnabled) return null;
             var htaccessPath = Path.Combine(projectPath, ".htaccess");
             File.AppendAllText(htaccessPath, configurationContent);
 

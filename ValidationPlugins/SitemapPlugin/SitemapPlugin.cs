@@ -114,7 +114,7 @@ namespace SitemapPlugin
         /// <param name="projectPath"></param>
         public List<AnalysisResult> Fix(string projectPath)
         {
-            if (!IsAutoFixeable || String.IsNullOrEmpty(Domain)) return null;
+            if (!IsAutoFixeable || String.IsNullOrEmpty(Domain) || !IsEnabled ) return null;
 
             var htmlFiles = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
 

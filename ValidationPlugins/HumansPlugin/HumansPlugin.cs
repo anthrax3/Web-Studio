@@ -147,7 +147,7 @@ namespace HumansPlugin
         /// <param name="projectPath"></param>
         public List<AnalysisResult> Fix(string projectPath)
         {
-            if (!IsAutoFixeable) return null;
+            if (!IsAutoFixeable || !IsEnabled) return null;
             var humansPath = Path.Combine(projectPath, "humans.txt");
             StringBuilder content = new StringBuilder();
             content.AppendLine("# Humans.txt file see more in http://humanstxt.org");

@@ -100,7 +100,7 @@ namespace HtaccessPlugin
         /// <param name="projectPath"></param>
         public List<AnalysisResult> Fix(string projectPath)
         {
-            if (!IsAutoFixeable) return null;
+            if (!IsAutoFixeable || !IsEnabled) return null;
             var htaccessPath = Path.Combine(projectPath, ".htaccess");
             var source = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), ".htaccess");
             File.Copy(source, htaccessPath); //Copy a well format .htaccess with all optimizations

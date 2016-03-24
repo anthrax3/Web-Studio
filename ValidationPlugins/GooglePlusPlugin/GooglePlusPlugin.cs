@@ -125,9 +125,8 @@ namespace GooglePlusPlugin
         /// <param name="projectPath"></param>
         public List<AnalysisResult> Fix(string projectPath)
         {
-            if (!IsAutoFixeable || string.IsNullOrWhiteSpace(Publisher)) return null;
+            if (!IsAutoFixeable || string.IsNullOrWhiteSpace(Publisher) ||!IsEnabled) return null;
 
-            if (!IsEnabled) return AnalysisResults;
             var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
             var counter = 0;
             foreach (var file in filesToCheck)

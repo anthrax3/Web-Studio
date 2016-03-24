@@ -149,7 +149,7 @@ namespace DescriptionPlugin
         /// <param name="projectPath"></param>
         public List<AnalysisResult> Fix(string projectPath)
         {
-            if (!IsAutoFixeable) return null;
+            if (!IsAutoFixeable || !IsEnabled) return null;
             
             List<AnalysisResult> list = new List<AnalysisResult>();
             int descriptionsCreated = 0;
