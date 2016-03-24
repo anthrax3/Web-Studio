@@ -130,22 +130,26 @@ namespace GooglePlusPlugin
             var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
             var counter = 0;
             foreach (var file in filesToCheck)
-            {
+            {   
                 var document = new HtmlDocument();
                 document.OptionWriteEmptyNodes = true; //Close tags
                 document.Load(file);
-                var headNode = document.DocumentNode.SelectSingleNode("//head");
-                if (headNode != null)
+                var link = document.DocumentNode.SelectSingleNode(@"//link[@rel='publisher']");
+                if (link == null)
                 {
-                    //Create meta description
-                    var linkTag = document.CreateElement("link");
+                    var headNode = document.DocumentNode.SelectSingleNode("//head");
+                    if (headNode != null)
+                    {
+                        //Create meta description
+                        var linkTag = document.CreateElement("link");
 
-                    linkTag.Attributes.Add("rel", "publisher");
-                    linkTag.Attributes.Add("href", Publisher);
-                    //Add to head
-                    headNode.AppendChild(linkTag);
-                    counter++;
-                    document.Save(file);
+                        linkTag.Attributes.Add("rel", "publisher");
+                        linkTag.Attributes.Add("href", Publisher);
+                        //Add to head
+                        headNode.AppendChild(linkTag);
+                        counter++;
+                        document.Save(file);
+                    }
                 }
             }
 
