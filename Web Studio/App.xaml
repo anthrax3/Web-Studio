@@ -35,6 +35,9 @@
                 <Setter Property="BorderThickness" Value="0"/>
                 <Setter Property="Background" Value="Transparent"></Setter>
             </Style>
+          <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource MetroCheckBox}">  
+              <Setter Property="Background" Value="#FFCDCDCD"></Setter>
+          </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
