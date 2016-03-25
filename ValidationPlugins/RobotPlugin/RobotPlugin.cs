@@ -15,7 +15,7 @@ namespace RobotPlugin
     /// </summary>
     [Export(typeof (IValidation))]
     [ExportMetadata("Name", "Robot")]
-    [ExportMetadata("After", "")]
+    [ExportMetadata("After", "Links")]
     public class RobotPlugin : IValidation
     {
         /// <summary>

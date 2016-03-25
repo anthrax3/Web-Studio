@@ -15,7 +15,7 @@ namespace HtaccessPlugin
     /// </summary>
     [Export(typeof (IValidation))]
     [ExportMetadata("Name", "Htaccess")]
-    [ExportMetadata("After", "")]
+    [ExportMetadata("After", "Links")]
     public class HtaccessPlugin : IValidation
     {
         /// <summary>

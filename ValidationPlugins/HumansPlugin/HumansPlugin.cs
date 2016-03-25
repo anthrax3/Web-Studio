@@ -18,7 +18,7 @@ namespace HumansPlugin
     /// </summary>
     [Export(typeof(IValidation))]
     [ExportMetadata("Name", "Humans")]         
-    [ExportMetadata("After", "")]              
+    [ExportMetadata("After", "Links")]              
     public class HumansPlugin :IValidation  
     {
         /// <summary>
