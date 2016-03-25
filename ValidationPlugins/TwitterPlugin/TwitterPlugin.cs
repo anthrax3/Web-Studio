@@ -19,7 +19,7 @@ namespace TwitterPlugin
     /// </summary>
     [Export(typeof(IValidation))]
     [ExportMetadata("Name", "Twitter")]          
-    [ExportMetadata("After", "Include")]              //Todo
+    [ExportMetadata("After", "Description")]              
     public class TwitterPlugin : IValidation  
     {
         /// <summary>
@@ -33,7 +33,7 @@ namespace TwitterPlugin
         /// <summary>
         ///     Text of AutoFix for binding
         /// </summary>
-        public string AutoFixText => Strings.AutoFix; //Todo
+        public string AutoFixText => Strings.AutoFix; 
 
         #region IValidation
         /// <summary>
