@@ -510,7 +510,13 @@ namespace Web_Studio.ViewModels
             {
                 Results.Clear();
                 NumberOfRulesProcessed = 0;
-                NumberOfRules = ValidationPluginManager.Plugins.Count*2; //Check and fix each plugin
+                int counter = 0;
+                foreach (Lazy<IValidation, IValidationMetadata> plugin in ValidationPluginManager.Plugins)
+                {
+                    if (plugin.Value.IsEnabled) counter++;
+                    if (plugin.Value.IsAutoFixeable) counter++;
+                }
+                NumberOfRules = counter; //Check and fix each plugin
                 IsGeneratingProject = true;
                 CopySourceToRelease();
                 EventSystem.Publish(new MessageContainerVisibilityChangedEvent {IsVisible = true});  //Make visible messages container
@@ -530,35 +536,43 @@ namespace Web_Studio.ViewModels
             string releasePath = Path.Combine(ProjectPath, "release");
 
             //Check loop
-            for (int i = 0; i < ValidationPluginManager.Plugins.Count; i++)
+            foreach (Lazy<IValidation, IValidationMetadata> t in ValidationPluginManager.Plugins)
             {
                 if (GenerationWorker.CancellationPending)  //Manage the cancelation event
                 {
                     doWorkEventArgs.Cancel = true;
                     return;
                 }
-                var tempResults = ValidationPluginManager.Plugins[i].Value.Check(releasePath);
-                System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
+                var plugin = t.Value;
+                if (plugin.IsEnabled)
                 {
-                    Results.AddRange(tempResults);
-                    NumberOfRulesProcessed++;
-                });
+                    var tempResults = plugin.Check(releasePath);
+                    System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
+                    {
+                        Results.AddRange(tempResults);
+                        NumberOfRulesProcessed++;
+                    });
+                }
             }
 
             //Fix loop
-            for (int i = 0; i < ValidationPluginManager.Plugins.Count; i++)
+            foreach (Lazy<IValidation, IValidationMetadata> t in ValidationPluginManager.Plugins)
             {
                 if (GenerationWorker.CancellationPending)  ////Manage the cancelation event
                 {
                     doWorkEventArgs.Cancel = true;
                     return;
                 }
-                var tempResults = ValidationPluginManager.Plugins[i].Value.Fix(releasePath);
-                System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
+                var plugin = t.Value;
+                if (plugin.IsAutoFixeable)
                 {
-                    Results.AddRange(tempResults);
-                    NumberOfRulesProcessed++;
-                });
+                    var tempResults = t.Value.Fix(releasePath);
+                    System.Windows.Application.Current.Dispatcher.BeginInvoke((Action) delegate //Update UI
+                    {
+                        Results.AddRange(tempResults);
+                        NumberOfRulesProcessed++;
+                    });
+                }
             }
         }
 
