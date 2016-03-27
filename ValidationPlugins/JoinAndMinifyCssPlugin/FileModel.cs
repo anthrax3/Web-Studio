@@ -72,7 +72,7 @@ namespace JoinAndMinifyCssPlugin
                     minifyResult.Warnings.Select(
                         warning =>
                             new AnalysisResult(_file.Replace("release", "src"), warning.LineNumber, Strings.Name,
-                                warning.Message, ErrorType.Instance)));
+                                warning.Message, WarningType.Instance)));
 
                 File.Delete(fileToProcess); //Remove file
             }
