@@ -15,7 +15,7 @@ namespace JoinAndMinifyCssPlugin
     /// </summary>
     [Export(typeof (IValidation))]
     [ExportMetadata("Name", "JoinAndMinifyCss")]
-    [ExportMetadata("After", "Include")]
+    [ExportMetadata("After", "CssValidator")]
     public class JoinAndMinifyCssPlugin : IValidation
     {
         /// <summary>
