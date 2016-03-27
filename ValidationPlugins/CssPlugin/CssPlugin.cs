@@ -1,29 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
-using ValidationInterface;
-using ValidationInterface.CategoryTypes;
+using System.Linq;
+using System.Windows.Controls;
 using CssPlugin.Properties;
 using HtmlAgilityPack;
+using ValidationInterface;
+using ValidationInterface.CategoryTypes;
 using ValidationInterface.MessageTypes;
 
 namespace CssPlugin
 {
     /// <summary>
-    ///  Class to manage the css in the html files
+    ///     Class to manage the css in the html files
     /// </summary>
-    [Export(typeof(IValidation))]
-    [ExportMetadata("Name", "Css")]          
-    [ExportMetadata("After", "JoinAndMinifyCss")]              
+    [Export(typeof (IValidation))]
+    [ExportMetadata("Name", "Css")]
+    [ExportMetadata("After", "JoinAndMinifyCss")]
     public class CssPlugin : IValidation
     {
         /// <summary>
-        /// Default constructor
+        ///     Default constructor
         /// </summary>
         public CssPlugin()
         {
@@ -33,11 +30,12 @@ namespace CssPlugin
         /// <summary>
         ///     Text of AutoFix for binding
         /// </summary>
-        public string AutoFixText => Strings.AutoFix; 
+        public string AutoFixText => Strings.AutoFix;
 
         #region IValidation
+
         /// <summary>
-        /// View showed when you select the plugin
+        ///     View showed when you select the plugin
         /// </summary>
         public UserControl View { get; }
 
@@ -85,15 +83,14 @@ namespace CssPlugin
             {
                 var document = new HtmlDocument();
                 document.Load(file);
-                CheckOrder(document,file);
+                CheckOrder(document, file);
                 CheckInlineStyle(document, file);
-
             }
             return AnalysisResults;
-
         }
+
         /// <summary>
-        /// Checks if there is one use of the style attribute 
+        ///     Checks if there is one use of the style attribute
         /// </summary>
         /// <param name="document"></param>
         /// <param name="file"></param>
@@ -102,30 +99,30 @@ namespace CssPlugin
             var styleNodes = document.DocumentNode.SelectNodes(@"//@style");
             if (styleNodes != null)
             {
-                foreach (HtmlNode node in styleNodes)
+                foreach (var node in styleNodes)
                 {
-                    AnalysisResults.Add(new AnalysisResult(file,node.Line,Name,Strings.StyleAtt,WarningType.Instance));
+                    AnalysisResults.Add(new AnalysisResult(file, node.Line, Name, Strings.StyleAtt, WarningType.Instance));
                 }
             }
         }
 
 
         /// <summary>
-        /// Checks if there is one js file before a css file
+        ///     Checks if there is one js file before a css file
         /// </summary>
         /// <param name="document"></param>
         /// <param name="file"></param>
-        private void CheckOrder(HtmlDocument document, string file )
+        private void CheckOrder(HtmlDocument document, string file)
         {
             var cssNodes = document.DocumentNode.SelectNodes(@"//link[@rel='stylesheet']");
             if (cssNodes == null) return;
-            int cssLastLine = cssNodes.Max(t => t.Line);
+            var cssLastLine = cssNodes.Max(t => t.Line);
             var jsNodes = document.DocumentNode.SelectNodes(@"//script");
-            if(jsNodes == null) return;
-            int jsFirstLine = jsNodes.Min(t => t.Line);
+            if (jsNodes == null) return;
+            var jsFirstLine = jsNodes.Min(t => t.Line);
             if (jsFirstLine < cssLastLine)
             {
-              AnalysisResults.Add(new AnalysisResult(file,jsFirstLine,Name,Strings.JsBeforeCss,ErrorType.Instance));   
+                AnalysisResults.Add(new AnalysisResult(file, jsFirstLine, Name, Strings.JsBeforeCss, ErrorType.Instance));
             }
         }
 
@@ -136,7 +133,7 @@ namespace CssPlugin
         public List<AnalysisResult> Fix(string projectPath)
         {
             if (!IsAutoFixeable || !IsEnabled) return null;
-            int counter = 0;
+            var counter = 0;
             var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
             foreach (var file in filesToCheck)
             {
@@ -157,8 +154,12 @@ namespace CssPlugin
                 document.Save(file);
             }
 
-            return new List<AnalysisResult> {new AnalysisResult("",0,Name,String.Format(Strings.Moved,counter),InfoType.Instance)};
+            return new List<AnalysisResult>
+            {
+                new AnalysisResult("", 0, Name, string.Format(Strings.Moved, counter), InfoType.Instance)
+            };
         }
+
         #endregion
     }
 }
