@@ -2,7 +2,9 @@
 
 namespace CssValidatorPlugin
 {
+#pragma warning disable 1591
     public class CssValidatorResult
+
     {
         public Cssvalidation cssvalidation { get; set; }
     }
@@ -43,5 +45,6 @@ namespace CssValidatorPlugin
         public List<Error> errors { get; set; }
         public List<Warning> warnings { get; set; }
     }
+#pragma warning restore 1591
 
 }
