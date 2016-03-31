@@ -1,13 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Text;
 using System.Windows.Controls;
 using CssValidatorPlugin.Properties;
+using Newtonsoft.Json;
 using ValidationInterface;
 using ValidationInterface.CategoryTypes;
 using ValidationInterface.MessageTypes;
-using WebMarkupMin.MsAjax.Minifiers;
 
 namespace CssValidatorPlugin
 {
@@ -74,22 +78,60 @@ namespace CssValidatorPlugin
             AnalysisResults.Clear();
             if (!IsEnabled) return AnalysisResults;
             var filesToCheck = Directory.GetFiles(projectPath, "*.css", SearchOption.AllDirectories);
-            var minifier = new MsAjaxCssMinifier();
             foreach (var file in filesToCheck)
             {
-                var content = File.ReadAllText(file);
-                var minifyResult = minifier.Minify(content, false);
-                //Errors
-                AnalysisResults.AddRange(
-                    minifyResult.Errors.Select(
-                        error =>
-                            new AnalysisResult(file.Replace("release", "src"), error.LineNumber, Strings.Name,
-                                error.Message, ErrorType.Instance)));
-                AnalysisResults.AddRange(
-                    minifyResult.Warnings.Select(
-                        warning =>
-                            new AnalysisResult(file.Replace("release", "src"), warning.LineNumber, Strings.Name,
-                                warning.Message, ErrorType.Instance)));
+                var directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+                if (directory != null)
+                {
+                    var processStartInfo = new ProcessStartInfo("cmd", "/c java -jar css-validator.jar --output=json --lang=es file:" + file)  //Run cmd in background
+                    {
+                        RedirectStandardError = true,
+                        RedirectStandardInput = true,
+                        RedirectStandardOutput = true,
+                        StandardErrorEncoding = Encoding.UTF8,
+                        CreateNoWindow = true,
+                        UseShellExecute = false,
+                        WorkingDirectory = directory
+                    };
+
+                    var process = Process.Start(processStartInfo);
+
+                    if (process != null)
+                    {
+                        string output;
+                        using (var streamReader = process.StandardOutput)
+                        {
+                            output = streamReader.ReadToEnd();
+                        }
+                        output = output.Remove(0, 80);
+                        try
+                        {
+                            var result = JsonConvert.DeserializeObject<CssValidatorResult>(output);
+                            if (result.cssvalidation.errors != null)
+                            {
+                                foreach (Error error in result.cssvalidation.errors)
+                                {
+                                    AnalysisResults.Add(new AnalysisResult(file.Replace("release", "src"), error.line, Name, error.message, ErrorType.Instance));
+                                }
+                            }
+                            if (result.cssvalidation.warnings != null)
+                            {
+                                foreach (Warning warning in result.cssvalidation.warnings)
+                                {
+                                    AnalysisResults.Add(new AnalysisResult(file.Replace("release", "src"), warning.line, Name, warning.message, WarningType.Instance));
+                                }
+                            }
+                        }
+                        catch (Exception)
+                        {
+                           //TODO
+                           
+                        }
+                       
+                      
+                    }
+                }
             }
 
             return AnalysisResults;
