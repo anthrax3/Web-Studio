@@ -121,7 +121,8 @@
     <value>Arreglar automáticamente</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Este plugin valida los archivos CSS</value>
+    <value>Este plugin valida los archivos CSS
+Este plugin necesita que java esté instalado.</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Validador de CSS</value>

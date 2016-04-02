@@ -119,7 +119,8 @@
   </resheader>
   <data name="Description" xml:space="preserve">
     <value>Este plugin lee todos los archivos html y después usa el validador de W3C, para comprobar si estos ficheros siguen el estandar W3C.
-Necesita todos los archivos html generados para ejecutarse correctamente.</value>
+Necesita todos los archivos html generados para ejecutarse correctamente.
+Este plugin necesita Java instalado.</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Validador de W3C</value>

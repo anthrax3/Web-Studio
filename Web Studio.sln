@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web Studio", "Web Studio\Web Studio.csproj", "{DA8D8AD9-4E1B-4BAF-A8B5-BD2EC69C1223}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -103,6 +103,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoinAndMinifyCssPlugin", "ValidationPlugins\JoinAndMinifyCssPlugin\JoinAndMinifyCssPlugin.csproj", "{EB117EC1-CB73-4B28-BE25-1BC40CC338FE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CssValidatorPlugin", "ValidationPlugins\CssValidatorPlugin\CssValidatorPlugin.csproj", "{F00E3B44-7BF7-43BA-8B33-B03E1876286B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaviconPlugin", "ValidationPlugins\FaviconPlugin\FaviconPlugin.csproj", "{4AA7AA48-79DD-4373-8524-20E78C15E886}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -642,6 +644,22 @@ Global
 		{F00E3B44-7BF7-43BA-8B33-B03E1876286B}.Release|x64.Build.0 = Release|Any CPU
 		{F00E3B44-7BF7-43BA-8B33-B03E1876286B}.Release|x86.ActiveCfg = Release|Any CPU
 		{F00E3B44-7BF7-43BA-8B33-B03E1876286B}.Release|x86.Build.0 = Release|Any CPU
+		{4AA7AA48-79DD-4373-8524-20E78C15E886}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AA7AA48-79DD-4373-8524-20E78C15E886}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AA7AA48-79DD-4373-8524-20E78C15E886}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{4AA7AA48-79DD-4373-8524-20E78C15E886}.Debug|ARM.Build.0 = Debug|Any CPU
+		{4AA7AA48-79DD-4373-8524-20E78C15E886}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4AA7AA48-79DD-4373-8524-20E78C15E886}.Debug|x64.Build.0 = Debug|Any CPU
+		{4AA7AA48-79DD-4373-8524-20E78C15E886}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4AA7AA48-79DD-4373-8524-20E78C15E886}.Debug|x86.Build.0 = Debug|Any CPU
+		{4AA7AA48-79DD-4373-8524-20E78C15E886}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AA7AA48-79DD-4373-8524-20E78C15E886}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AA7AA48-79DD-4373-8524-20E78C15E886}.Release|ARM.ActiveCfg = Release|Any CPU
+		{4AA7AA48-79DD-4373-8524-20E78C15E886}.Release|ARM.Build.0 = Release|Any CPU
+		{4AA7AA48-79DD-4373-8524-20E78C15E886}.Release|x64.ActiveCfg = Release|Any CPU
+		{4AA7AA48-79DD-4373-8524-20E78C15E886}.Release|x64.Build.0 = Release|Any CPU
+		{4AA7AA48-79DD-4373-8524-20E78C15E886}.Release|x86.ActiveCfg = Release|Any CPU
+		{4AA7AA48-79DD-4373-8524-20E78C15E886}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -678,5 +696,6 @@ Global
 		{411189C6-283E-494C-B1A5-E1A31C24D72C} = {3E8395CA-55DA-4EB1-B787-2E521E6AABC8}
 		{EB117EC1-CB73-4B28-BE25-1BC40CC338FE} = {3E8395CA-55DA-4EB1-B787-2E521E6AABC8}
 		{F00E3B44-7BF7-43BA-8B33-B03E1876286B} = {3E8395CA-55DA-4EB1-B787-2E521E6AABC8}
+		{4AA7AA48-79DD-4373-8524-20E78C15E886} = {3E8395CA-55DA-4EB1-B787-2E521E6AABC8}
 	EndGlobalSection
 EndGlobal

@@ -121,7 +121,8 @@
     <value>Fix automatically</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>This plugin validates the CSS syntax</value>
+    <value>This plugin validates the CSS syntax.
+This plugin needs Java installed</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Css validator</value>

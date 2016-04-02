@@ -71,6 +71,7 @@ namespace CssValidatorPlugin.Properties {
         
         /// <summary>
         ///   Busca una cadena traducida similar a This plugin validates the CSS syntax.
+        ///This plugin needs Java installed.
         /// </summary>
         internal static string Description {
             get {
