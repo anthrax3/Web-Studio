@@ -174,7 +174,8 @@
                                 SelectedItemName="{Binding SelectedItemName}"
                                 SelectedItemPath="{Binding SelectedItemPath}"
                                 SelectedItemIsFolder="{Binding SelectedItemIsFolder}"
-                                PathToWatch="{Binding ProjectPath}" />
+                                PathToWatch="{Binding ProjectPath}"
+                                RemoveCommand="{Binding ExplorerControlItemRemovedCommand}"/>
                         </avalonDock:LayoutAnchorable>
                     </avalonDock:LayoutAnchorablePane>
                     <avalonDock:LayoutAnchorablePane >

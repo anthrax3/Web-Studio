@@ -3,13 +3,17 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
 using FastObservableCollection;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Interactivity.InteractionRequest;
 using Prism.Mvvm;
+using TreeViewExplorerControl;
 using ValidationInterface;
 using ValidationInterface.MessageTypes;
 using Web_Studio.Editor;
@@ -63,6 +67,7 @@ namespace Web_Studio.ViewModels
             AddFileCommand = new DelegateCommand(AddFile);
             NewFileCommand = new DelegateCommand(NewFile);
             BusyControlCancelCommand = new DelegateCommand(BusyControlCancel);
+            ExplorerControlItemRemovedCommand = new DelegateCommand<INode>(ExplorerControlItemRemoved);
 
             //Manage events
             EventSystem.Subscribe<FontSizeChangedEvent>(ManageChangedFont);
@@ -77,8 +82,7 @@ namespace Web_Studio.ViewModels
             GenerationWorker.WorkerSupportsCancellation = true;
         }
 
-      
-
+         
 
         /// <summary>
         ///     Path to the loaded project
@@ -413,6 +417,66 @@ namespace Web_Studio.ViewModels
 
         #region Explorer control
 
+        /// <summary>
+        ///     Command to manage removed item changed
+        /// </summary>
+        public DelegateCommand<INode> ExplorerControlItemRemovedCommand { get; private set; }
+
+        /// <summary>
+        /// Method to manage the remove command, ask for confirmation, and close removed documents
+        /// </summary>
+        /// <param name="node"></param>
+        private async void ExplorerControlItemRemoved(INode node)
+        {
+            if (node is FileNode)   //Is a File
+            {
+                var metroWindow = Application.Current.MainWindow as MetroWindow;
+                if (metroWindow == null) return;
+                var response = await metroWindow.ShowMessageAsync(Strings.RemoveFileTitle, Strings.RemoveFileDescription, MessageDialogStyle.AffirmativeAndNegative,
+                    new MetroDialogSettings
+                    {
+                        AffirmativeButtonText = Strings.Remove,
+                        NegativeButtonText = Strings.Cancel
+                    });
+                if (response != MessageDialogResult.Affirmative) return;
+                try
+                {
+                    File.Delete(node.FullPath);
+                    Documents.Remove(Documents.FirstOrDefault(t => t.ToolTip == node.FullPath));   //Remove document
+                }
+                catch (Exception)
+                {
+                    //TODO:
+                }
+            }
+            if (node is FolderNode)
+            {
+                var metroWindow = Application.Current.MainWindow as MetroWindow;
+                if (metroWindow == null) return;
+                var response = await metroWindow.ShowMessageAsync(Strings.RemoveFolderTitle, Strings.RemoveFolderDescription, MessageDialogStyle.AffirmativeAndNegative,
+                    new MetroDialogSettings
+                    {
+                        AffirmativeButtonText = Strings.Remove,
+                        NegativeButtonText = Strings.Cancel
+                    });
+                if (response != MessageDialogResult.Affirmative) return;
+                try
+                {
+                    Directory.Delete(node.FullPath, true);
+                    var documentsToRemove = Documents.Where(t => t.ToolTip.Contains(node.FullPath));
+                    foreach (var document in documentsToRemove.ToList())
+                    {
+                        Documents.Remove(document);     //Remove document
+                    }
+
+                }
+                catch (Exception)
+                {
+                    //TODO:
+                }
+            }
+        }
+
         private bool _selectedItemIsFolder;
         private string _selectedItemName;
         private string _selectedItemPath;
@@ -629,7 +693,7 @@ namespace Web_Studio.ViewModels
             set
             {
                 SetProperty(ref _messageSelected, value);
-                if (_messageSelected.File != "" && File.Exists(_messageSelected.File))  //Project message
+                if (_messageSelected!= null && _messageSelected.File != "" && File.Exists(_messageSelected.File))  //Project message
                 {
                     GoToMessageLine();  
                 }

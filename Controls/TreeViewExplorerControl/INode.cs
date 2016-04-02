@@ -18,7 +18,7 @@ namespace TreeViewExplorerControl
         string Name { get; set; }
 
         /// <summary>
-        /// MLD2 image code
+        ///     MLD2 image code
         /// </summary>
         string Image { get; set; }
 

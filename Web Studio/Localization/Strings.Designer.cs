@@ -322,6 +322,53 @@ namespace Web_Studio.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Remove.
+        /// </summary>
+        public static string Remove {
+            get {
+                return ResourceManager.GetString("Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Are you sure that you want to delete this file?
+        ///This process is going to move the file to recycle bin.
+        /// </summary>
+        public static string RemoveFileDescription {
+            get {
+                return ResourceManager.GetString("RemoveFileDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Removing file.
+        /// </summary>
+        public static string RemoveFileTitle {
+            get {
+                return ResourceManager.GetString("RemoveFileTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Are you sure that you want to delete this folder?
+        ///This process is going to move the folder and its content to recycle bin.
+        /// </summary>
+        public static string RemoveFolderDescription {
+            get {
+                return ResourceManager.GetString("RemoveFolderDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Removing folder.
+        /// </summary>
+        public static string RemoveFolderTitle {
+            get {
+                return ResourceManager.GetString("RemoveFolderTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Save changes.
         /// </summary>
         public static string SaveChanges {

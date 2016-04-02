@@ -255,4 +255,21 @@
   <data name="Warnings" xml:space="preserve">
     <value>Advertencias</value>
   </data>
+  <data name="RemoveFileTitle" xml:space="preserve">
+    <value>Eliminando fichero</value>
+  </data>
+  <data name="RemoveFileDescription" xml:space="preserve">
+    <value>¿Estás seguro de que quieres eliminar este fichero?
+Este proceso moverá el fichero a la papelera de reciclaje.</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="RemoveFolderTitle" xml:space="preserve">
+    <value>Eliminando la carpeta</value>
+  </data>
+  <data name="RemoveFolderDescription" xml:space="preserve">
+    <value>¿Estás seguro de que quieres eliminar esta carpeta?
+Este proceso moverá la carpeta y su contenido a la papelera de reciclaje</value>
+  </data>
 </root>
