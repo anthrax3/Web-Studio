@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using Web_Studio.Events;
 
 namespace Web_Studio
@@ -24,7 +25,15 @@ namespace Web_Studio
         /// <param name="obj"></param>
         private void MessageContainerVisibilityChanged(MessageContainerVisibilityChangedEvent obj)
         {
-            messagesContainer.IsActive = IsVisible;
+            try
+            {
+                messagesContainer.IsActive = IsVisible;
+
+            }
+            catch (Exception)
+            {
+               //TODO: 
+            }
         }
 
         /// <summary>

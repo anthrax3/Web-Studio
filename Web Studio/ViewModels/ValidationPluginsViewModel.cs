@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Prism.Mvvm;
@@ -12,27 +13,23 @@ namespace Web_Studio.ViewModels
     /// </summary>
     public class ValidationPluginsViewModel : BindableBase
     {
-        private UserControl _configurationUI;
+        private static UserControl _configurationUI;
 
-        private IValidation _pluginSelected;
+        private Lazy<IValidation,IValidationMetadata> _pluginSelected;
 
         /// <summary>
         ///     Default constructor
         /// </summary>
         public ValidationPluginsViewModel()
-        {
-            foreach (var plugin in ValidationPluginManager.Plugins)
-            {
-                Plugins.Add(plugin.Value);
-            }
-            CollectionViewSource.GetDefaultView(Plugins).GroupDescriptions.Add(new PropertyGroupDescription("Type"));
+        { 
+            CollectionViewSource.GetDefaultView(Plugins).GroupDescriptions.Add(new PropertyGroupDescription("Value.Type"));
                 //Grouping   
         }
 
         /// <summary>
         ///     Selected plugin in the list
         /// </summary>
-        public IValidation PluginSelected
+        public Lazy<IValidation, IValidationMetadata> PluginSelected
         {
             get { return _pluginSelected; }
             set
@@ -45,12 +42,12 @@ namespace Web_Studio.ViewModels
         /// <summary>
         ///     Validation plugins
         /// </summary>
-        public ObservableCollection<IValidation> Plugins { get; set; } = new ObservableCollection<IValidation>();
+        public ObservableCollection<Lazy<IValidation,IValidationMetadata>> Plugins => ValidationPluginManager.Plugins;
 
         /// <summary>
         ///     Configuration user interface of the plugin
         /// </summary>
-        public UserControl ConfigurationUI
+        public  UserControl ConfigurationUI     //TODO: static
         {
             get { return _configurationUI; }
             set { SetProperty(ref _configurationUI, value); }
@@ -61,9 +58,9 @@ namespace Web_Studio.ViewModels
         ///     Load the configuration UI of the selected plugin
         /// </summary>
         /// <param name="validation"></param>
-        private void Configuration(IValidation validation)
+        private void Configuration(Lazy<IValidation, IValidationMetadata> validation)
         {
-            ConfigurationUI = validation.View;
+            ConfigurationUI = validation.Value.GetView();
         }
     }
 }

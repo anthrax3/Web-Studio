@@ -54,6 +54,7 @@ namespace Web_Studio
         private void Application_Exit(object sender, ExitEventArgs e)
         {
             Settings.Default.Save();
+            ProjectModel.Instance.Save();
         }
 
         /// <summary>

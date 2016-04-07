@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using Windows.Data.Json;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using ValidationInterface;
+using Web_Studio.PluginManager;
 using Web_Studio.Utils;
 
 namespace Web_Studio.Models
@@ -37,7 +42,7 @@ namespace Web_Studio.Models
             get { return _fullPath; }
             set { _fullPath = value; }
         }
-
+          
         /// <summary>
         ///     Name of project
         /// </summary>
@@ -101,7 +106,27 @@ namespace Web_Studio.Models
         {
             if (FullPath != null)
             {
-                //TODO  
+                //Create custom serializer
+                JsonSerializerSettings settings = new JsonSerializerSettings
+                {
+                    ContractResolver = new SetPropertiesResolver(),
+                    Formatting = Formatting.Indented
+                };
+
+                JObject jsonJObject = new JObject();
+
+                jsonJObject["Name"] = Name;
+                jsonJObject["FullPath"] = FullPath;
+                
+                //Add all plugins to configuration file
+                foreach (Lazy<IValidation, IValidationMetadata> plugin in ValidationPluginManager.Plugins)
+                {
+                    //Add an entry with the plugin name and its writable properties
+                    jsonJObject[plugin.Metadata.Name] = JObject.FromObject(plugin.Value, JsonSerializer.Create(settings));  
+                }
+               
+                File.WriteAllText(Path.Combine(Instance.FullPath, Instance.Name + ".ws"),jsonJObject.ToString(Formatting.Indented));
+
             }
         }
 
@@ -110,10 +135,24 @@ namespace Web_Studio.Models
         /// </summary>
         /// <param name="path"></param>
         public static void Open(string path)
-        {
-            //Load instance
-            // Instance = (ProjectModel) Json.FileToObject(Instance, path);
-            // Instance.FullPath = Path.GetDirectoryName(path);
+        { 
+
+            JObject jsonObject = JObject.Parse(File.ReadAllText(path));
+            Instance.FullPath = jsonObject["FullPath"]?.ToString();
+            Instance.Name = jsonObject["Name"]?.ToString();
+            for (int index = 0; index < ValidationPluginManager.Plugins.Count; index++)
+            {
+                Lazy<IValidation, IValidationMetadata> plugin = ValidationPluginManager.Plugins[index];
+                var pluginJObject = jsonObject[plugin.Metadata.Name];
+
+                if (pluginJObject != null)
+                {
+                    //Updata plugin configuration with the project values
+                    var lazyPlugin = new Lazy<IValidation, IValidationMetadata>(() => (IValidation)pluginJObject.ToObject(plugin.Value.GetType()), plugin.Metadata);  
+                    ValidationPluginManager.Plugins[index] = lazyPlugin;
+                }
+            }
+         
             Instance.FullPath = Path.GetDirectoryName(path);
         }
     }

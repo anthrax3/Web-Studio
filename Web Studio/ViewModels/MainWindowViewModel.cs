@@ -288,6 +288,7 @@ namespace Web_Studio.ViewModels
 
         private void PluginsWindow()
         {
+
             PluginsWindowRequest.Raise( new Notification {Title = "Plugins"});
         }
 
