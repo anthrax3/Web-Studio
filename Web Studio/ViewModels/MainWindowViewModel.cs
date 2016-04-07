@@ -173,7 +173,7 @@ namespace Web_Studio.ViewModels
                 if (saveFile.ShowDialog() == true)
                 {
                    File.WriteAllText(saveFile.FileName,String.Empty); //Create file
-                   SearchOrCreateDocument(saveFile.FileName,Path.GetFileName(saveFile.FileName));  
+                   SearchOrCreateDocument(saveFile.FileName);  
                 }
             }
         }
@@ -531,7 +531,7 @@ namespace Web_Studio.ViewModels
                     doc.IsSelected = false;
                 }
 
-                EditorViewModel myEditor = SearchOrCreateDocument(SelectedItemPath, SelectedItemName);
+                EditorViewModel myEditor = SearchOrCreateDocument(SelectedItemPath);
                 myEditor.IsSelected = true;
             }
         }
@@ -539,15 +539,14 @@ namespace Web_Studio.ViewModels
         /// <summary>
         /// Search for a document if it finds it, it returns it, else it creates a new Document and return it
         /// </summary>
-        /// <param name="path"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        private EditorViewModel SearchOrCreateDocument(string path, string name)
+        /// <param name="path"></param> 
+        private EditorViewModel SearchOrCreateDocument(string path)
         {
             var editorViewModel = Documents.Where(doc => doc.ToolTip == path);
             if (!editorViewModel.Any())
             {
-                EditorViewModel myEditor = new EditorViewModel(name, path, EditorShowLineNumbers,
+                var nuevoNombre = path.Replace(ProjectPath+@"\", String.Empty);
+                EditorViewModel myEditor = new EditorViewModel(nuevoNombre, path, EditorShowLineNumbers,
                     EditorLinkTextForegroundBrush, EditorFontSize);
                 Documents.Add(myEditor);
                 return myEditor;
@@ -715,7 +714,7 @@ namespace Web_Studio.ViewModels
             {
                 doc.IsSelected = false;
             }
-            var myEditor = SearchOrCreateDocument(MessageSelected.File, Path.GetFileName(MessageSelected.File));
+            var myEditor = SearchOrCreateDocument(MessageSelected.File);
             myEditor.IsSelected = true;
             myEditor.ScrollToLine = MessageSelected.Line;
         }
