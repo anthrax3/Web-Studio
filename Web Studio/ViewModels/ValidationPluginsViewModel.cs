@@ -76,6 +76,9 @@ namespace Web_Studio.ViewModels
             ConfigurationUI = validation.Value.GetView();
         }
 
+        /// <summary>
+        /// Property changed static implementation
+        /// </summary>
         public static event EventHandler<PropertyChangedEventArgs> StaticPropertyChanged;
         private static void NotifyStaticPropertyChanged(string propertyName)
         {
