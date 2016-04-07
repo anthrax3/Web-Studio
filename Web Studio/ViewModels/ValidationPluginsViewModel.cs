@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Prism.Mvvm;
@@ -14,7 +15,7 @@ namespace Web_Studio.ViewModels
     public class ValidationPluginsViewModel : BindableBase
     {
         private static UserControl _configurationUI;
-
+        private static ObservableCollection<Lazy<IValidation, IValidationMetadata>> _plugins;
         private Lazy<IValidation,IValidationMetadata> _pluginSelected;
 
         /// <summary>
@@ -22,6 +23,7 @@ namespace Web_Studio.ViewModels
         /// </summary>
         public ValidationPluginsViewModel()
         { 
+            Plugins = ValidationPluginManager.Plugins;
             CollectionViewSource.GetDefaultView(Plugins).GroupDescriptions.Add(new PropertyGroupDescription("Value.Type"));
                 //Grouping   
         }
@@ -42,15 +44,26 @@ namespace Web_Studio.ViewModels
         /// <summary>
         ///     Validation plugins
         /// </summary>
-        public ObservableCollection<Lazy<IValidation,IValidationMetadata>> Plugins => ValidationPluginManager.Plugins;
+        public static ObservableCollection<Lazy<IValidation, IValidationMetadata>> Plugins {
+            get { return _plugins; }
+            set
+            {
+                _plugins = value;
+                NotifyStaticPropertyChanged("Plugins"); 
+            }
+        } 
 
         /// <summary>
         ///     Configuration user interface of the plugin
         /// </summary>
-        public  UserControl ConfigurationUI     //TODO: static
+        public static  UserControl ConfigurationUI     
         {
             get { return _configurationUI; }
-            set { SetProperty(ref _configurationUI, value); }
+            set
+            {
+                _configurationUI = value;
+                NotifyStaticPropertyChanged("ConfigurationUI");
+            }
         }
 
 
@@ -61,6 +74,13 @@ namespace Web_Studio.ViewModels
         private void Configuration(Lazy<IValidation, IValidationMetadata> validation)
         {
             ConfigurationUI = validation.Value.GetView();
+        }
+
+        public static event EventHandler<PropertyChangedEventArgs> StaticPropertyChanged;
+        private static void NotifyStaticPropertyChanged(string propertyName)
+        {
+            if (StaticPropertyChanged != null)
+                StaticPropertyChanged(null, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

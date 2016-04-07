@@ -286,9 +286,14 @@ namespace Web_Studio.ViewModels
             OptionWindowRequest.Raise(new Notification {Title = Strings.Options});
         }
 
+        /// <summary>
+        /// Raise plugin window request
+        /// </summary>
         private void PluginsWindow()
         {
-
+            ValidationPluginsViewModel.ConfigurationUI = null;
+            ValidationPluginsViewModel.Plugins = null;
+            ValidationPluginsViewModel.Plugins = ValidationPluginManager.Plugins;
             PluginsWindowRequest.Raise( new Notification {Title = "Plugins"});
         }
 
