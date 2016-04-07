@@ -22,22 +22,9 @@ namespace LinkTypesPlugin
     [ExportMetadata("After", "Links")]           
     public class LinkTypesPlugin : IValidation  
     {
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        public LinkTypesPlugin()
-        {
-            View = new View(this);
-        }
-
-
-
+      
         #region IValidation
-        /// <summary>
-        /// View showed when you select the plugin
-        /// </summary>
-        public UserControl View { get; }
-
+      
         /// <summary>
         ///     Name of the plugin
         /// </summary>
@@ -75,8 +62,8 @@ namespace LinkTypesPlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            AnalysisResults.Clear();
-            if (!IsEnabled) return AnalysisResults;
+            List<AnalysisResult> analysisResults  = new List<AnalysisResult>();
+            if (!IsEnabled) return analysisResults;
             var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
             int follow = 0, noFollow = 0;
             foreach (var file in filesToCheck)
@@ -95,8 +82,8 @@ namespace LinkTypesPlugin
                     }
                 }
             }
-            AnalysisResults.Add(new AnalysisResult("",0,Name,String.Format(Strings.Found,follow,noFollow),InfoType.Instance));
-            return AnalysisResults;
+            analysisResults.Add(new AnalysisResult("",0,Name,String.Format(Strings.Found,follow,noFollow),InfoType.Instance));
+            return analysisResults;
 
         }
 
@@ -110,6 +97,15 @@ namespace LinkTypesPlugin
 
             return null;
         }
+
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        public UserControl GetView()
+        {
+            return new View(this);
+        }
+
         #endregion
     }
 }

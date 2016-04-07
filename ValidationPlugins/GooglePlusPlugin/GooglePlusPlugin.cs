@@ -18,14 +18,7 @@ namespace GooglePlusPlugin
     [ExportMetadata("After", "Include")]
     public class GooglePlusPlugin : IValidation
     {
-        /// <summary>
-        ///     Default constructor
-        /// </summary>
-        public GooglePlusPlugin()
-        {
-            View = new View(this);
-        }
-
+        
         /// <summary>
         ///     Text of AutoFix for binding
         /// </summary>
@@ -43,12 +36,7 @@ namespace GooglePlusPlugin
         public string Publisher { get; set; }
 
         #region IValidation
-
-        /// <summary>
-        ///     View showed when you select the plugin
-        /// </summary>
-        public UserControl View { get; }
-
+        
         /// <summary>
         ///     Name of the plugin
         /// </summary>
@@ -63,12 +51,7 @@ namespace GooglePlusPlugin
         ///     Category of the plugin
         /// </summary>
         public ICategoryType Type { get; } = SeoType.Instance;
-
-        /// <summary>
-        ///     Results of the check method.
-        /// </summary>
-        public List<AnalysisResult> AnalysisResults { get; } = new List<AnalysisResult>();
-
+        
         /// <summary>
         ///     can we automatically fix some errors?
         /// </summary>
@@ -86,8 +69,8 @@ namespace GooglePlusPlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            AnalysisResults.Clear();
-            if (!IsEnabled) return AnalysisResults;
+            List<AnalysisResult> analysisResults  = new List<AnalysisResult>();
+            if (!IsEnabled) return analysisResults;
             var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
             foreach (var file in filesToCheck)
             {
@@ -96,10 +79,10 @@ namespace GooglePlusPlugin
                 var nodes = document.DocumentNode.SelectNodes(@"//link[@rel='publisher']");
                 if (nodes == null)
                 {
-                    AnalysisResults.Add(NotFoundMessage(file));
+                    analysisResults.Add(NotFoundMessage(file));
                 }
             }
-            return AnalysisResults;
+            return analysisResults;
         }
 
         /// <summary>
@@ -154,6 +137,14 @@ namespace GooglePlusPlugin
             }
 
             return new List<AnalysisResult> {PublisherGenerate(counter)};
+        }
+
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        public UserControl GetView()
+        {
+            return new View(this);
         }
 
         /// <summary>

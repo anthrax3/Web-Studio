@@ -19,13 +19,7 @@ namespace LinksPlugin
     [ExportMetadata("After", "Include")]
     public class LinksPlugin : IValidation
     {
-        /// <summary>
-        ///     Default constructor
-        /// </summary>
-        public LinksPlugin()
-        {
-            View = new View(this);
-        }
+       
 
         /// <summary>
         ///     Display info about domain property
@@ -39,11 +33,7 @@ namespace LinksPlugin
 
         #region IValidation
 
-        /// <summary>
-        ///     View showed when you select the plugin
-        /// </summary>
-        public UserControl View { get; }
-
+        
         /// <summary>
         ///     Name of the plugin
         /// </summary>
@@ -81,8 +71,8 @@ namespace LinksPlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            AnalysisResults.Clear();
-            if (!IsEnabled) return AnalysisResults;
+            List<AnalysisResult> analysisResults  = new List<AnalysisResult>();
+            if (!IsEnabled) return analysisResults;
             if (string.IsNullOrWhiteSpace(Domain))
                 return new List<AnalysisResult>
                 {
@@ -100,26 +90,26 @@ namespace LinksPlugin
             foreach (var link in links)
             {
                 var result = link.HasQuestionMark();
-                if (result != null) AnalysisResults.Add(result);
+                if (result != null) analysisResults.Add(result);
                 result = link.UrlLength();
-                if (result != null) AnalysisResults.Add(result);
+                if (result != null) analysisResults.Add(result);
                 result = link.SeoUrlCheck();
-                if (result != null) AnalysisResults.Add(result);
+                if (result != null) analysisResults.Add(result);
                 result = link.BrokenUrlCheck();
-                if (result != null) AnalysisResults.Add(result);
+                if (result != null) analysisResults.Add(result);
                 result = link.CheckLocalFiles(localFiles);
-                if (result != null) AnalysisResults.Add(result);
+                if (result != null) analysisResults.Add(result);
             }
             foreach (var file in localFiles) //los que no estan marcados sobran
             {
                 if (!file.IsReferenced)
                 {
-                    AnalysisResults.Add(new AnalysisResult(file.FullPath, 0, Name, Strings.CanRemoveFile,
+                    analysisResults.Add(new AnalysisResult(file.FullPath, 0, Name, Strings.CanRemoveFile,
                         WarningType.Instance));
                 }
             }
 
-            return AnalysisResults;
+            return analysisResults;
         }
 
 
@@ -153,6 +143,14 @@ namespace LinksPlugin
             if (!IsAutoFixeable || !IsEnabled) return null;
 
             return null;
+        }
+
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        public UserControl GetView()
+        {
+            return new View(this);
         }
 
         #endregion

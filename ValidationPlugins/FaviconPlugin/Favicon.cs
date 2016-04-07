@@ -19,15 +19,7 @@ namespace FaviconPlugin
     [ExportMetadata("After", "Include")]
     public class Favicon : IValidation
     {
-        /// <summary>
-        ///     Default constructor
-        /// </summary>
-        public Favicon()
-        {
-            View = new View(this);
-        }
-
-
+       
         /// <summary>
         ///     Text of AutoFix for binding
         /// </summary>
@@ -54,12 +46,7 @@ namespace FaviconPlugin
         public string Domain { get; set; }
 
         #region IValidation
-
-        /// <summary>
-        ///     View showed when you select the plugin
-        /// </summary>
-        public UserControl View { get; }
-
+        
         /// <summary>
         ///     Name of the plugin
         /// </summary>
@@ -74,12 +61,7 @@ namespace FaviconPlugin
         ///     Category of the plugin
         /// </summary>
         public ICategoryType Type { get; } = StyleType.Instance;
-
-        /// <summary>
-        ///     Results of the check method.
-        /// </summary>
-        public List<AnalysisResult> AnalysisResults { get; } = new List<AnalysisResult>();
-
+        
         /// <summary>
         ///     can we automatically fix some errors?
         /// </summary>
@@ -97,8 +79,8 @@ namespace FaviconPlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            AnalysisResults.Clear();
-            if (!IsEnabled) return AnalysisResults;
+            List<AnalysisResult> analysisResults = new List<AnalysisResult>();
+            if (!IsEnabled) return analysisResults;
 
             var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
             foreach (var file in filesToCheck)
@@ -109,11 +91,11 @@ namespace FaviconPlugin
                 var link = document.DocumentNode.SelectSingleNode(@"//link[@rel='icon']");
                 if (link == null)
                 {
-                    AnalysisResults.Add(new AnalysisResult(file, 0, Name, Strings.NotFound, ErrorType.Instance));
+                    analysisResults.Add(new AnalysisResult(file, 0, Name, Strings.NotFound, ErrorType.Instance));
                 }
             }
 
-            return AnalysisResults;
+            return analysisResults;
         }
 
         /// <summary>
@@ -170,6 +152,14 @@ namespace FaviconPlugin
 
 
             return null;
+        }
+
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        public UserControl GetView()
+        {
+            return new View(this);
         }
 
         #endregion

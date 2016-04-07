@@ -22,21 +22,8 @@ namespace CssValidatorPlugin
     [ExportMetadata("Name", "CssValidator")]
     [ExportMetadata("After", "Include")]
     public class CssValidatorPlugin : IValidation
-    {
-        /// <summary>
-        ///     Default constructor
-        /// </summary>
-        public CssValidatorPlugin()
-        {
-            View = new View(this);
-        }
-
+    {  
         #region IValidation
-
-        /// <summary>
-        ///     View showed when you select the plugin
-        /// </summary>
-        public UserControl View { get; }
 
         /// <summary>
         ///     Name of the plugin
@@ -52,11 +39,6 @@ namespace CssValidatorPlugin
         ///     Category of the plugin
         /// </summary>
         public ICategoryType Type { get; } = DevelopmentType.Instance;
-
-        /// <summary>
-        ///     Results of the check method.
-        /// </summary>
-        public List<AnalysisResult> AnalysisResults { get; } = new List<AnalysisResult>();
 
         /// <summary>
         ///     can we automatically fix some errors?
@@ -75,8 +57,9 @@ namespace CssValidatorPlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            AnalysisResults.Clear();
-            if (!IsEnabled) return AnalysisResults;
+           List<AnalysisResult> analysisResults  = new List<AnalysisResult>();
+
+            if (!IsEnabled) return analysisResults;
             var filesToCheck = Directory.GetFiles(projectPath, "*.css", SearchOption.AllDirectories);
             foreach (var file in filesToCheck)
             {
@@ -112,14 +95,14 @@ namespace CssValidatorPlugin
                             {
                                 foreach (Error error in result.cssvalidation.errors)
                                 {
-                                    AnalysisResults.Add(new AnalysisResult(file.Replace("release", "src"), error.line, Name, error.message, ErrorType.Instance));
+                                    analysisResults.Add(new AnalysisResult(file.Replace("release", "src"), error.line, Name, error.message, ErrorType.Instance));
                                 }
                             }
                             if (result.cssvalidation.warnings != null)
                             {
                                 foreach (Warning warning in result.cssvalidation.warnings)
                                 {
-                                    AnalysisResults.Add(new AnalysisResult(file.Replace("release", "src"), warning.line, Name, warning.message, WarningType.Instance));
+                                    analysisResults.Add(new AnalysisResult(file.Replace("release", "src"), warning.line, Name, warning.message, WarningType.Instance));
                                 }
                             }
                         }
@@ -134,7 +117,7 @@ namespace CssValidatorPlugin
                 }
             }
 
-            return AnalysisResults;
+            return analysisResults;
         }
 
         /// <summary>
@@ -146,6 +129,14 @@ namespace CssValidatorPlugin
             if (!IsAutoFixeable || !IsEnabled) return null;
 
             return null;
+        }
+
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        public UserControl GetView()
+        {
+            return new View(this);
         }
 
         #endregion

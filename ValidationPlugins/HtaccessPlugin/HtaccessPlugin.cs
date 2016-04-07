@@ -19,24 +19,11 @@ namespace HtaccessPlugin
     public class HtaccessPlugin : IValidation
     {
         /// <summary>
-        ///     Default constructor, inject the view
-        /// </summary>
-        public HtaccessPlugin()
-        {
-            View = new View(this);
-        }
-
-        /// <summary>
         ///     Text of AutoFix for binding
         /// </summary>
-        public string AutoFixText => Strings.AutoFix; //Todo
+        public string AutoFixText => Strings.AutoFix; 
 
         #region IValidation
-
-        /// <summary>
-        ///     View showed when you select the plugin
-        /// </summary>
-        public UserControl View { get; }
 
         /// <summary>
         ///     Name of the plugin
@@ -52,12 +39,7 @@ namespace HtaccessPlugin
         ///     Category of the plugin
         /// </summary>
         public ICategoryType Type { get; } = DevelopmentType.Instance;
-
-        /// <summary>
-        ///     Results of the check method.
-        /// </summary>
-        public List<AnalysisResult> AnalysisResults { get; } = new List<AnalysisResult>();
-
+        
         /// <summary>
         ///     can we automatically fix some errors?
         /// </summary>
@@ -75,13 +57,13 @@ namespace HtaccessPlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            AnalysisResults.Clear();
-            if (!IsEnabled) return AnalysisResults;
+            List<AnalysisResult> analysisResults  = new List<AnalysisResult>();
+            if (!IsEnabled) return analysisResults;
 
             var htaccessPath = Path.Combine(projectPath, ".htaccess");
             if (!File.Exists(htaccessPath))
             {
-                AnalysisResults.Add(new AnalysisResult
+                analysisResults.Add(new AnalysisResult
                 {
                     File = "",
                     Line = 0,
@@ -91,7 +73,7 @@ namespace HtaccessPlugin
                 });
             }
 
-            return AnalysisResults;
+            return analysisResults;
         }
 
         /// <summary>
@@ -106,6 +88,14 @@ namespace HtaccessPlugin
             File.Copy(source, htaccessPath); //Copy a well format .htaccess with all optimizations
             List<AnalysisResult> list = new List<AnalysisResult> {HtaccessGenerated(htaccessPath)};
             return list; 
+        }
+
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        public UserControl GetView()
+        {
+            return new View(this);
         }
 
         /// <summary>

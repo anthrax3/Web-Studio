@@ -21,14 +21,7 @@ namespace HumansPlugin
     [ExportMetadata("After", "Links")]              
     public class HumansPlugin :IValidation  
     {
-        /// <summary>
-        /// Default constructor inject the vm to the view
-        /// </summary>
-        public HumansPlugin()
-        {
-            View = new View(this);
-        }
-
+       
         /// <summary>
         ///     Text of AutoFix for binding
         /// </summary>
@@ -65,10 +58,7 @@ namespace HumansPlugin
         public string Technology { get; set; }
 
         #region IValidation
-        /// <summary>
-        /// View showed when you select the plugin
-        /// </summary>
-        public UserControl View { get; }
+      
 
         /// <summary>
         ///     Name of the plugin
@@ -84,12 +74,7 @@ namespace HumansPlugin
         ///     Category of the plugin
         /// </summary>
         public ICategoryType Type { get; } = DevelopmentType.Instance;
-
-        /// <summary>
-        ///     Results of the check method.
-        /// </summary>
-        public List<AnalysisResult> AnalysisResults { get; } = new List<AnalysisResult>();
-
+        
         /// <summary>
         ///     can we automatically fix some errors?
         /// </summary>
@@ -107,14 +92,14 @@ namespace HumansPlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            AnalysisResults.Clear();
-            if (!IsEnabled) return AnalysisResults;
+            List<AnalysisResult> analysisResults = new List<AnalysisResult>();
+            if (!IsEnabled) return analysisResults;
 
             var humansPath = Path.Combine(projectPath, "humans.txt");
 
             if (!File.Exists(humansPath))
             {
-                AnalysisResults.Add(new AnalysisResult
+                analysisResults.Add(new AnalysisResult
                 {
                     PluginName = Name,
                     File = humansPath,
@@ -127,7 +112,7 @@ namespace HumansPlugin
             if (string.IsNullOrWhiteSpace(Team) || string.IsNullOrWhiteSpace(Thanks) ||
                 string.IsNullOrWhiteSpace(Technology))
             {
-                AnalysisResults.Add(new AnalysisResult
+                analysisResults.Add(new AnalysisResult
                 {
                     PluginName = Name,
                     File = "",
@@ -137,7 +122,7 @@ namespace HumansPlugin
                 });
             }
 
-            return AnalysisResults;
+            return analysisResults;
 
         }
 
@@ -162,6 +147,14 @@ namespace HumansPlugin
             
             List<AnalysisResult> list = new List<AnalysisResult> {HumansGenerated(humansPath)};
             return list;
+        }
+
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        public UserControl GetView()
+        {
+            return new View(this);
         }
 
         /// <summary>

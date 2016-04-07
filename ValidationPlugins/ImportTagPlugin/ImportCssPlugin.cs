@@ -22,25 +22,14 @@ namespace ImportTagPlugin
     [ExportMetadata("After", "Include")]              
     public class ImportCssPlugin : IValidation  
     {
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        public ImportCssPlugin()
-        {
-            View = new View(this);
-        }
-
+        
         /// <summary>
         ///     Text of AutoFix for binding
         /// </summary>
         public string AutoFixText => Strings.AutoFix; 
 
         #region IValidation
-        /// <summary>
-        /// View showed when you select the plugin
-        /// </summary>
-        public UserControl View { get; }
-
+    
         /// <summary>
         ///     Name of the plugin
         /// </summary>
@@ -78,8 +67,8 @@ namespace ImportTagPlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            AnalysisResults.Clear();
-            if (!IsEnabled) return AnalysisResults;
+            List<AnalysisResult> analysisResults  = new List<AnalysisResult>();   
+            if (!IsEnabled) return analysisResults;
             Regex importRegex = new Regex("^[^//*]*@import .*;"); //import without comments
             var filesToCheck = Directory.GetFiles(projectPath, "*.css", SearchOption.AllDirectories);
             foreach (var file in filesToCheck)
@@ -90,11 +79,11 @@ namespace ImportTagPlugin
                     string line = lines[i];
                     if (importRegex.IsMatch(line))
                     {
-                        AnalysisResults.Add(new AnalysisResult(file, i+1, Name, Strings.Found, ErrorType.Instance));
+                        analysisResults.Add(new AnalysisResult(file, i+1, Name, Strings.Found, ErrorType.Instance));
                     }
                 }
             }
-            return AnalysisResults;
+            return analysisResults;
 
         }
 
@@ -107,7 +96,15 @@ namespace ImportTagPlugin
             if (!IsAutoFixeable || !IsEnabled) return null;   
 
             return null;
-        } 
+        }
+
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        public UserControl GetView()
+        {
+            return new View(this);
+        }
 
         #endregion
     }

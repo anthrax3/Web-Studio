@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Windows.Controls;
 using ValidationInterface;
 using ValidationInterface.CategoryTypes;
 using PrintCssPlugin.Properties;
@@ -22,19 +18,10 @@ namespace PrintCssPlugin
     [ExportMetadata("After", "CssValidator")]              
     public class PrintCss : IValidation  
     {
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        public PrintCss()
-        {
-            View = new View(this);
-        } 
+        
 
         #region IValidation
-        /// <summary>
-        /// View showed when you select the plugin
-        /// </summary>
-        public UserControl View { get; }
+      
 
         /// <summary>
         ///     Name of the plugin
@@ -50,12 +37,7 @@ namespace PrintCssPlugin
         ///     Category of the plugin
         /// </summary>
         public ICategoryType Type { get; } = StyleType.Instance;
-
-        /// <summary>
-        ///     Results of the check method.
-        /// </summary>
-        public List<AnalysisResult> AnalysisResults { get; } = new List<AnalysisResult>();
-
+        
         /// <summary>
         ///     can we automatically fix some errors?
         /// </summary>
@@ -73,8 +55,9 @@ namespace PrintCssPlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            AnalysisResults.Clear();
-            if (!IsEnabled) return AnalysisResults;
+            List<AnalysisResult> analysisResults  = new List<AnalysisResult>();
+            analysisResults.Clear();
+            if (!IsEnabled) return analysisResults;
             var filesToCheck = Directory.GetFiles(projectPath, "*.css", SearchOption.AllDirectories);
             Regex match = new Regex("@media[ ]+print");
             int counter = 0;
@@ -83,13 +66,13 @@ namespace PrintCssPlugin
                 var content = File.ReadAllText(file);
                 if (match.IsMatch(content))
                 {
-                    AnalysisResults.Add(new AnalysisResult(file,0,Name,Strings.Found,InfoType.Instance));
+                    analysisResults.Add(new AnalysisResult(file,0,Name,Strings.Found,InfoType.Instance));
                     counter++;
                 }
             }
-            if(counter==0) AnalysisResults.Add(new AnalysisResult("",0,Name,Strings.NotFound,ErrorType.Instance));
+            if(counter==0) analysisResults.Add(new AnalysisResult("",0,Name,Strings.NotFound,ErrorType.Instance));
 
-            return AnalysisResults;
+            return analysisResults;
 
         }
 
@@ -103,6 +86,15 @@ namespace PrintCssPlugin
 
             return null;
         }
+
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        public UserControl GetView()
+        {
+            return new View(this);
+        }
+
         #endregion
     }
 }

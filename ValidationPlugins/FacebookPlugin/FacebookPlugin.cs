@@ -17,15 +17,7 @@ namespace FacebookPlugin
     [ExportMetadata("Name", "Facebook")]
     [ExportMetadata("After", "Description")]
     public class FacebookPlugin : IValidation
-    {
-        /// <summary>
-        ///     Default constructor
-        /// </summary>
-        public FacebookPlugin()
-        {
-            View = new View(this);
-        }
-
+    {  
         /// <summary>
         ///     Text of AutoFix for binding
         /// </summary>
@@ -42,12 +34,7 @@ namespace FacebookPlugin
         public string Domain { get; set; }
 
         #region IValidation
-
-        /// <summary>
-        ///     View showed when you select the plugin
-        /// </summary>
-        public UserControl View { get; }
-
+        
         /// <summary>
         ///     Name of the plugin
         /// </summary>
@@ -62,12 +49,7 @@ namespace FacebookPlugin
         ///     Category of the plugin
         /// </summary>
         public ICategoryType Type { get; } = SeoType.Instance;
-
-        /// <summary>
-        ///     Results of the check method.
-        /// </summary>
-        public List<AnalysisResult> AnalysisResults { get; } = new List<AnalysisResult>();
-
+        
         /// <summary>
         ///     can we automatically fix some errors?
         /// </summary>
@@ -85,8 +67,9 @@ namespace FacebookPlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            AnalysisResults.Clear();
-            if (!IsEnabled) return AnalysisResults;
+            List<AnalysisResult> analysisResults = new List<AnalysisResult>();
+            analysisResults.Clear();
+            if (!IsEnabled) return analysisResults;
 
             var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
             foreach (var file in filesToCheck)
@@ -96,11 +79,11 @@ namespace FacebookPlugin
                 var nodes = document.DocumentNode.SelectNodes(@"//meta[@property='og:title']");
                 if (nodes == null)
                 {
-                    AnalysisResults.Add(NotFoundMessage(file));
+                    analysisResults.Add(NotFoundMessage(file));
                 }
             }
 
-            return AnalysisResults;
+            return analysisResults;
         }
 
         /// <summary>
@@ -139,6 +122,14 @@ namespace FacebookPlugin
             }
             list.Add(new AnalysisResult("", 0, Name, string.Format(Strings.Generated, counter), InfoType.Instance));
             return list;
+        }
+
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        public UserControl GetView()
+        {
+            return new View(this);
         }
 
         #endregion

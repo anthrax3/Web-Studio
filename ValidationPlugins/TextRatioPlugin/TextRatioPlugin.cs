@@ -19,20 +19,10 @@ namespace TextRatioPlugin
     [ExportMetadata("After", "Twitter")]
     public class TextRatioPlugin : IValidation
     {
-        /// <summary>
-        ///     Default constructor
-        /// </summary>
-        public TextRatioPlugin()
-        {
-            View = new View(this);
-        }
-
+       
         #region IValidation
 
-        /// <summary>
-        ///     View showed when you select the plugin
-        /// </summary>
-        public UserControl View { get; }
+     
 
         /// <summary>
         ///     Name of the plugin
@@ -48,12 +38,7 @@ namespace TextRatioPlugin
         ///     Category of the plugin
         /// </summary>
         public ICategoryType Type { get; } = SeoType.Instance;
-
-        /// <summary>
-        ///     Results of the check method.
-        /// </summary>
-        public List<AnalysisResult> AnalysisResults { get; } = new List<AnalysisResult>();
-
+        
         /// <summary>
         ///     can we automatically fix some errors?
         /// </summary>
@@ -71,8 +56,9 @@ namespace TextRatioPlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            AnalysisResults.Clear();
-            if (!IsEnabled) return AnalysisResults;
+            List<AnalysisResult> analysisResults  = new List<AnalysisResult>();
+
+            if (!IsEnabled) return analysisResults;
             var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
             long projectTotalSize = 0, projectTextSize = 0;
             foreach (var file in filesToCheck)
@@ -91,14 +77,14 @@ namespace TextRatioPlugin
                 var ratio = textSize/(double) totalSize;
                 if (ratio < 0.25 || ratio > 0.70)
                 {
-                    AnalysisResults.Add(new AnalysisResult(file, 0, Name, string.Format(Strings.BadRatio, ratio),
+                    analysisResults.Add(new AnalysisResult(file, 0, Name, string.Format(Strings.BadRatio, ratio),
                         ErrorType.Instance));
                 }
             }
             var projectRatio = projectTextSize/(double) projectTotalSize;
-            AnalysisResults.Add(new AnalysisResult("", 0, Name, string.Format(Strings.ProjectRatio, projectRatio),
+            analysisResults.Add(new AnalysisResult("", 0, Name, string.Format(Strings.ProjectRatio, projectRatio),
                 InfoType.Instance));
-            return AnalysisResults;
+            return analysisResults;
         }
 
         /// <summary>
@@ -110,6 +96,14 @@ namespace TextRatioPlugin
             if (!IsAutoFixeable || !IsEnabled) return null;
 
             return null;
+        }
+
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        public UserControl GetView()
+        {
+            return new View(this);
         }
 
         #endregion

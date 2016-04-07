@@ -22,19 +22,7 @@ namespace W3cPlugin
     [ExportMetadata("After", "Include")]
     public class W3cPlugin : IValidation
     {
-        /// <summary>
-        /// Default constructor, it creates the view
-        /// </summary>
-        public W3cPlugin()
-        {
-            View = new View(this);
-        }
-
-        /// <summary>
-        ///     View showed when you select the plugin
-        /// </summary>
-        public UserControl View { get; }
-
+       
         /// <summary>
         ///     Name of the plugin
         /// </summary>
@@ -49,12 +37,7 @@ namespace W3cPlugin
         ///     Category of the plugin
         /// </summary>
         public ICategoryType Type { get; } = DevelopmentType.Instance;
-
-        /// <summary>
-        ///     Results of the check method.
-        /// </summary>
-        public List<AnalysisResult> AnalysisResults { get; } = new List<AnalysisResult>();
-
+      
         /// <summary>
         ///     can we automatically fix some errors?
         /// </summary>
@@ -72,7 +55,7 @@ namespace W3cPlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            AnalysisResults.Clear(); //Remove older entries
+            List<AnalysisResult> AnalysisResults = new List<AnalysisResult>(); 
 
             if (!IsEnabled) return AnalysisResults;
 
@@ -126,6 +109,15 @@ namespace W3cPlugin
             return null;
             //Do nothing
         }
+
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        public UserControl GetView()
+        {
+            return new View(this);
+        }
+
 
         private AnalysisResult GenerateResult(string file, MessageClass message)
         {

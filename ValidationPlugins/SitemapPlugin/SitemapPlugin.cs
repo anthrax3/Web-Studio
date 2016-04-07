@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
-using System.Reflection;
 using System.Text;
 using System.Windows.Controls;
-using System.Xml;
-using System.Xml.Schema;
 using SitemapPlugin.Properties;
 using ValidationInterface;
 using ValidationInterface.CategoryTypes;
@@ -27,19 +24,7 @@ namespace SitemapPlugin
         /// </summary>
         public string AutoFixText => Strings.AutoFix;
 
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        public SitemapPlugin()
-        {
-            View = new View(this);
-        }
-         
-        /// <summary>
-        /// View showed when you select the plugin
-        /// </summary>
-        public UserControl View { get; }
-
+        
         /// <summary>
         ///     Name of the plugin
         /// </summary>
@@ -54,13 +39,7 @@ namespace SitemapPlugin
         ///     Category of the plugin
         /// </summary>
         public ICategoryType Type { get; } = DevelopmentType.Instance;
-
-
-        /// <summary>
-        ///     Results of the check method.
-        /// </summary>
-        public List<AnalysisResult> AnalysisResults { get; } = new List<AnalysisResult>();
-
+        
         /// <summary>
         ///     can we automatically fix some errors?
         /// </summary>
@@ -78,13 +57,13 @@ namespace SitemapPlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            AnalysisResults.Clear();
-            if (!IsEnabled) return AnalysisResults;
+            List<AnalysisResult> analysisResults  = new List<AnalysisResult>();
+            if (!IsEnabled) return analysisResults;
 
             var filesToCheck = Directory.GetFiles(projectPath, "*sitemap*.xml", SearchOption.AllDirectories);
             if (filesToCheck.Length == 0)
             {
-                AnalysisResults.Add(new AnalysisResult
+                analysisResults.Add(new AnalysisResult
                 {
                     File = "",
                     Line = 0,
@@ -95,7 +74,7 @@ namespace SitemapPlugin
             }
             else
             {
-               AnalysisResults.Add(new AnalysisResult
+               analysisResults.Add(new AnalysisResult
                 {
                     File = "",
                     Line = 0,
@@ -105,7 +84,7 @@ namespace SitemapPlugin
                 });
             }
            
-            return AnalysisResults;
+            return analysisResults;
         }
 
         /// <summary>
@@ -133,6 +112,14 @@ namespace SitemapPlugin
 
             List<AnalysisResult> list = new List<AnalysisResult> {SitemapGenerated(Path.Combine(projectPath, "sitemap.xml")) };
             return list;
+        }
+
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        public UserControl GetView()
+        {
+            return new View(this);
         }
 
         /// <summary>

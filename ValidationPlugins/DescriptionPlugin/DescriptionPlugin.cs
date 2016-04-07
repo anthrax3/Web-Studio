@@ -22,25 +22,14 @@ namespace DescriptionPlugin
     [ExportMetadata("After", "Include")]             
     public class DescriptionPlugin : IValidation 
     {
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        public DescriptionPlugin()
-        {
-            View = new View(this);
-        }
-
+       
         /// <summary>
         ///     Text of AutoFix for binding
         /// </summary>
         public string AutoFixText => Strings.AutoFix;
 
         #region IValidation
-        /// <summary>
-        /// View showed when you select the plugin
-        /// </summary>
-        public UserControl View { get; }
-
+        
         /// <summary>
         ///     Name of the plugin
         /// </summary>
@@ -55,12 +44,7 @@ namespace DescriptionPlugin
         ///     Category of the plugin
         /// </summary>
         public ICategoryType Type { get; } = SeoType.Instance;
-
-        /// <summary>
-        ///     Results of the check method.
-        /// </summary>
-        public List<AnalysisResult> AnalysisResults { get; } = new List<AnalysisResult>();
-
+        
         /// <summary>
         ///     can we automatically fix some errors?
         /// </summary>
@@ -78,8 +62,8 @@ namespace DescriptionPlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            AnalysisResults.Clear();
-            if (!IsEnabled) return AnalysisResults;
+            List<AnalysisResult> analysisResults = new List<AnalysisResult>();
+            if (!IsEnabled) return analysisResults;
             var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
             foreach (var file in filesToCheck)
             {
@@ -88,7 +72,7 @@ namespace DescriptionPlugin
                 var nodes = document.DocumentNode.SelectNodes(@"//meta[@name='description']");
                 if (nodes == null)
                 {
-                    AnalysisResults.Add(NotFoundMessage(file));
+                    analysisResults.Add(NotFoundMessage(file));
                 }
                 else
                 {
@@ -99,13 +83,13 @@ namespace DescriptionPlugin
                         {
                             if (content.Length < 130 | content.Length > 155)
                             {
-                                AnalysisResults.Add(DescriptionLength(file, node.Line));
+                                analysisResults.Add(DescriptionLength(file, node.Line));
                             }
                         }
                     }
                 }
             }
-            return AnalysisResults;
+            return analysisResults;
         }
 
         /// <summary>
@@ -188,6 +172,14 @@ namespace DescriptionPlugin
 
             list.Add(DescriptionsGenerated(descriptionsCreated));
             return list;
+        }
+
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        public UserControl GetView()
+        {
+            return new View(this);
         }
 
         /// <summary>

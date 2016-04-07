@@ -19,15 +19,7 @@ namespace ImagesCompressorPlugin
     [ExportMetadata("After", "Include")]
     public class ImagesCompressor : IValidation
     {
-        private readonly object myLock = new object();
-
-        /// <summary>
-        ///     Default constructor
-        /// </summary>
-        public ImagesCompressor()
-        {
-            View = new View(this);
-        }
+        private readonly object _myLock = new object();
 
         /// <summary>
         ///     Text of AutoFix for binding
@@ -35,12 +27,7 @@ namespace ImagesCompressorPlugin
         public string AutoFixText => Strings.AutoFix;
 
         #region IValidation
-
-        /// <summary>
-        ///     View showed when you select the plugin
-        /// </summary>
-        public UserControl View { get; }
-
+      
         /// <summary>
         ///     Name of the plugin
         /// </summary>
@@ -55,12 +42,7 @@ namespace ImagesCompressorPlugin
         ///     Category of the plugin
         /// </summary>
         public ICategoryType Type { get; } = OptimizationType.Instance;
-
-        /// <summary>
-        ///     Results of the check method.
-        /// </summary>
-        public List<AnalysisResult> AnalysisResults { get; } = new List<AnalysisResult>();
-
+        
         /// <summary>
         ///     can we automatically fix some errors?
         /// </summary>
@@ -78,12 +60,13 @@ namespace ImagesCompressorPlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            AnalysisResults.Clear();
-            if (!IsEnabled) return AnalysisResults;
+            List<AnalysisResult> analysisResults  = new List<AnalysisResult>();
+            analysisResults.Clear();
+            if (!IsEnabled) return analysisResults;
 
             if (!IsAutoFixeable)
-                AnalysisResults.Add(new AnalysisResult("", 0, Name, Strings.NotEnabled, WarningType.Instance));
-            return AnalysisResults;
+                analysisResults.Add(new AnalysisResult("", 0, Name, Strings.NotEnabled, WarningType.Instance));
+            return analysisResults;
         }
 
         /// <summary>
@@ -100,7 +83,7 @@ namespace ImagesCompressorPlugin
             Parallel.ForEach(filesToCheck, file =>
             {
                 var myFile = new FileInfo(file);
-                lock (myLock)
+                lock (_myLock)
                 {
                     //Only one thread can enter
                     originalSize += (ulong) myFile.Length;
@@ -121,7 +104,7 @@ namespace ImagesCompressorPlugin
                     image.Write(file);
                 }
                 myFile.Refresh();
-                lock (myLock) //Only one thread can enter
+                lock (_myLock) //Only one thread can enter
                 {
                     afterSize += (ulong) myFile.Length;
                 }
@@ -133,6 +116,14 @@ namespace ImagesCompressorPlugin
                     string.Format(Strings.CompressionRate, originalSize/(1024*1024), afterSize/(1024*1024)),
                     InfoType.Instance)
             };
+        }
+
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        public UserControl GetView()
+        {
+            return new View(this);
         }
 
         #endregion

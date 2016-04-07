@@ -19,26 +19,14 @@ namespace CssPlugin
     [ExportMetadata("After", "JoinAndMinifyCss")]
     public class CssPlugin : IValidation
     {
-        /// <summary>
-        ///     Default constructor
-        /// </summary>
-        public CssPlugin()
-        {
-            View = new View(this);
-        }
-
+      
         /// <summary>
         ///     Text of AutoFix for binding
         /// </summary>
         public string AutoFixText => Strings.AutoFix;
 
         #region IValidation
-
-        /// <summary>
-        ///     View showed when you select the plugin
-        /// </summary>
-        public UserControl View { get; }
-
+        
         /// <summary>
         ///     Name of the plugin
         /// </summary>
@@ -54,11 +42,7 @@ namespace CssPlugin
         /// </summary>
         public ICategoryType Type { get; } = OptimizationType.Instance;
 
-        /// <summary>
-        ///     Results of the check method.
-        /// </summary>
-        public List<AnalysisResult> AnalysisResults { get; } = new List<AnalysisResult>();
-
+        
         /// <summary>
         ///     can we automatically fix some errors?
         /// </summary>
@@ -76,17 +60,17 @@ namespace CssPlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            AnalysisResults.Clear();
-            if (!IsEnabled) return AnalysisResults;
+             List<AnalysisResult> analysisResults= new List<AnalysisResult>();  
+            if (!IsEnabled) return analysisResults;
             var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
             foreach (var file in filesToCheck)
             {
                 var document = new HtmlDocument();
                 document.Load(file);
-                CheckOrder(document, file);
-                CheckInlineStyle(document, file);
+                CheckOrder(document, file,analysisResults);
+                CheckInlineStyle(document, file, analysisResults);
             }
-            return AnalysisResults;
+            return analysisResults;
         }
 
         /// <summary>
@@ -94,14 +78,15 @@ namespace CssPlugin
         /// </summary>
         /// <param name="document"></param>
         /// <param name="file"></param>
-        private void CheckInlineStyle(HtmlDocument document, string file)
+        /// <param name="analysisResults"></param>
+        private void CheckInlineStyle(HtmlDocument document, string file, List<AnalysisResult> analysisResults)
         {
             var styleNodes = document.DocumentNode.SelectNodes(@"//@style");
             if (styleNodes != null)
             {
                 foreach (var node in styleNodes)
                 {
-                    AnalysisResults.Add(new AnalysisResult(file, node.Line, Name, Strings.StyleAtt, WarningType.Instance));
+                    analysisResults.Add(new AnalysisResult(file, node.Line, Name, Strings.StyleAtt, WarningType.Instance));
                 }
             }
         }
@@ -112,7 +97,8 @@ namespace CssPlugin
         /// </summary>
         /// <param name="document"></param>
         /// <param name="file"></param>
-        private void CheckOrder(HtmlDocument document, string file)
+        /// <param name="analysisResults"></param>
+        private void CheckOrder(HtmlDocument document, string file, List<AnalysisResult> analysisResults)
         {
             var cssNodes = document.DocumentNode.SelectNodes(@"//link[@rel='stylesheet']");
             if (cssNodes == null) return;
@@ -122,7 +108,7 @@ namespace CssPlugin
             var jsFirstLine = jsNodes.Min(t => t.Line);
             if (jsFirstLine < cssLastLine)
             {
-                AnalysisResults.Add(new AnalysisResult(file, jsFirstLine, Name, Strings.JsBeforeCss, ErrorType.Instance));
+                analysisResults.Add(new AnalysisResult(file, jsFirstLine, Name, Strings.JsBeforeCss, ErrorType.Instance));
             }
         }
 
@@ -158,6 +144,14 @@ namespace CssPlugin
             {
                 new AnalysisResult("", 0, Name, string.Format(Strings.Moved, counter), InfoType.Instance)
             };
+        }
+
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        public UserControl GetView()
+        {
+            return new View(this);
         }
 
         #endregion

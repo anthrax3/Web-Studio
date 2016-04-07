@@ -22,13 +22,7 @@ namespace TwitterPlugin
     [ExportMetadata("After", "Description")]              
     public class TwitterPlugin : IValidation  
     {
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        public TwitterPlugin()
-        {
-            View = new View(this);
-        }
+       
 
         /// <summary>
         ///     Text of AutoFix for binding
@@ -36,10 +30,7 @@ namespace TwitterPlugin
         public string AutoFixText => Strings.AutoFix; 
 
         #region IValidation
-        /// <summary>
-        /// View showed when you select the plugin
-        /// </summary>
-        public UserControl View { get; }
+     
 
         /// <summary>
         ///     Name of the plugin
@@ -78,8 +69,9 @@ namespace TwitterPlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            AnalysisResults.Clear();
-            if (!IsEnabled) return AnalysisResults;
+            List<AnalysisResult> analysisResults  = new List<AnalysisResult>();  
+
+            if (!IsEnabled) return analysisResults;
 
             var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
             foreach (var file in filesToCheck)
@@ -89,11 +81,11 @@ namespace TwitterPlugin
                 var nodes = document.DocumentNode.SelectNodes(@"//meta[@name='twitter:card']");
                 if (nodes == null)
                 {
-                    AnalysisResults.Add(NotFoundMessage(file));
+                    analysisResults.Add(NotFoundMessage(file));
                 }
             }
 
-            return AnalysisResults;
+            return analysisResults;
 
         }
 
@@ -133,6 +125,15 @@ namespace TwitterPlugin
             list.Add(new AnalysisResult("", 0, Name, string.Format(Strings.Generated, counter), InfoType.Instance));
             return list;
         }
+
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        public UserControl GetView()
+        {
+            return new View(this);
+        }
+
         #endregion
 
         /// <summary>

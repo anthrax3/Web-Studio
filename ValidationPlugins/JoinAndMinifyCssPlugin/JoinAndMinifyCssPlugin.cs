@@ -18,13 +18,7 @@ namespace JoinAndMinifyCssPlugin
     [ExportMetadata("After", "PrintCss")]
     public class JoinAndMinifyCssPlugin : IValidation
     {
-        /// <summary>
-        ///     Default constructor
-        /// </summary>
-        public JoinAndMinifyCssPlugin()
-        {
-            View = new View(this);
-        }
+     
 
         /// <summary>
         ///     Text of AutoFix for binding
@@ -43,11 +37,7 @@ namespace JoinAndMinifyCssPlugin
 
         #region IValidation
 
-        /// <summary>
-        ///     View showed when you select the plugin
-        /// </summary>
-        public UserControl View { get; }
-
+        
         /// <summary>
         ///     Name of the plugin
         /// </summary>
@@ -85,8 +75,9 @@ namespace JoinAndMinifyCssPlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            AnalysisResults.Clear();
-            if (!IsEnabled) return AnalysisResults;
+            List<AnalysisResult> analysisResults  = new List<AnalysisResult>();
+       
+            if (!IsEnabled) return analysisResults;
             //it takes all css files
             var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
             FileModel.Domain = Domain;
@@ -101,12 +92,12 @@ namespace JoinAndMinifyCssPlugin
                 if (cssFiles == null) continue;
                 if (cssFiles.Count > 1)
                 {
-                    AnalysisResults.Add(new AnalysisResult(file, 0, Name, Strings.TooFiles, WarningType.Instance));
+                    analysisResults.Add(new AnalysisResult(file, 0, Name, Strings.TooFiles, WarningType.Instance));
                 }
             }
 
 
-            return AnalysisResults;
+            return analysisResults;
         }
 
         /// <summary>
@@ -160,6 +151,14 @@ namespace JoinAndMinifyCssPlugin
             results.Add(new AnalysisResult("", 0, Name,
                 string.Format(Strings.Compression, Stadistics.Ratio(projectPath)), InfoType.Instance));
             return results;
+        }
+
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        public UserControl GetView()
+        {
+            return new View(this);
         }
 
         #endregion

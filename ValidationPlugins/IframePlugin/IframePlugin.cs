@@ -18,21 +18,10 @@ namespace IframePlugin
     [ExportMetadata("After", "Include")]
     public class IframePlugin : IValidation
     {
-        /// <summary>
-        ///     Default constructor
-        /// </summary>
-        public IframePlugin()
-        {
-            View = new View(this);
-        }
+       
 
         #region IValidation
-
-        /// <summary>
-        ///     View showed when you select the plugin
-        /// </summary>
-        public UserControl View { get; }
-
+        
         /// <summary>
         ///     Name of the plugin
         /// </summary>
@@ -47,12 +36,7 @@ namespace IframePlugin
         ///     Category of the plugin
         /// </summary>
         public ICategoryType Type { get; } = OptimizationType.Instance;
-
-        /// <summary>
-        ///     Results of the check method.
-        /// </summary>
-        public List<AnalysisResult> AnalysisResults { get; } = new List<AnalysisResult>();
-
+        
         /// <summary>
         ///     can we automatically fix some errors?
         /// </summary>
@@ -70,8 +54,8 @@ namespace IframePlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            AnalysisResults.Clear();
-            if (!IsEnabled) return AnalysisResults;
+            List<AnalysisResult> analysisResults  = new List<AnalysisResult>(); 
+            if (!IsEnabled) return analysisResults;
             var counter = 0;
             var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
             foreach (var file in filesToCheck)
@@ -82,15 +66,15 @@ namespace IframePlugin
                 if (nodes == null) continue;
                 foreach (var node in nodes)
                 {
-                    AnalysisResults.Add(new AnalysisResult(file, node.Line, Name, Strings.IframeFound,
+                    analysisResults.Add(new AnalysisResult(file, node.Line, Name, Strings.IframeFound,
                         ErrorType.Instance));
                     counter++;
                 }
             }
             if (counter != 0)
-                AnalysisResults.Add(new AnalysisResult("", 0, Name, string.Format(Strings.Found, counter),
+                analysisResults.Add(new AnalysisResult("", 0, Name, string.Format(Strings.Found, counter),
                     InfoType.Instance));
-            return AnalysisResults;
+            return analysisResults;
         }
 
         /// <summary>
@@ -102,6 +86,14 @@ namespace IframePlugin
             if (!IsAutoFixeable || !IsEnabled) return null;
 
             return null;
+        }
+
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        public UserControl GetView()
+        {
+            return new View(this);
         }
 
         #endregion
