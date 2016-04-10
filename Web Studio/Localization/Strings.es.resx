@@ -272,4 +272,13 @@ Este proceso moverá el fichero a la papelera de reciclaje.</value>
     <value>¿Estás seguro de que quieres eliminar esta carpeta?
 Este proceso moverá la carpeta y su contenido a la papelera de reciclaje</value>
   </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Recargar</value>
+  </data>
+  <data name="FileHasChanged" xml:space="preserve">
+    <value>El archivo ha cambiado</value>
+  </data>
+  <data name="FileHasChangedDescription" xml:space="preserve">
+    <value>El archivo ha cambiado, puede continuar con el contenido actual o descargar los cambios y recargar el archivo.</value>
+  </data>
 </root>

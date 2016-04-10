@@ -205,6 +205,24 @@ namespace Web_Studio.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a The file has changed.
+        /// </summary>
+        public static string FileHasChanged {
+            get {
+                return ResourceManager.GetString("FileHasChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a This file has changed, so you can continue with the actual content or you can discard all content and reload the new..
+        /// </summary>
+        public static string FileHasChangedDescription {
+            get {
+                return ResourceManager.GetString("FileHasChangedDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Finish.
         /// </summary>
         public static string Finish {
@@ -318,6 +336,15 @@ namespace Web_Studio.Localization {
         public static string Project {
             get {
                 return ResourceManager.GetString("Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Reload.
+        /// </summary>
+        public static string Reload {
+            get {
+                return ResourceManager.GetString("Reload", resourceCulture);
             }
         }
         

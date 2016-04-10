@@ -272,4 +272,13 @@ This process is going to move the file to recycle bin</value>
     <value>Are you sure that you want to delete this folder?
 This process is going to move the folder and its content to recycle bin</value>
   </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Reload</value>
+  </data>
+  <data name="FileHasChanged" xml:space="preserve">
+    <value>The file has changed</value>
+  </data>
+  <data name="FileHasChangedDescription" xml:space="preserve">
+    <value>This file has changed, so you can continue with the actual content or you can discard all content and reload the new.</value>
+  </data>
 </root>

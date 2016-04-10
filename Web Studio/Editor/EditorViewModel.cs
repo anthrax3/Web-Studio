@@ -1,9 +1,14 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Threading;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using Prism.Commands;
 using Prism.Interactivity.InteractionRequest;
 using Prism.Mvvm;
@@ -36,6 +41,8 @@ namespace Web_Studio.Editor
 
         private string _toolTip;
 
+        private FileSystemWatcher _watcher;
+
         /// <summary>
         ///     Default constructor
         /// </summary>
@@ -51,8 +58,7 @@ namespace Web_Studio.Editor
             CloseCommand = new DelegateCommand(CloseFile);
             SaveCommand = new DelegateCommand(SaveFile);
             SaveChangesConfirmationRequest = new InteractionRequest<IConfirmation>();
-
-
+            
             //Load file
             var streamReader = File.OpenText(ToolTip);
             _document = new TextDocument(streamReader.ReadToEnd());
@@ -60,7 +66,58 @@ namespace Web_Studio.Editor
 
             //Load SyntaxHighlighting
             var syntaxHighlighterTool = new SyntaxHighlighterTool();
-            SyntaxHighlighting = syntaxHighlighterTool.SyntaxHighlightingMode(path); 
+            SyntaxHighlighting = syntaxHighlighterTool.SyntaxHighlightingMode(path);
+
+
+            _watcher = new FileSystemWatcher
+            {
+                Path = Path.GetDirectoryName(path),
+                Filter = Path.GetFileName(path),
+                NotifyFilter = NotifyFilters.LastWrite
+            };
+            _watcher.Changed += WatcherOnChanged;
+            // Begin watching
+            _watcher.EnableRaisingEvents = true;
+        }
+
+        /// <summary>
+        /// Show a dialog where you can reload the file if it has changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="fileSystemEventArgs"></param>
+        private  void WatcherOnChanged(object sender, FileSystemEventArgs fileSystemEventArgs)
+        {
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(async delegate
+            {
+
+                try
+                {
+                    _watcher.EnableRaisingEvents = false;
+                    var metroWindow = Application.Current.MainWindow as MetroWindow;
+                    if (metroWindow == null) return;
+                    var response =
+                        await
+                            metroWindow.ShowMessageAsync(Strings.FileHasChanged, Strings.FileHasChangedDescription,
+                                MessageDialogStyle.AffirmativeAndNegative,
+                                new MetroDialogSettings
+                                {
+                                    AffirmativeButtonText = Strings.Reload,
+                                    NegativeButtonText = Strings.Cancel
+                                });
+                    if (response == MessageDialogResult.Negative) return;
+                    //Reload file
+                    var streamReader = File.OpenText(ToolTip);
+                    Document = new TextDocument(streamReader.ReadToEnd());
+                    streamReader.Close(); 
+                }
+
+                finally
+                {
+                    _watcher.EnableRaisingEvents = true;
+                }
+               
+              
+            }));
         }
 
         /// <summary>
