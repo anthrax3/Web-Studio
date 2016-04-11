@@ -279,6 +279,6 @@ Este proceso moverá la carpeta y su contenido a la papelera de reciclaje</value
     <value>El archivo ha cambiado</value>
   </data>
   <data name="FileHasChangedDescription" xml:space="preserve">
-    <value>El archivo ha cambiado, puede continuar con el contenido actual o descargar los cambios y recargar el archivo.</value>
+    <value>Este archivo ha sido modificado, acepta si quieres recargar el nuevo contenido.</value>
   </data>
 </root>

@@ -1,14 +1,10 @@
 ﻿using System;
 using System.IO;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Threading;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
-using MahApps.Metro.Controls;
-using MahApps.Metro.Controls.Dialogs;
 using Prism.Commands;
 using Prism.Interactivity.InteractionRequest;
 using Prism.Mvvm;
@@ -58,6 +54,7 @@ namespace Web_Studio.Editor
             CloseCommand = new DelegateCommand(CloseFile);
             SaveCommand = new DelegateCommand(SaveFile);
             SaveChangesConfirmationRequest = new InteractionRequest<IConfirmation>();
+            ReloadConfirmationRequest = new InteractionRequest<IConfirmation>();
             
             //Load file
             var streamReader = File.OpenText(ToolTip);
@@ -86,38 +83,35 @@ namespace Web_Studio.Editor
         /// <param name="sender"></param>
         /// <param name="fileSystemEventArgs"></param>
         private  void WatcherOnChanged(object sender, FileSystemEventArgs fileSystemEventArgs)
-        {
-            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(async delegate
-            {
-
+        {    
                 try
                 {
                     _watcher.EnableRaisingEvents = false;
-                    var metroWindow = Application.Current.MainWindow as MetroWindow;
-                    if (metroWindow == null) return;
-                    var response =
-                        await
-                            metroWindow.ShowMessageAsync(Strings.FileHasChanged, Strings.FileHasChangedDescription,
-                                MessageDialogStyle.AffirmativeAndNegative,
-                                new MetroDialogSettings
+                    Application.Current.Dispatcher.Invoke(delegate
+                    {
+                        var contenTextBox = new TextBlock
+                        {
+                            Text = Strings.FileHasChangedDescription,
+                            Foreground = new SolidColorBrush(Colors.White)
+                        };
+                        ReloadConfirmationRequest.Raise(
+                            new Confirmation {Content = contenTextBox, Title = Strings.FileHasChanged},
+                            c =>
+                            {
+                                if (c.Confirmed)
                                 {
-                                    AffirmativeButtonText = Strings.Reload,
-                                    NegativeButtonText = Strings.Cancel
-                                });
-                    if (response == MessageDialogResult.Negative) return;
-                    //Reload file
-                    var streamReader = File.OpenText(ToolTip);
-                    Document = new TextDocument(streamReader.ReadToEnd());
-                    streamReader.Close(); 
+                                    var streamReader = File.OpenText(ToolTip);
+                                    Document = new TextDocument(streamReader.ReadToEnd());
+                                    streamReader.Close();
+                                }
+                            });
+                    });
                 }
 
                 finally
                 {
                     _watcher.EnableRaisingEvents = true;
                 }
-               
-              
-            }));
         }
 
         /// <summary>
@@ -133,6 +127,11 @@ namespace Web_Studio.Editor
         ///     Confirmation event popup
         /// </summary>
         public InteractionRequest<IConfirmation> SaveChangesConfirmationRequest { get; }
+
+        /// <summary>
+        ///     Confirmation event popup for reload
+        /// </summary>
+        public InteractionRequest<IConfirmation> ReloadConfirmationRequest { get; }
 
         /// <summary>
         ///     the document is modified

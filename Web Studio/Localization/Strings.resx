@@ -279,6 +279,6 @@ This process is going to move the folder and its content to recycle bin</value>
     <value>The file has changed</value>
   </data>
   <data name="FileHasChangedDescription" xml:space="preserve">
-    <value>This file has changed, so you can continue with the actual content or you can discard all content and reload the new.</value>
+    <value>This file has been modified, click in Ok if you want to reload the new content.</value>
   </data>
 </root>

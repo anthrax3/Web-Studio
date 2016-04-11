@@ -214,7 +214,7 @@ namespace Web_Studio.Localization {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a This file has changed, so you can continue with the actual content or you can discard all content and reload the new..
+        ///   Busca una cadena traducida similar a This file has been modified, click in Ok if you want to reload the new content..
         /// </summary>
         public static string FileHasChangedDescription {
             get {
