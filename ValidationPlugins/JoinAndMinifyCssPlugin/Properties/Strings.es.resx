@@ -121,7 +121,7 @@
     <value>Arreglar automáticamente</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Este plugin une todos los ficheros CSS de la carpeta css, en un único archivo y lo comprime.</value>
+    <value>Este plugin une todos los ficheros CSS  en un único archivo y lo comprime.</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Compresor de CSS</value>
