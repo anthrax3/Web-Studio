@@ -80,7 +80,6 @@ namespace JoinAndMinifyCssPlugin
             if (!IsEnabled) return analysisResults;
             //it takes all css files
             var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
-            FileModel.Domain = Domain;
 
             foreach (var file in filesToCheck)
             {
