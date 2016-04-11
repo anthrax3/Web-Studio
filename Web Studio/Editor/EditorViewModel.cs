@@ -115,12 +115,15 @@ namespace Web_Studio.Editor
         }
 
         /// <summary>
-        /// Save file
+        /// Save file with the fileSystemWatcher disable, because we don't want a notification as "The file has changed"
         /// </summary>
         private void SaveFile()
         {
+            _watcher.EnableRaisingEvents = false; //Disable fileSystemWatcher
            File.WriteAllText(ToolTip,Document.Text);
             EditorIsModified = false;
+            _watcher.EnableRaisingEvents = true; //Enable fileSystemWatcher
+
         }
 
         /// <summary>
