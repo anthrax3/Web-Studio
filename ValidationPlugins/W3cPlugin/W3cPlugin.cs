@@ -58,6 +58,11 @@ namespace W3cPlugin
             List<AnalysisResult> AnalysisResults = new List<AnalysisResult>(); 
 
             if (!IsEnabled) return AnalysisResults;
+            if (IsJavaInstalled == null) IsJavaInstalled = CheckIfJavaIsInstalled();
+            if (IsJavaInstalled == false)
+            {
+                AnalysisResults.Add(new AnalysisResult("",0,Name,Strings.NoJava,ErrorType.Instance));
+            }
 
             //Get the html files in the folder and subfolder
             var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
@@ -150,5 +155,30 @@ namespace W3cPlugin
             }
             return analysisResult;
         }
+
+        /// <summary>
+        /// Method for check if java is installed
+        /// </summary>
+        /// <returns></returns>
+        private bool CheckIfJavaIsInstalled()
+        {
+            string environmentPath = Environment.GetEnvironmentVariable("JAVA_HOME");
+            if (!string.IsNullOrEmpty(environmentPath))
+            {
+                return true;
+            }  
+            string javaKey = "SOFTWARE\\JavaSoft\\Java Runtime Environment\\";
+            using (Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(javaKey))
+            {
+                return rk != null;
+            }
+        }
+
+        /// <summary>
+        /// Java is installed
+        /// </summary>
+        public bool? IsJavaInstalled { get; set; } = null;
+
+
     }
 }
