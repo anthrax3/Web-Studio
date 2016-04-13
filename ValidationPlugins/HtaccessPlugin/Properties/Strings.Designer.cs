@@ -71,6 +71,7 @@ namespace HtaccessPlugin.Properties {
         
         /// <summary>
         ///   Busca una cadena traducida similar a This plugin checks if a .htacess exists, if it doesn&apos;t exist, the plugin can generate it.
+        ///This plugin needs the following Apache modules: mod_authz_core.c, mod_autoindex.c, mod_defalte.c, mod_expires.c, mod_filter.c, mod_headers.c, mod_mime.c, mod_rewrite.c and mod_setenvif.c.
         /// </summary>
         internal static string Description {
             get {
