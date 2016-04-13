@@ -149,4 +149,13 @@ Además este plugin es capaz de incluir estas etiquetas automáticamente en toda
   <data name="SiteName" xml:space="preserve">
     <value>Introduce la cuenta del sitio, ejemplo @google</value>
   </data>
+  <data name="DomainName" xml:space="preserve">
+    <value>Introduzca la ruta del dominio, por ejemplo http://www.google.es</value>
+  </data>
+  <data name="NoSite" xml:space="preserve">
+    <value>Tienes que rellenar el campo del sitio</value>
+  </data>
+  <data name="NoDomain" xml:space="preserve">
+    <value>Tienes que rellenar el campo del dominio</value>
+  </data>
 </root>

@@ -147,4 +147,13 @@
   <data name="SiteName" xml:space="preserve">
     <value>Introduce the site account, example @google</value>
   </data>
+  <data name="DomainName" xml:space="preserve">
+    <value>Introduce the full path to root folder, example http://www.google.es</value>
+  </data>
+  <data name="NoSite" xml:space="preserve">
+    <value>You need to fill the site field</value>
+  </data>
+  <data name="NoDomain" xml:space="preserve">
+    <value>You need to fill the domain field</value>
+  </data>
 </root>

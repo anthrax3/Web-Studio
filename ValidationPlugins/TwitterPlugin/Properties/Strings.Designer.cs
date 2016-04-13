@@ -88,6 +88,15 @@ namespace TwitterPlugin.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Introduce the full path to root folder, example http://www.google.es.
+        /// </summary>
+        internal static string DomainName {
+            get {
+                return ResourceManager.GetString("DomainName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a We have generated Twitter tags for {0} pages.
         /// </summary>
         internal static string Generated {
@@ -120,6 +129,24 @@ namespace TwitterPlugin.Properties {
         internal static string Name {
             get {
                 return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a You need to fill the domain field.
+        /// </summary>
+        internal static string NoDomain {
+            get {
+                return ResourceManager.GetString("NoDomain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a You need to fill the site field.
+        /// </summary>
+        internal static string NoSite {
+            get {
+                return ResourceManager.GetString("NoSite", resourceCulture);
             }
         }
         

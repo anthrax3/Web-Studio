@@ -27,10 +27,20 @@ namespace TwitterPlugin
         /// <summary>
         ///     Text of AutoFix for binding
         /// </summary>
-        public string AutoFixText => Strings.AutoFix; 
+        public string AutoFixText => Strings.AutoFix;
+
+        /// <summary>
+        ///     Display info about domain property
+        /// </summary>
+        public string DomainName => Strings.DomainName;
+
+        /// <summary>
+        ///     Full path to root file
+        /// </summary>
+        public string Domain { get; set; }
 
         #region IValidation
-     
+
 
         /// <summary>
         ///     Name of the plugin
@@ -113,12 +123,14 @@ namespace TwitterPlugin
         public List<AnalysisResult> Fix(string projectPath)
         {
             if (!IsAutoFixeable || !IsEnabled) return null;
+            if (String.IsNullOrWhiteSpace(Site)) return new List<AnalysisResult> {new AnalysisResult("",0,Name,Strings.NoSite,ErrorType.Instance)};
+            if(String.IsNullOrWhiteSpace(Domain)) return new List<AnalysisResult> {new AnalysisResult("",0,Name,Strings.NoDomain,ErrorType.Instance)};
             var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
             var list = new List<AnalysisResult>();
             var counter = 0;
             foreach (var file in filesToCheck)
             {
-                var utils = new TwitterMetadata(file,Site);
+                var utils = new TwitterMetadata(file,Site,Domain);
                 list.AddRange(utils.AddTags());
                 counter++;
             }

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using TwitterPlugin.Properties;
 using ValidationInterface;
@@ -15,16 +17,19 @@ namespace TwitterPlugin
         private HtmlNode _headNode;
         private string _file;
         private string _site;
+        private string _domain;
 
         /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="file"></param>
         /// <param name="site"></param>
-        public TwitterMetadata(string file,string site)
+        /// <param name="domain"></param>
+        public TwitterMetadata(string file,string site,string domain)
         {
             _file = file;
             _site = site;
+            _domain = domain;
             _document = new HtmlDocument();
             _document.OptionWriteEmptyNodes = true; //Close tags
             _document.Load(file);
@@ -127,10 +132,25 @@ namespace TwitterPlugin
                     return new AnalysisResult(_file, 0, Strings.Name, Strings.ImgNotFound, WarningType.Instance);
                 var metaTag = _document.CreateElement("meta");
                 metaTag.Attributes.Add("name", "twitter:image");
-                metaTag.Attributes.Add("content", value);
+                metaTag.Attributes.Add("content", UrlToResource(value));
                 _headNode.AppendChild(metaTag);
             }
             return null;
         }
+        /// <summary>
+        /// Return an absolute url to resource
+        /// </summary>
+        /// <param name="resource"></param>
+        /// <returns></returns>
+        private string UrlToResource(string resource)
+        {
+            var httpRegex = new Regex("http.*");
+            if (httpRegex.IsMatch(resource)) //External url
+            {
+                return resource;
+            }
+            return _domain + "/" + resource; //Absolute url
+        }
+
     }
 }
