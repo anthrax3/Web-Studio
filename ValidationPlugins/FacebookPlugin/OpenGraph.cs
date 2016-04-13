@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using FacebookPlugin.Properties;
 using HtmlAgilityPack;
 using ValidationInterface;
@@ -115,7 +117,7 @@ namespace FacebookPlugin
                     return new AnalysisResult(_file, 0, Strings.Name, Strings.ImgNotFound, WarningType.Instance);
                 var metaTag = _document.CreateElement("meta");
                 metaTag.Attributes.Add("property", "og:image");
-                metaTag.Attributes.Add("content", value);
+                metaTag.Attributes.Add("content", UrlToResource(value));
                 _headNode.AppendChild(metaTag);
             }
             return null;
@@ -136,6 +138,21 @@ namespace FacebookPlugin
                 _headNode.AppendChild(metaTag);
             }
             return null;
+        }
+
+        /// <summary>
+        /// Return an absolute url to resource
+        /// </summary>
+        /// <param name="resource"></param>
+        /// <returns></returns>
+        private String UrlToResource(String resource)
+        {
+            var httpRegex = new Regex("http.*");
+            if (httpRegex.IsMatch(resource)) //External url
+            {
+                return resource;
+            }
+            return _domain + "/" + resource; //Absolute url
         }
     }
 }
