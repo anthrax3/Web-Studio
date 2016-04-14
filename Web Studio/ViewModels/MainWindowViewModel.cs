@@ -614,7 +614,14 @@ namespace Web_Studio.ViewModels
                 int counter = 0;
                 foreach (Lazy<IValidation, IValidationMetadata> plugin in ValidationPluginManager.Plugins)
                 {
-                    if (plugin.Value.IsEnabled) counter++;
+                    if (plugin.Value.IsEnabled)
+                    {
+                        counter++;
+                        if (plugin.Value.IsAutoFixeable)
+                        {
+                            counter += 2; //1º Fix and then Check 
+                        }
+                    }
                     if (plugin.Value.IsAutoFixeable) counter++;
                 }
                 NumberOfRules = counter; //Check and fix each plugin
@@ -648,7 +655,7 @@ namespace Web_Studio.ViewModels
                 if (plugin.IsEnabled)
                 {
                     var tempResults = plugin.Check(releasePath);
-                    System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
+                    Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
                     {
                         Results.AddRange(tempResults);
                         NumberOfRulesProcessed++;
@@ -656,7 +663,7 @@ namespace Web_Studio.ViewModels
                 }
             }
 
-            //Fix loop
+            //Fix loop and recheck loop
             foreach (Lazy<IValidation, IValidationMetadata> t in ValidationPluginManager.Plugins)
             {
                 if (GenerationWorker.CancellationPending)  ////Manage the cancelation event
@@ -665,16 +672,23 @@ namespace Web_Studio.ViewModels
                     return;
                 }
                 var plugin = t.Value;
-                if (plugin.IsAutoFixeable)
+                if (plugin.IsAutoFixeable && plugin.IsEnabled)
                 {
                     var tempResults = t.Value.Fix(releasePath);
-                    System.Windows.Application.Current.Dispatcher.BeginInvoke((Action) delegate //Update UI
+                    Application.Current.Dispatcher.BeginInvoke((Action) delegate //Update UI
                     {
                         Results.AddRange(tempResults);
                         NumberOfRulesProcessed++;
                     });
+                    var checkResults = plugin.Check(releasePath);
+                    Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
+                    {
+                        Results.AddRange(checkResults);
+                        NumberOfRulesProcessed++;
+                    });
                 }
             }
+
         }
 
         /// <summary>
