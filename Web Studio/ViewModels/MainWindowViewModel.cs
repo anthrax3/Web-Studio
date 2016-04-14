@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using System.Windows.Threading;
 using FastObservableCollection;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
@@ -520,20 +519,32 @@ namespace Web_Studio.ViewModels
         public DelegateCommand SelectedItemChangedCommand { get; private set; }
 
         /// <summary>
-        ///     Open the selected file and display it
+        ///     Open the selected file and display it if you can do it
         /// </summary>
         private void SelectedItemChanged()
         {
-            if (!SelectedItemIsFolder)
+            var s = Path.GetExtension(SelectedItemPath);
+            if (SelectedItemIsFolder || s==null) return;
+            var extension = s.ToLower();
+          
+            switch (extension)  //Only open these extensions
             {
-                foreach (var doc in Documents)
-                {
-                    doc.IsSelected = false;
-                }
-
-                EditorViewModel myEditor = SearchOrCreateDocument(SelectedItemPath);
-                myEditor.IsSelected = true;
+                case ".html":
+                case ".css":
+                case ".js":
+                case ".ws":
+                    break;
+                default:
+                    return;
             }
+
+            foreach (var doc in Documents)
+            {
+                doc.IsSelected = false;
+            }
+
+            EditorViewModel myEditor = SearchOrCreateDocument(SelectedItemPath);
+            myEditor.IsSelected = true;
         }
 
         /// <summary>
