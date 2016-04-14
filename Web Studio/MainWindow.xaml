@@ -185,7 +185,7 @@
                                 RemoveCommand="{Binding ExplorerControlItemRemovedCommand}"/>
                                 <Grid Grid.Row="1" Margin="10" Visibility="{Binding SelectedItemPath, Converter={StaticResource NullToVisibilityConverter}}">
                                     <Grid.RowDefinitions>
-                                        <RowDefinition></RowDefinition> 
+                                        <RowDefinition Height="Auto"></RowDefinition> 
                                         <RowDefinition Height="3*"></RowDefinition>
                                     </Grid.RowDefinitions>
                                     <StackPanel>
