@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using FastObservableCollection;
 using MahApps.Metro.Controls;
@@ -53,6 +54,7 @@ namespace Web_Studio.ViewModels
             NewProjectRequest = new InteractionRequest<INotification>();
             PluginsWindowRequest = new InteractionRequest<INotification>();
             SaveChangesInteractionRequest = new InteractionRequest<IConfirmation>();
+            ItemRemovedRequest = new InteractionRequest<IConfirmation>();
 
             //Manage commands
             SelectedItemChangedCommand = new DelegateCommand(SelectedItemChanged);
@@ -428,57 +430,76 @@ namespace Web_Studio.ViewModels
         public DelegateCommand<INode> ExplorerControlItemRemovedCommand { get; private set; }
 
         /// <summary>
+        /// Request to show the removed item window
+        /// </summary>
+        public InteractionRequest<IConfirmation> ItemRemovedRequest { get; }
+
+        /// <summary>
         /// Method to manage the remove command, ask for confirmation, and close removed documents
         /// </summary>
         /// <param name="node"></param>
-        private async void ExplorerControlItemRemoved(INode node)
+        private void ExplorerControlItemRemoved(INode node)
         {
-            if (node is FileNode)   //Is a File
+            if (node is FileNode) //Is a File
             {
-                var metroWindow = Application.Current.MainWindow as MetroWindow;
-                if (metroWindow == null) return;
-                var response = await metroWindow.ShowMessageAsync(Strings.RemoveFileTitle, Strings.RemoveFileDescription, MessageDialogStyle.AffirmativeAndNegative,
-                    new MetroDialogSettings
+                Application.Current.Dispatcher.Invoke(delegate
+                {
+                    var contenTextBox = new TextBlock
                     {
-                        AffirmativeButtonText = Strings.Remove,
-                        NegativeButtonText = Strings.Cancel
-                    });
-                if (response != MessageDialogResult.Affirmative) return;
-                try
-                {
-                    File.Delete(node.FullPath);
-                    Documents.Remove(Documents.FirstOrDefault(t => t.ToolTip == node.FullPath));   //Remove document
-                }
-                catch (Exception)
-                {
-                    //TODO:
-                }
+                        Text = Strings.RemoveFileDescription,
+                        Foreground = new SolidColorBrush(Colors.White)
+                    };
+                    ItemRemovedRequest.Raise(
+                        new Confirmation {Content = contenTextBox, Title = Strings.RemoveFolderTitle},
+                        c =>
+                        {
+                            if (c.Confirmed)
+                            {
+                                try
+                                {
+                                    File.Delete(node.FullPath);
+                                    Documents.Remove(Documents.FirstOrDefault(t => t.ToolTip == node.FullPath));
+                                    //Remove document
+                                }
+                                catch (Exception)
+                                {
+                                    //TODO:
+                                }
+                            }
+                        });
+                });
             }
             if (node is FolderNode)
             {
-                var metroWindow = Application.Current.MainWindow as MetroWindow;
-                if (metroWindow == null) return;
-                var response = await metroWindow.ShowMessageAsync(Strings.RemoveFolderTitle, Strings.RemoveFolderDescription, MessageDialogStyle.AffirmativeAndNegative,
-                    new MetroDialogSettings
-                    {
-                        AffirmativeButtonText = Strings.Remove,
-                        NegativeButtonText = Strings.Cancel
-                    });
-                if (response != MessageDialogResult.Affirmative) return;
-                try
+                Application.Current.Dispatcher.Invoke(delegate
                 {
-                    Directory.Delete(node.FullPath, true);
-                    var documentsToRemove = Documents.Where(t => t.ToolTip.Contains(node.FullPath));
-                    foreach (var document in documentsToRemove.ToList())
+                    var contenTextBox = new TextBlock
                     {
-                        Documents.Remove(document);     //Remove document
-                    }
-
-                }
-                catch (Exception)
-                {
-                    //TODO:
-                }
+                        Text = Strings.RemoveFolderDescription,
+                        Foreground = new SolidColorBrush(Colors.White)
+                    };
+                    ItemRemovedRequest.Raise(
+                        new Confirmation {Content = contenTextBox, Title = Strings.RemoveFolderTitle},
+                        c =>
+                        {
+                            if (c.Confirmed)
+                            {
+                                try
+                                {
+                                    Directory.Delete(node.FullPath, true);
+                                    var documentsToRemove = Documents.Where(t => t.ToolTip.Contains(node.FullPath));
+                                    foreach (var document in documentsToRemove.ToList())
+                                    {
+                                        Documents.Remove(document); //Remove document
+                                    }
+                                }
+                                catch (Exception)
+                                {
+                                    //TODO:
+                                }
+                            }
+                        });
+                });
             }
         }
 
