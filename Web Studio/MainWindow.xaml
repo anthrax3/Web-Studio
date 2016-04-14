@@ -31,6 +31,8 @@
     WindowState="{Binding Source={x:Static properties:Settings.Default},Path=WindowState,Mode=TwoWay}"  ShowIconOnTitleBar="True" ShowTitleBar="True" Style="{DynamicResource CustomMetroWindow}">
     <controls:MetroWindow.Resources>
         <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter"></converters:ActiveDocumentConverter>
+        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"></converters:NullToVisibilityConverter>
+        <converters:SouceToImageSourceConverter x:Key="SouceToImageSourceConverter"></converters:SouceToImageSourceConverter>
     </controls:MetroWindow.Resources>
     <controls:MetroWindow.DataContext>
         <viewModels:MainWindowViewModel />
@@ -169,13 +171,35 @@
                     <avalonDock:LayoutDocumentPane />
                     <avalonDock:LayoutAnchorablePane DockWidth="200">
                         <avalonDock:LayoutAnchorable x:Name="ExplorerLayout" Title="{lex:Loc FileExplorer}">
-                            <treeViewExplorerControl:ExplorerControl
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="2*"></RowDefinition>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <treeViewExplorerControl:ExplorerControl  Grid.Row="0"
                                 SelectedItemChanged="{Binding SelectedItemChangedCommand}"
                                 SelectedItemName="{Binding SelectedItemName}"
                                 SelectedItemPath="{Binding SelectedItemPath}"
                                 SelectedItemIsFolder="{Binding SelectedItemIsFolder}"
                                 PathToWatch="{Binding ProjectPath}"
                                 RemoveCommand="{Binding ExplorerControlItemRemovedCommand}"/>
+                                <Grid Grid.Row="1" Margin="10" Visibility="{Binding SelectedItemPath, Converter={StaticResource NullToVisibilityConverter}}">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition></RowDefinition> 
+                                        <RowDefinition Height="3*"></RowDefinition>
+                                    </Grid.RowDefinitions>
+                                    <StackPanel>
+                                        <TextBlock VerticalAlignment="Center" Text="{lex:Loc Path}"></TextBlock>
+                                        <TextBlock Text="{Binding SelectedItemPath}" VerticalAlignment="Center" TextWrapping="Wrap"></TextBlock>
+                                    </StackPanel> 
+                                    <Rectangle Grid.Row="1">
+                                        <Rectangle.Fill>
+                                            <ImageBrush Stretch="Uniform" ImageSource="{Binding SelectedItemPath,Converter={StaticResource SouceToImageSourceConverter}}"></ImageBrush>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                </Grid>
+                            </Grid>
+                           
                         </avalonDock:LayoutAnchorable>
                     </avalonDock:LayoutAnchorablePane>
                     <avalonDock:LayoutAnchorablePane >

@@ -281,4 +281,7 @@ Este proceso moverá la carpeta y su contenido a la papelera de reciclaje</value
   <data name="FileHasChangedDescription" xml:space="preserve">
     <value>Este archivo ha sido modificado, acepta si quieres recargar el nuevo contenido.</value>
   </data>
+  <data name="Path" xml:space="preserve">
+    <value>Ruta:</value>
+  </data>
 </root>

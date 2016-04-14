@@ -281,4 +281,7 @@ This process is going to move the folder and its content to recycle bin</value>
   <data name="FileHasChangedDescription" xml:space="preserve">
     <value>This file has been modified, click in Ok if you want to reload the new content.</value>
   </data>
+  <data name="Path" xml:space="preserve">
+    <value>Path:</value>
+  </data>
 </root>
