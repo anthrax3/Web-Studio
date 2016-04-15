@@ -24,8 +24,12 @@ namespace Web_Studio.ViewModels
         public ValidationPluginsViewModel()
         { 
             Plugins = ValidationPluginManager.Plugins;
-            CollectionViewSource.GetDefaultView(Plugins).GroupDescriptions.Add(new PropertyGroupDescription("Value.Type"));
-                //Grouping   
+            if (Plugins != null)
+            {    //Grouping
+                CollectionViewSource.GetDefaultView(Plugins)
+                    .GroupDescriptions.Add(new PropertyGroupDescription("Value.Type"));
+            }
+               
         }
 
         /// <summary>
