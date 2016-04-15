@@ -1,32 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Controls;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
-using System.Windows.Documents;
+using System.Windows.Controls;
+using HtmlCompressionPlugin.Properties;
 using ValidationInterface;
 using ValidationInterface.CategoryTypes;
-using HtmlCompressionPlugin.Properties;
 using ValidationInterface.MessageTypes;
 using WebMarkupMin.Core.Minifiers;
 
 namespace HtmlCompressionPlugin
 {
     /// <summary>
-    ///  Plugin to compress the html code
+    ///     Plugin to compress the html code
     /// </summary>
-    [Export(typeof(IValidation))]
-    [ExportMetadata("Name", "HtmlCompression")]        
-    [ExportMetadata("After", "NormalizeCss")]              
-    public class HtmlCompression : IValidation  
+    [Export(typeof (IValidation))]
+    [ExportMetadata("Name", "HtmlCompression")]
+    [ExportMetadata("After", "NormalizeCss")]
+    public class HtmlCompression : IValidation
     {
-
-
         /// <summary>
         ///     Text of AutoFix for binding
         /// </summary>
-        public string AutoFixText => Strings.AutoFix; 
+        public string AutoFixText => Strings.AutoFix;
 
         #region IValidation
 
@@ -43,7 +39,7 @@ namespace HtmlCompressionPlugin
         /// <summary>
         ///     Category of the plugin
         /// </summary>
-        public ICategoryType Type { get; } = OptimizationType.Instance; 
+        public ICategoryType Type { get; } = OptimizationType.Instance;
 
         /// <summary>
         ///     can we automatically fix some errors?
@@ -62,11 +58,11 @@ namespace HtmlCompressionPlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            List<AnalysisResult> analysisResults = new List<AnalysisResult>();
+            var analysisResults = new List<AnalysisResult>();
             if (!IsEnabled) return analysisResults;
-            if(!IsAutoFixeable) analysisResults.Add(new AnalysisResult("",0,Name,Strings.Disable,WarningType.Instance));
+            if (!IsAutoFixeable)
+                analysisResults.Add(new AnalysisResult("", 0, Name, Strings.Disable, WarningType.Instance));
             return analysisResults;
-
         }
 
         /// <summary>
@@ -77,39 +73,41 @@ namespace HtmlCompressionPlugin
         {
             if (!IsAutoFixeable || !IsEnabled) return null;
 
-            /*   List<AnalysisResult> results = new List<AnalysisResult>();
-               var htmlMinifier = new HtmlMinifier();
-               long originalSize = 0, minifiedSize = 0;
+            var results = new List<AnalysisResult>();
+            var htmlMinifier = new HtmlMinifier();
+            long originalSize = 0, minifiedSize = 0;
 
-               var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
+            var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
 
-               foreach (var file in filesToCheck)
-               {
+            foreach (var file in filesToCheck)
+            {
+                var result = htmlMinifier.Minify(File.ReadAllText(file), true);
 
+                var statistics = result.Statistics;
+                if (statistics != null) // add statistics
+                {
+                    originalSize += statistics.OriginalSize;
+                    minifiedSize += statistics.MinifiedSize;
+                }
+                File.WriteAllText(file, result.MinifiedContent); //Write the minified version
+                //Process errors and warnings
+                results.AddRange(
+                    result.Errors.Select(
+                        error => new AnalysisResult(file, error.LineNumber, Name, error.Message, ErrorType.Instance)));
+                results.AddRange(
+                    result.Warnings.Select(
+                        warning =>
+                            new AnalysisResult(file, warning.LineNumber, Name, warning.Message, ErrorType.Instance)));
+            }
 
-                   MarkupMinificationResult result = htmlMinifier.Minify(File.ReadAllText(file), true);
+            results.Add(new AnalysisResult("", 0, Name,
+                string.Format(Strings.Compression, (double) minifiedSize/originalSize), InfoType.Instance));
 
-                       MinificationStatistics statistics = result.Statistics;
-                       if (statistics != null)   // add statistics
-                       {
-                           originalSize += statistics.OriginalSize;
-                           minifiedSize += statistics.MinifiedSize;
-                       }
-
-                   //Process errors and warnings
-                   results.AddRange(result.Errors.Select(error => new AnalysisResult(file, error.LineNumber, Name, error.Message, ErrorType.Instance)));
-                   results.AddRange(result.Warnings.Select(warning => new AnalysisResult(file,warning.LineNumber,Name,warning.Message,ErrorType.Instance))); 
-               }
-
-               results.Add(new AnalysisResult("",0,Name,String.Format(Strings.Compression,minifiedSize/originalSize),InfoType.Instance));
-
-               return results;
-                    */
-            return null;
+            return results;
         }
 
         /// <summary>
-        /// View showed when you select the plugin
+        ///     View showed when you select the plugin
         /// </summary>
         public UserControl GetView()
         {
