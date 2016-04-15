@@ -87,5 +87,14 @@ namespace CssValidatorPlugin.Properties {
                 return ResourceManager.GetString("Name", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a We need java installed in your machine, please install it and try again.
+        /// </summary>
+        internal static string NoJava {
+            get {
+                return ResourceManager.GetString("NoJava", resourceCulture);
+            }
+        }
     }
 }

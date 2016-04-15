@@ -55,13 +55,14 @@ namespace W3cPlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            List<AnalysisResult> AnalysisResults = new List<AnalysisResult>(); 
+            List<AnalysisResult> analysisResults = new List<AnalysisResult>(); 
 
-            if (!IsEnabled) return AnalysisResults;
+            if (!IsEnabled) return analysisResults;
             if (IsJavaInstalled == null) IsJavaInstalled = CheckIfJavaIsInstalled();
             if (IsJavaInstalled == false)
             {
-                AnalysisResults.Add(new AnalysisResult("",0,Name,Strings.NoJava,ErrorType.Instance));
+                analysisResults.Add(new AnalysisResult("",0,Name,Strings.NoJava,ErrorType.Instance));
+                return analysisResults;
             }
 
             //Get the html files in the folder and subfolder
@@ -97,12 +98,12 @@ namespace W3cPlugin
                         var account = JsonConvert.DeserializeObject<W3cResult>(output);
                         foreach (var message in account.Messages)
                         {
-                            AnalysisResults.Add(GenerateResult(file, message));
+                            analysisResults.Add(GenerateResult(file, message));
                         }
                     }
                 }
             }
-            return AnalysisResults;
+            return analysisResults;
         }
 
         /// <summary>
@@ -177,7 +178,7 @@ namespace W3cPlugin
         /// <summary>
         /// Java is installed
         /// </summary>
-        public bool? IsJavaInstalled { get; set; } = null;
+        private bool? IsJavaInstalled { get; set; }
 
 
     }

@@ -127,4 +127,7 @@ Este plugin necesita que java esté instalado.</value>
   <data name="Name" xml:space="preserve">
     <value>Validador de CSS</value>
   </data>
+  <data name="NoJava" xml:space="preserve">
+    <value>Necesitamos que java este instalado en tu máquina, por favor instálalo y vuelve a intentarlo</value>
+  </data>
 </root>

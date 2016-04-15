@@ -127,4 +127,7 @@ This plugin needs Java installed</value>
   <data name="Name" xml:space="preserve">
     <value>Css validator</value>
   </data>
+  <data name="NoJava" xml:space="preserve">
+    <value>We need java installed in your machine, please install it and try again</value>
+  </data>
 </root>
