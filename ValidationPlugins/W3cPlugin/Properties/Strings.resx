@@ -119,9 +119,13 @@
   </resheader>
   <data name="Description" xml:space="preserve">
     <value>The plugin reads all html files and then use the W3C validator, to check if these files follow the W3C standard. 
-It needs all html files generated to run correctly.</value>
+It needs all html files generated to run correctly.
+This plugin needs Java installed.</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>W3C Validator</value>
+  </data>
+  <data name="NoJava" xml:space="preserve">
+    <value>We need java installed in your machine, please install it and try again</value>
   </data>
 </root>

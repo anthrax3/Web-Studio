@@ -28,9 +28,11 @@
         Width="{Binding Source={x:Static properties:Settings.Default},Path=Width,Mode=TwoWay}"
         Left="{Binding Source={x:Static properties:Settings.Default},Path=Left,Mode=TwoWay}"
         Top="{Binding Source={x:Static properties:Settings.Default},Path=Top,Mode=TwoWay}"
-    WindowState="{Binding Source={x:Static properties:Settings.Default},Path=WindowState,Mode=TwoWay}">
+    WindowState="{Binding Source={x:Static properties:Settings.Default},Path=WindowState,Mode=TwoWay}"  ShowIconOnTitleBar="True" ShowTitleBar="True" Style="{DynamicResource CustomMetroWindow}">
     <controls:MetroWindow.Resources>
         <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter"></converters:ActiveDocumentConverter>
+        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"></converters:NullToVisibilityConverter>
+        <converters:SouceToImageSourceConverter x:Key="SouceToImageSourceConverter"></converters:SouceToImageSourceConverter>
     </controls:MetroWindow.Resources>
     <controls:MetroWindow.DataContext>
         <viewModels:MainWindowViewModel />
@@ -66,7 +68,11 @@
             SourceObject="{Binding SaveChangesInteractionRequest, Mode=OneWay}">
             <windowAction:MetroPopupWindowAction IsModal="True" CenterOverAssociatedObject="True" />
         </interactionRequest:InteractionRequestTrigger>
-
+        
+        <interactionRequest:InteractionRequestTrigger
+            SourceObject="{Binding ItemRemovedRequest, Mode=OneWay}">
+            <windowAction:MetroPopupWindowAction IsModal="True" CenterOverAssociatedObject="True" />
+        </interactionRequest:InteractionRequestTrigger>
     </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
@@ -76,27 +82,70 @@
         <Menu IsMainMenu="True" Grid.Row="0">
             <MenuItem Header="{lex:Loc File}">
                 <MenuItem Header="{lex:Loc New}">
+                    <MenuItem.Icon>
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="5,0,0,0"></TextBlock>
+                    </MenuItem.Icon>
                     <MenuItem Header="{lex:Loc File}" Command="{Binding NewFileCommand}"/>
                     <MenuItem Header="{lex:Loc Project}" Command="{Binding NewProjectCommand}" />
                 </MenuItem>
-                <MenuItem Header="{lex:Loc OpenProject}" Command="{Binding OpenProjectCommand}" />
-                <MenuItem Header="{lex:Loc AddFile}" Command="{Binding AddFileCommand}" />
+                <MenuItem Header="{lex:Loc OpenProject}" Command="{Binding OpenProjectCommand}" >
+                    <MenuItem.Icon>
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="5,0,0,0"></TextBlock>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{lex:Loc AddFile}" Command="{Binding AddFileCommand}" >
+                    <MenuItem.Icon>
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="5,0,0,0"></TextBlock>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <Separator />
-                <MenuItem Header="{lex:Loc CloseFile}" Command="{Binding ActiveDocument.CloseCommand}"/>
-                <MenuItem Header="{lex:Loc CloseProject}" Command="{Binding CloseProjectCommand}" />
-                <MenuItem Header="{lex:Loc SaveFile}" Command="{Binding ActiveDocument.SaveCommand}"/>
-                <MenuItem Header="{lex:Loc SaveProject}" Command="{Binding SaveProjectCommand}" />
+                <MenuItem Header="{lex:Loc CloseFile}" Command="{Binding ActiveDocument.CloseCommand}">
+                    <MenuItem.Icon>
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="5,0,0,0"></TextBlock>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{lex:Loc CloseProject}" Command="{Binding CloseProjectCommand}" >
+                    <MenuItem.Icon>
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="5,0,0,0"></TextBlock>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{lex:Loc SaveFile}" Command="{Binding ActiveDocument.SaveCommand}">
+                    <MenuItem.Icon>
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="5,0,0,0"></TextBlock>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{lex:Loc SaveProject}" Command="{Binding SaveProjectCommand}" >
+                    <MenuItem.Icon>
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="5,0,0,0"></TextBlock>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <Separator />
-                <MenuItem Header="{lex:Loc Exit}" />
+                <MenuItem Header="{lex:Loc Exit}" >
+                    <MenuItem.Icon>
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="5,0,0,0"></TextBlock>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
 
             
             <MenuItem Header="{lex:Loc Edit}">
-                <MenuItem Header="{lex:Loc Options}" Command="{Binding OptionWindowCommand}" />
+                <MenuItem Header="{lex:Loc Options}" Command="{Binding OptionWindowCommand}" >
+                    <MenuItem.Icon>
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="5,0,0,0"></TextBlock>
+                    </MenuItem.Icon> 
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="{lex:Loc View}" />
-            <MenuItem Header="{lex:Loc Generate}" Command="{Binding GenerateCommand}"></MenuItem>
-            <MenuItem Header="Plugins" Command="{Binding PluginsWindowCommand}"></MenuItem>
+            <MenuItem Header="{lex:Loc Generate}" Command="{Binding GenerateCommand}">
+                <MenuItem.Icon>
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="0,0,-5,0" ></TextBlock>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Plugins" Command="{Binding PluginsWindowCommand}">
+                <MenuItem.Icon>
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="0,0,-5,0"></TextBlock>
+                </MenuItem.Icon> 
+            </MenuItem>
             <MenuItem Header="{lex:Loc Window}">
                 <MenuItem x:Name="ExplorerMenuItem" Header="{lex:Loc FileExplorer}"
                           IsChecked="{Binding ElementName=ExplorerLayout,Path=IsVisible,Mode=TwoWay}"
@@ -126,12 +175,35 @@
                     <avalonDock:LayoutDocumentPane />
                     <avalonDock:LayoutAnchorablePane DockWidth="200">
                         <avalonDock:LayoutAnchorable x:Name="ExplorerLayout" Title="{lex:Loc FileExplorer}">
-                            <treeViewExplorerControl:ExplorerControl
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="2*"></RowDefinition>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <treeViewExplorerControl:ExplorerControl  Grid.Row="0"
                                 SelectedItemChanged="{Binding SelectedItemChangedCommand}"
                                 SelectedItemName="{Binding SelectedItemName}"
                                 SelectedItemPath="{Binding SelectedItemPath}"
                                 SelectedItemIsFolder="{Binding SelectedItemIsFolder}"
-                                PathToWatch="{Binding ProjectPath}" />
+                                PathToWatch="{Binding ProjectPath}"
+                                RemoveCommand="{Binding ExplorerControlItemRemovedCommand}"/>
+                                <Grid Grid.Row="1" Margin="10" Visibility="{Binding SelectedItemPath, Converter={StaticResource NullToVisibilityConverter}}">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"></RowDefinition> 
+                                        <RowDefinition Height="3*"></RowDefinition>
+                                    </Grid.RowDefinitions>
+                                    <StackPanel>
+                                        <TextBlock VerticalAlignment="Center" Text="{lex:Loc Path}"></TextBlock>
+                                        <TextBlock Text="{Binding SelectedItemPath}" VerticalAlignment="Center" TextWrapping="Wrap"></TextBlock>
+                                    </StackPanel> 
+                                    <Rectangle Grid.Row="1">
+                                        <Rectangle.Fill>
+                                            <ImageBrush Stretch="Uniform" ImageSource="{Binding SelectedItemPath,Converter={StaticResource SouceToImageSourceConverter}}"></ImageBrush>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                </Grid>
+                            </Grid>
+                           
                         </avalonDock:LayoutAnchorable>
                     </avalonDock:LayoutAnchorablePane>
                     <avalonDock:LayoutAnchorablePane >
@@ -147,7 +219,7 @@
                                         <RowDefinition Height="Auto"></RowDefinition>
                                         <RowDefinition></RowDefinition>
                                     </Grid.RowDefinitions>
-                                    <busyControl:BusyControl Description="{lex:Loc Generating}" IsBusy="{Binding IsGeneratingProject}" MaxValue="{Binding NumberOfRules}" MinValue="0" Value="{Binding NumberOfRulesProcessed}" x:Name="BusyControl"></busyControl:BusyControl>
+                                    <busyControl:BusyControl Description="{lex:Loc Generating}" IsBusy="{Binding IsGeneratingProject}" MaxValue="{Binding NumberOfRules}" MinValue="0" Value="{Binding NumberOfRulesProcessed}" x:Name="BusyControl" CancelCommand="{Binding BusyControlCancelCommand}" ></busyControl:BusyControl>
                                     <messageListControl:MessageListControl x:Name="MessageListControl"  ItemsSource="{Binding Results}" Grid.Row="1" SelectedItem="{Binding MessageSelected,Mode=OneWayToSource}"></messageListControl:MessageListControl>
                                 </Grid>
                             </avalonDock:LayoutAnchorable>

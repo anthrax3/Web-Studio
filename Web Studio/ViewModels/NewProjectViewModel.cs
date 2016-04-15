@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
 using Prism.Commands;
@@ -138,15 +139,30 @@ namespace Web_Studio.ViewModels
         /// </summary>
         public DelegateCommand SocialCheckAvailability { get; private set; }
 
+        /// <summary>
+        /// Checks the availability of the name in some sites
+        /// </summary>
         private void SocialCheckAvailabilityRun()
         {
             var loader = new GenericMefPluginLoader<ISocialCheck>("Plugins\\Social");
-            var name = ProjectName.Replace(" ", string.Empty);
-            foreach (var sc in loader.Plugins)
+            var name = ProjectName.Replace(" ", string.Empty); //Name without spaces
+
+            BackgroundWorker worker = new BackgroundWorker();
+
+            worker.DoWork += (sender, args) =>
             {
-                sc.CheckAvailability(name);
-                SocialCheckItems.Add(sc);
-            }
+                foreach (var sc in loader.Plugins)
+                {
+                    sc.CheckAvailability(name);
+                    System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
+                    {
+                        SocialCheckItems.Add(sc);
+                    });
+                }
+            };
+            
+            worker.RunWorkerAsync(); 
+          
         }
 
         private ObservableCollection<ISocialCheck> _socialCheckItems;

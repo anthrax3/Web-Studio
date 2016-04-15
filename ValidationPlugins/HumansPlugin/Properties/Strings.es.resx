@@ -142,4 +142,7 @@ Si el fichero no existe, se puede crear completando los datos siguientes</value>
   <data name="DataNeeded" xml:space="preserve">
     <value>Necesitas rellenar todos los datos de la configuración del plugin, para no tener un humans.txt malo</value>
   </data>
+  <data name="Generated" xml:space="preserve">
+    <value>Humans generado correctamente</value>
+  </data>
 </root>

@@ -122,12 +122,16 @@
   </data>
   <data name="Description" xml:space="preserve">
     <value>Este plugin comprueba la existencia de un fichero .htaccess
-En el caso de que no exista, el plugin te puede generar uno con las opciones más comunes y algunas optimizaciones.</value>
+En el caso de que no exista, el plugin te puede generar uno con las opciones más comunes y algunas optimizaciones.
+Este plugin necesita los siguientes módulos de Apache: mod_authz_core.c, mod_autoindex.c, mod_defalte.c, mod_expires.c, mod_filter.c, mod_headers.c, mod_mime.c, mod_rewrite.c y mod_setenvif.c</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Htaccess</value>
   </data>
   <data name="NotFound" xml:space="preserve">
     <value>No se ha encontrado el fichero .htaccess</value>
+  </data>
+  <data name="Generated" xml:space="preserve">
+    <value>El fichero .htaccess generado correctamente</value>
   </data>
 </root>

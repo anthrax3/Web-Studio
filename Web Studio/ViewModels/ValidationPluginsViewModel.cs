@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Prism.Mvvm;
@@ -12,27 +14,29 @@ namespace Web_Studio.ViewModels
     /// </summary>
     public class ValidationPluginsViewModel : BindableBase
     {
-        private UserControl _configurationUI;
-
-        private IValidation _pluginSelected;
+        private static UserControl _configurationUI;
+        private static ObservableCollection<Lazy<IValidation, IValidationMetadata>> _plugins;
+        private Lazy<IValidation,IValidationMetadata> _pluginSelected;
 
         /// <summary>
         ///     Default constructor
         /// </summary>
         public ValidationPluginsViewModel()
-        {
-            foreach (var plugin in ValidationPluginManager.Plugins)
-            {
-                Plugins.Add(plugin.Value);
+        { 
+            Plugins = ValidationPluginManager.Plugins;
+            if (Plugins != null)
+            {    //Grouping
+                CollectionViewSource.GetDefaultView(Plugins)
+                    .GroupDescriptions.Add(new PropertyGroupDescription("Value.Type"));
+                //TODO:
             }
-            CollectionViewSource.GetDefaultView(Plugins).GroupDescriptions.Add(new PropertyGroupDescription("Type"));
-                //Grouping   
+               
         }
 
         /// <summary>
         ///     Selected plugin in the list
         /// </summary>
-        public IValidation PluginSelected
+        public Lazy<IValidation, IValidationMetadata> PluginSelected
         {
             get { return _pluginSelected; }
             set
@@ -45,15 +49,26 @@ namespace Web_Studio.ViewModels
         /// <summary>
         ///     Validation plugins
         /// </summary>
-        public ObservableCollection<IValidation> Plugins { get; set; } = new ObservableCollection<IValidation>();
+        public static ObservableCollection<Lazy<IValidation, IValidationMetadata>> Plugins {
+            get { return _plugins; }
+            set
+            {
+                _plugins = value;
+                NotifyStaticPropertyChanged("Plugins"); 
+            }
+        } 
 
         /// <summary>
         ///     Configuration user interface of the plugin
         /// </summary>
-        public UserControl ConfigurationUI
+        public static  UserControl ConfigurationUI     
         {
             get { return _configurationUI; }
-            set { SetProperty(ref _configurationUI, value); }
+            set
+            {
+                _configurationUI = value;
+                NotifyStaticPropertyChanged("ConfigurationUI");
+            }
         }
 
 
@@ -61,9 +76,19 @@ namespace Web_Studio.ViewModels
         ///     Load the configuration UI of the selected plugin
         /// </summary>
         /// <param name="validation"></param>
-        private void Configuration(IValidation validation)
+        private void Configuration(Lazy<IValidation, IValidationMetadata> validation)
         {
-            ConfigurationUI = validation.View;
+            ConfigurationUI = validation.Value.GetView();
+        }
+
+        /// <summary>
+        /// Property changed static implementation
+        /// </summary>
+        public static event EventHandler<PropertyChangedEventArgs> StaticPropertyChanged;
+        private static void NotifyStaticPropertyChanged(string propertyName)
+        {
+            if (StaticPropertyChanged != null)
+                StaticPropertyChanged(null, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

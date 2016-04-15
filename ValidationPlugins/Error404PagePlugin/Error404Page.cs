@@ -19,25 +19,14 @@ namespace Error404PagePlugin
     [ExportMetadata("After", "Htaccess")]
     public class Error404Page : IValidation
     {
-        /// <summary>
-        /// </summary>
-        public Error404Page()
-        {
-            View = new View(this);
-        }
-
+       
         /// <summary>
         ///     Text of AutoFix for binding
         /// </summary>
-        public string AutoFixText => Strings.AutoFix; //Todo
+        public string AutoFixText => Strings.AutoFix; 
 
         #region IValidation
-
-        /// <summary>
-        ///     View showed when you select the plugin
-        /// </summary>
-        public UserControl View { get; }
-
+        
         /// <summary>
         ///     Name of the plugin
         /// </summary>
@@ -52,12 +41,7 @@ namespace Error404PagePlugin
         ///     Category of the plugin
         /// </summary>
         public ICategoryType Type { get; } = DevelopmentType.Instance;
-
-        /// <summary>
-        ///     Results of the check method.
-        /// </summary>
-        public List<AnalysisResult> AnalysisResults { get; } = new List<AnalysisResult>();
-
+        
         /// <summary>
         ///     can we automatically fix some errors?
         /// </summary>
@@ -75,13 +59,14 @@ namespace Error404PagePlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            AnalysisResults.Clear();
-            if (!IsEnabled) return AnalysisResults;
+            List<AnalysisResult> analysisResults = new List<AnalysisResult>();
+            analysisResults.Clear();
+            if (!IsEnabled) return analysisResults;
 
             var htaccessPath = Path.Combine(projectPath, ".htaccess");
             if (!File.Exists(htaccessPath))
             {
-                AnalysisResults.Add(new AnalysisResult
+                analysisResults.Add(new AnalysisResult
                 {
                     PluginName = Name,
                     File = "",
@@ -96,7 +81,7 @@ namespace Error404PagePlugin
                 var match = Regex.Match(content, @"ErrorDocument 404 .*");
                 if (!match.Success)
                 {
-                    AnalysisResults.Add(new AnalysisResult
+                    analysisResults.Add(new AnalysisResult
                     {
                         PluginName = Name,
                         File = htaccessPath,
@@ -106,14 +91,14 @@ namespace Error404PagePlugin
                     });
                 }
             }
-            return AnalysisResults;
+            return analysisResults;
         }
 
         /// <summary>
         ///     Method to fix automatically some errors
         /// </summary>
         /// <param name="projectPath"></param>
-        public void Fix(string projectPath)
+        public List<AnalysisResult> Fix(string projectPath)
         {
             var configurationContent =
                 @"# ----------------------------------------------------------------------
@@ -125,7 +110,7 @@ namespace Error404PagePlugin
 
 # ErrorDocument 404 /404.html";
 
-            if (!IsAutoFixeable) return;
+            if (!IsAutoFixeable || !IsEnabled) return null;
             var htaccessPath = Path.Combine(projectPath, ".htaccess");
             File.AppendAllText(htaccessPath, configurationContent);
 
@@ -133,6 +118,33 @@ namespace Error404PagePlugin
             var source = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "404.html");
             var destination = Path.Combine(projectPath, "404.html");
             File.Copy(source, destination);
+            List<AnalysisResult> list = new List<AnalysisResult> {ErrorPageGenerated(destination)};
+            return list;
+        }
+
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        public UserControl GetView()
+        {
+            return new View(this);
+        }
+
+        /// <summary>
+        /// Creates the Error 404 page message
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        private AnalysisResult ErrorPageGenerated(string file)
+        {
+            return new AnalysisResult
+            {
+                File = file,
+                Line = 0,
+                PluginName = Name,
+                Type = InfoType.Instance,
+                Message = Strings.Generated
+            };
         }
 
         #endregion

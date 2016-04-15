@@ -249,4 +249,39 @@
   <data name="OpenProject" xml:space="preserve">
     <value>Open Project</value>
   </data>
+  <data name="Errors" xml:space="preserve">
+    <value>Errors</value>
+  </data>
+  <data name="Warnings" xml:space="preserve">
+    <value>Warnings</value>
+  </data>
+  <data name="RemoveFileTitle" xml:space="preserve">
+    <value>Removing file</value>
+  </data>
+  <data name="RemoveFileDescription" xml:space="preserve">
+    <value>Are you sure that you want to delete this file?
+This process is going to move the file to recycle bin</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="RemoveFolderTitle" xml:space="preserve">
+    <value>Removing folder</value>
+  </data>
+  <data name="RemoveFolderDescription" xml:space="preserve">
+    <value>Are you sure that you want to delete this folder?
+This process is going to move the folder and its content to recycle bin</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Reload</value>
+  </data>
+  <data name="FileHasChanged" xml:space="preserve">
+    <value>The file has changed</value>
+  </data>
+  <data name="FileHasChangedDescription" xml:space="preserve">
+    <value>This file has been modified, click in Ok if you want to reload the new content.</value>
+  </data>
+  <data name="Path" xml:space="preserve">
+    <value>Path:</value>
+  </data>
 </root>

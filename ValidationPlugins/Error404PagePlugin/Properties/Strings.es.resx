@@ -133,4 +133,7 @@ Este plugin fue creado para el servidor web Apache, por lo que necesita un fiche
   <data name="TagNotFound" xml:space="preserve">
     <value>No hemos encontrado el texto de configuración "ErrorDocument 404" en el fichero .htaccess</value>
   </data>
+  <data name="Generated" xml:space="preserve">
+    <value>La página del error 404 ha sido generada correctamente</value>
+  </data>
 </root>

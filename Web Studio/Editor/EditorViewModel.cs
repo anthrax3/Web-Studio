@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Document;
@@ -36,6 +37,8 @@ namespace Web_Studio.Editor
 
         private string _toolTip;
 
+        private FileSystemWatcher _watcher;
+
         /// <summary>
         ///     Default constructor
         /// </summary>
@@ -51,8 +54,8 @@ namespace Web_Studio.Editor
             CloseCommand = new DelegateCommand(CloseFile);
             SaveCommand = new DelegateCommand(SaveFile);
             SaveChangesConfirmationRequest = new InteractionRequest<IConfirmation>();
-
-
+            ReloadConfirmationRequest = new InteractionRequest<IConfirmation>();
+            
             //Load file
             var streamReader = File.OpenText(ToolTip);
             _document = new TextDocument(streamReader.ReadToEnd());
@@ -60,22 +63,78 @@ namespace Web_Studio.Editor
 
             //Load SyntaxHighlighting
             var syntaxHighlighterTool = new SyntaxHighlighterTool();
-            SyntaxHighlighting = syntaxHighlighterTool.SyntaxHighlightingMode(path); 
+            SyntaxHighlighting = syntaxHighlighterTool.SyntaxHighlightingMode(path);
+
+
+            _watcher = new FileSystemWatcher
+            {
+                Path = Path.GetDirectoryName(path),
+                Filter = Path.GetFileName(path),
+                NotifyFilter = NotifyFilters.LastWrite
+            };
+            _watcher.Changed += WatcherOnChanged;
+            // Begin watching
+            _watcher.EnableRaisingEvents = true;
         }
 
         /// <summary>
-        /// Save file
+        /// Show a dialog where you can reload the file if it has changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="fileSystemEventArgs"></param>
+        private  void WatcherOnChanged(object sender, FileSystemEventArgs fileSystemEventArgs)
+        {    
+                try
+                {
+                    _watcher.EnableRaisingEvents = false;
+                    Application.Current.Dispatcher.Invoke(delegate
+                    {
+                        var contenTextBox = new TextBlock
+                        {
+                            Text = Strings.FileHasChangedDescription,
+                            Foreground = new SolidColorBrush(Colors.White)
+                        };
+                        ReloadConfirmationRequest.Raise(
+                            new Confirmation {Content = contenTextBox, Title = Strings.FileHasChanged},
+                            c =>
+                            {
+                                if (c.Confirmed)
+                                {
+                                    var streamReader = File.OpenText(ToolTip);
+                                    Document = new TextDocument(streamReader.ReadToEnd());
+                                    streamReader.Close();
+                                }
+                            });
+                    });
+                }
+
+                finally
+                {
+                    _watcher.EnableRaisingEvents = true;
+                }
+        }
+
+        /// <summary>
+        /// Save file with the fileSystemWatcher disable, because we don't want a notification as "The file has changed"
         /// </summary>
         private void SaveFile()
         {
+            _watcher.EnableRaisingEvents = false; //Disable fileSystemWatcher
            File.WriteAllText(ToolTip,Document.Text);
             EditorIsModified = false;
+            _watcher.EnableRaisingEvents = true; //Enable fileSystemWatcher
+
         }
 
         /// <summary>
         ///     Confirmation event popup
         /// </summary>
         public InteractionRequest<IConfirmation> SaveChangesConfirmationRequest { get; }
+
+        /// <summary>
+        ///     Confirmation event popup for reload
+        /// </summary>
+        public InteractionRequest<IConfirmation> ReloadConfirmationRequest { get; }
 
         /// <summary>
         ///     the document is modified

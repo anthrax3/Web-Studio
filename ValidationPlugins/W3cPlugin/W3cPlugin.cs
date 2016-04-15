@@ -20,21 +20,10 @@ namespace W3cPlugin
     [Export(typeof (IValidation))]
     [ExportMetadata("Name", "W3cValidator")]
     [ExportMetadata("After", "Include")]
+    // ReSharper disable once InconsistentNaming
     public class W3cPlugin : IValidation
     {
-        /// <summary>
-        /// Default constructor, it creates the view
-        /// </summary>
-        public W3cPlugin()
-        {
-            View = new View(this);
-        }
-
-        /// <summary>
-        ///     View showed when you select the plugin
-        /// </summary>
-        public UserControl View { get; }
-
+       
         /// <summary>
         ///     Name of the plugin
         /// </summary>
@@ -49,12 +38,7 @@ namespace W3cPlugin
         ///     Category of the plugin
         /// </summary>
         public ICategoryType Type { get; } = DevelopmentType.Instance;
-
-        /// <summary>
-        ///     Results of the check method.
-        /// </summary>
-        public List<AnalysisResult> AnalysisResults { get; } = new List<AnalysisResult>();
-
+      
         /// <summary>
         ///     can we automatically fix some errors?
         /// </summary>
@@ -72,9 +56,15 @@ namespace W3cPlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            AnalysisResults.Clear(); //Remove older entries
+            List<AnalysisResult> analysisResults = new List<AnalysisResult>(); 
 
-            if (!IsEnabled) return AnalysisResults;
+            if (!IsEnabled) return analysisResults;
+            if (IsJavaInstalled == null) IsJavaInstalled = CheckIfJavaIsInstalled();
+            if (IsJavaInstalled == false)
+            {
+                analysisResults.Add(new AnalysisResult("",0,Name,Strings.NoJava,ErrorType.Instance));
+                return analysisResults;
+            }
 
             //Get the html files in the folder and subfolder
             var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
@@ -109,22 +99,32 @@ namespace W3cPlugin
                         var account = JsonConvert.DeserializeObject<W3cResult>(output);
                         foreach (var message in account.Messages)
                         {
-                            AnalysisResults.Add(GenerateResult(file, message));
+                            analysisResults.Add(GenerateResult(file, message));
                         }
                     }
                 }
             }
-            return AnalysisResults;
+            return analysisResults;
         }
 
         /// <summary>
         ///     Method to fix automatically some errors
         /// </summary>
         /// <param name="projectPath"></param>
-        public void Fix(string projectPath)
+        public List<AnalysisResult> Fix(string projectPath)
         {
+            return null;
             //Do nothing
         }
+
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        public UserControl GetView()
+        {
+            return new View(this);
+        }
+
 
         private AnalysisResult GenerateResult(string file, MessageClass message)
         {
@@ -157,5 +157,30 @@ namespace W3cPlugin
             }
             return analysisResult;
         }
+
+        /// <summary>
+        /// Method for check if java is installed
+        /// </summary>
+        /// <returns></returns>
+        private bool CheckIfJavaIsInstalled()
+        {
+            string environmentPath = Environment.GetEnvironmentVariable("JAVA_HOME");
+            if (!string.IsNullOrEmpty(environmentPath))
+            {
+                return true;
+            }  
+            string javaKey = "SOFTWARE\\JavaSoft\\Java Runtime Environment\\";
+            using (Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(javaKey))
+            {
+                return rk != null;
+            }
+        }
+
+        /// <summary>
+        /// Java is installed
+        /// </summary>
+        private bool? IsJavaInstalled { get; set; }
+
+
     }
 }

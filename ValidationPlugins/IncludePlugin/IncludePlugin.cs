@@ -19,19 +19,7 @@ namespace IncludePlugin
     [ExportMetadata("After", "")]
     public class IncludePlugin : IValidation
     {
-        /// <summary>
-        ///     Default constructor, it creates the view
-        /// </summary>
-        public IncludePlugin()
-        {
-            View = new View(this);
-        }
-
-        /// <summary>
-        ///     View showed when you select the plugin
-        /// </summary>
-        public UserControl View { get; }
-
+       
         /// <summary>
         ///     Name of the plugin
         /// </summary>
@@ -46,12 +34,6 @@ namespace IncludePlugin
         ///     Category of the plugin
         /// </summary>
         public ICategoryType Type { get; } = DevelopmentType.Instance;
-
-
-        /// <summary>
-        ///     Results of the check method.
-        /// </summary>
-        public List<AnalysisResult> AnalysisResults { get; } = new List<AnalysisResult>();
 
         /// <summary>
         ///     can we automatically fix some errors?
@@ -70,8 +52,8 @@ namespace IncludePlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            AnalysisResults.Clear(); //Remove older entries
-            if (!IsEnabled) return AnalysisResults;
+            List<AnalysisResult> analysisResults  =  new List<AnalysisResult>();
+            if (!IsEnabled) return analysisResults;
 
             var numIncludes = 0;
             var filesToChecks = new List<FileToCheck>();
@@ -81,13 +63,13 @@ namespace IncludePlugin
             {
                 var fileToCheck = new FileToCheck(file);
                 filesToChecks.Add(fileToCheck);
-                numIncludes += fileToCheck.MakeInclusion(AnalysisResults, Name);
+                numIncludes += fileToCheck.MakeInclusion(analysisResults, Name);
                 fileToCheck.IncludedFile();
             }
 
             if (numIncludes > 0)
             {
-                AnalysisResults.Add(new AnalysisResult
+                analysisResults.Add(new AnalysisResult
                 {
                     File = "",
                     Line = 0,
@@ -97,15 +79,24 @@ namespace IncludePlugin
                 });
             }
             RemoveIncludeFiles(filesToChecks);
-            return AnalysisResults;
+            return analysisResults;
         }
 
         /// <summary>
         ///     Method to fix automatically some errors
         /// </summary>
         /// <param name="projectPath"></param>
-        public void Fix(string projectPath)
+        public List<AnalysisResult> Fix(string projectPath)
         {
+            return null;
+        }
+
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        public UserControl GetView()
+        {
+            return new View(this);
         }
 
 

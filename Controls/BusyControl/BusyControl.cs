@@ -10,8 +10,7 @@ using BusyControl.Properties;
 namespace BusyControl
 {
     /// <summary>
-    ///     Control to show that a program is busy, how many steps there are, what is the current step and it allows to cancel
-    ///     or pause the process
+    ///     Control to show that a program is busy, how many steps there are, what is the current step and it allows to cancel the process
     /// </summary>
     public class BusyControl : Control, INotifyPropertyChanged
     {
@@ -26,10 +25,7 @@ namespace BusyControl
         /// </summary>
         public string Progress => Value + "/" + MaxValue;
 
-        /// <summary>
-        ///     Pause text
-        /// </summary>
-        public string Pause => Strings.Pause;
+       
 
         /// <summary>
         ///     Cancel text
@@ -62,7 +58,7 @@ namespace BusyControl
         public void RefreshUI()
         {
             OnPropertyChanged(nameof(Cancel));
-            OnPropertyChanged(nameof(Pause));
+           
         }
 
         #region Dependency Properties
@@ -81,23 +77,8 @@ namespace BusyControl
         /// </summary>
         public static readonly DependencyProperty CancelCommandProperty =
             DependencyProperty.Register("CancelCommand", typeof (ICommand), typeof (BusyControl));
-
-
-        /// <summary>
-        ///     Pause Command
-        /// </summary>
-        public ICommand PauseCommand
-        {
-            get { return (ICommand) GetValue(PauseCommandProperty); }
-            set { SetValue(PauseCommandProperty, value); }
-        }
-
-        /// <summary>
-        ///     Register the pause command
-        /// </summary>
-        public static readonly DependencyProperty PauseCommandProperty =
-            DependencyProperty.Register("PauseCommand", typeof (ICommand), typeof (BusyControl));
-
+        
+     
         /// <summary>
         ///     Show why the program is busy
         /// </summary>

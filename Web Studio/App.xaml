@@ -17,6 +17,27 @@
             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MetroButton}">
                 <Setter Property="controls:ButtonHelper.PreserveTextCase" Value="True" />
             </Style>
+            <Style x:Key="CustomMetroWindow" TargetType="{x:Type controls:MetroWindow}">
+                <Setter Property="IconTemplate">
+                    <Setter.Value>
+                        <DataTemplate>
+                            <Grid Width="25"
+                    Height="25"
+                    Background="Transparent"
+                    Margin="4"
+                    RenderOptions.EdgeMode="Aliased"
+                    RenderOptions.BitmapScalingMode="HighQuality">
+                                <Image Source="webStudio.ico" Stretch="Uniform" />
+                            </Grid>
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Background" Value="Transparent"></Setter>
+            </Style>
+          <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource MetroCheckBox}">  
+              <Setter Property="Background" Value="#FFCDCDCD"></Setter>
+          </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

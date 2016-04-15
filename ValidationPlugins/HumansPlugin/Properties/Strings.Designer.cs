@@ -88,6 +88,15 @@ namespace HumansPlugin.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Humans generated correctly.
+        /// </summary>
+        internal static string Generated {
+            get {
+                return ResourceManager.GetString("Generated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Humans.txt.
         /// </summary>
         internal static string Name {

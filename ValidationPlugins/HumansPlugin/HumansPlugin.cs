@@ -18,17 +18,10 @@ namespace HumansPlugin
     /// </summary>
     [Export(typeof(IValidation))]
     [ExportMetadata("Name", "Humans")]         
-    [ExportMetadata("After", "")]              
+    [ExportMetadata("After", "Links")]              
     public class HumansPlugin :IValidation  
     {
-        /// <summary>
-        /// Default constructor inject the vm to the view
-        /// </summary>
-        public HumansPlugin()
-        {
-            View = new View(this);
-        }
-
+       
         /// <summary>
         ///     Text of AutoFix for binding
         /// </summary>
@@ -65,10 +58,7 @@ namespace HumansPlugin
         public string Technology { get; set; }
 
         #region IValidation
-        /// <summary>
-        /// View showed when you select the plugin
-        /// </summary>
-        public UserControl View { get; }
+      
 
         /// <summary>
         ///     Name of the plugin
@@ -84,12 +74,7 @@ namespace HumansPlugin
         ///     Category of the plugin
         /// </summary>
         public ICategoryType Type { get; } = DevelopmentType.Instance;
-
-        /// <summary>
-        ///     Results of the check method.
-        /// </summary>
-        public List<AnalysisResult> AnalysisResults { get; } = new List<AnalysisResult>();
-
+        
         /// <summary>
         ///     can we automatically fix some errors?
         /// </summary>
@@ -107,14 +92,14 @@ namespace HumansPlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            AnalysisResults.Clear();
-            if (!IsEnabled) return AnalysisResults;
+            List<AnalysisResult> analysisResults = new List<AnalysisResult>();
+            if (!IsEnabled) return analysisResults;
 
             var humansPath = Path.Combine(projectPath, "humans.txt");
 
             if (!File.Exists(humansPath))
             {
-                AnalysisResults.Add(new AnalysisResult
+                analysisResults.Add(new AnalysisResult
                 {
                     PluginName = Name,
                     File = humansPath,
@@ -127,7 +112,7 @@ namespace HumansPlugin
             if (string.IsNullOrWhiteSpace(Team) || string.IsNullOrWhiteSpace(Thanks) ||
                 string.IsNullOrWhiteSpace(Technology))
             {
-                AnalysisResults.Add(new AnalysisResult
+                analysisResults.Add(new AnalysisResult
                 {
                     PluginName = Name,
                     File = "",
@@ -137,7 +122,7 @@ namespace HumansPlugin
                 });
             }
 
-            return AnalysisResults;
+            return analysisResults;
 
         }
 
@@ -145,9 +130,9 @@ namespace HumansPlugin
         ///     Method to fix automatically some errors
         /// </summary>
         /// <param name="projectPath"></param>
-        public void Fix(string projectPath)
+        public List<AnalysisResult> Fix(string projectPath)
         {
-            if (!IsAutoFixeable) return;
+            if (!IsAutoFixeable || !IsEnabled) return null;
             var humansPath = Path.Combine(projectPath, "humans.txt");
             StringBuilder content = new StringBuilder();
             content.AppendLine("# Humans.txt file see more in http://humanstxt.org");
@@ -159,6 +144,34 @@ namespace HumansPlugin
             content.AppendLine(Technology);
 
             File.WriteAllText(humansPath,content.ToString());
+            
+            List<AnalysisResult> list = new List<AnalysisResult> {HumansGenerated(humansPath)};
+            return list;
+        }
+
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        public UserControl GetView()
+        {
+            return new View(this);
+        }
+
+        /// <summary>
+        /// Creates the humans generated message
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        private AnalysisResult HumansGenerated(string file)
+        {
+            return new AnalysisResult
+            {
+                File = file,
+                Line = 0,
+                PluginName = Name,
+                Type = InfoType.Instance,
+                Message =  Strings.Generated
+            };
         }
         #endregion
     }

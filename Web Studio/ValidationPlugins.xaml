@@ -25,8 +25,8 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <CheckBox Grid.Column="0" Name="Enabled" IsChecked="{Binding IsEnabled}" />
-                        <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center"
+                        <CheckBox Grid.Column="0" Name="Enabled" IsChecked="{Binding Value.IsEnabled}" />
+                        <TextBlock Grid.Column="1" Text="{Binding Value.Name}" VerticalAlignment="Center"
                                    HorizontalAlignment="Left" />
                     </Grid>
                 </DataTemplate>

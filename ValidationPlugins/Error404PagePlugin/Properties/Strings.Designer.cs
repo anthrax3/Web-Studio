@@ -80,6 +80,15 @@ namespace Error404PagePlugin.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Error 404 page generated correctly.
+        /// </summary>
+        internal static string Generated {
+            get {
+                return ResourceManager.GetString("Generated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Error 404 Page.
         /// </summary>
         internal static string Name {

@@ -135,4 +135,7 @@
   <data name="DomainName" xml:space="preserve">
     <value>Introduce the full path to root folder</value>
   </data>
+  <data name="Generated" xml:space="preserve">
+    <value>Sitemap generated correctly</value>
+  </data>
 </root>

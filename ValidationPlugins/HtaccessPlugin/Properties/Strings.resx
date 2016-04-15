@@ -121,12 +121,16 @@
     <value>Fix automatically</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>This plugin checks if a .htacess exists, if it doesn't exist, the plugin can generate it</value>
+    <value>This plugin checks if a .htacess exists, if it doesn't exist, the plugin can generate it.
+This plugin needs the following Apache modules: mod_authz_core.c, mod_autoindex.c, mod_defalte.c, mod_expires.c, mod_filter.c, mod_headers.c, mod_mime.c, mod_rewrite.c and mod_setenvif.c</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Htaccess</value>
   </data>
   <data name="NotFound" xml:space="preserve">
     <value>File .htaccess not found</value>
+  </data>
+  <data name="Generated" xml:space="preserve">
+    <value>File .htaccess generated correctly</value>
   </data>
 </root>

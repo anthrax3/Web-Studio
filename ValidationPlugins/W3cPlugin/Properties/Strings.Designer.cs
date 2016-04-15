@@ -62,7 +62,8 @@ namespace W3cPlugin.Properties {
         
         /// <summary>
         ///   Busca una cadena traducida similar a The plugin reads all html files and then use the W3C validator, to check if these files follow the W3C standard. 
-        ///It needs all html files generated to run correctly..
+        ///It needs all html files generated to run correctly.
+        ///This plugin needs Java installed..
         /// </summary>
         internal static string Description {
             get {
@@ -76,6 +77,15 @@ namespace W3cPlugin.Properties {
         internal static string Name {
             get {
                 return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a We need java installed in your machine, please install it and try again.
+        /// </summary>
+        internal static string NoJava {
+            get {
+                return ResourceManager.GetString("NoJava", resourceCulture);
             }
         }
     }

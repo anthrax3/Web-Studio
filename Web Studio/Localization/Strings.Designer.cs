@@ -169,6 +169,15 @@ namespace Web_Studio.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Errors.
+        /// </summary>
+        public static string Errors {
+            get {
+                return ResourceManager.GetString("Errors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Exit.
         /// </summary>
         public static string Exit {
@@ -192,6 +201,24 @@ namespace Web_Studio.Localization {
         public static string FileExplorer {
             get {
                 return ResourceManager.GetString("FileExplorer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a The file has changed.
+        /// </summary>
+        public static string FileHasChanged {
+            get {
+                return ResourceManager.GetString("FileHasChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a This file has been modified, click in Ok if you want to reload the new content..
+        /// </summary>
+        public static string FileHasChangedDescription {
+            get {
+                return ResourceManager.GetString("FileHasChangedDescription", resourceCulture);
             }
         }
         
@@ -304,11 +331,76 @@ namespace Web_Studio.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Path:.
+        /// </summary>
+        public static string Path {
+            get {
+                return ResourceManager.GetString("Path", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Project.
         /// </summary>
         public static string Project {
             get {
                 return ResourceManager.GetString("Project", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Reload.
+        /// </summary>
+        public static string Reload {
+            get {
+                return ResourceManager.GetString("Reload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Remove.
+        /// </summary>
+        public static string Remove {
+            get {
+                return ResourceManager.GetString("Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Are you sure that you want to delete this file?
+        ///This process is going to move the file to recycle bin.
+        /// </summary>
+        public static string RemoveFileDescription {
+            get {
+                return ResourceManager.GetString("RemoveFileDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Removing file.
+        /// </summary>
+        public static string RemoveFileTitle {
+            get {
+                return ResourceManager.GetString("RemoveFileTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Are you sure that you want to delete this folder?
+        ///This process is going to move the folder and its content to recycle bin.
+        /// </summary>
+        public static string RemoveFolderDescription {
+            get {
+                return ResourceManager.GetString("RemoveFolderDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Removing folder.
+        /// </summary>
+        public static string RemoveFolderTitle {
+            get {
+                return ResourceManager.GetString("RemoveFolderTitle", resourceCulture);
             }
         }
         
@@ -390,6 +482,15 @@ namespace Web_Studio.Localization {
         public static string View {
             get {
                 return ResourceManager.GetString("View", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Warnings.
+        /// </summary>
+        public static string Warnings {
+            get {
+                return ResourceManager.GetString("Warnings", resourceCulture);
             }
         }
         

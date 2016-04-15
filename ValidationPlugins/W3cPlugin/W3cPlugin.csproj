@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="PresentationCore" />
@@ -63,18 +63,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ValidationInterface\ValidationInterface.csproj">
-      <Project>{303eec5a-af5e-40b5-8cc8-546d42ec168b}</Project>
-      <Name>ValidationInterface</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="vnu.jar">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Strings.es.resx" />
@@ -89,10 +80,21 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ValidationInterface\ValidationInterface.csproj">
+      <Project>{303eec5a-af5e-40b5-8cc8-546d42ec168b}</Project>
+      <Name>ValidationInterface</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName) == Debug echo d | xcopy /sy "$(TargetDir)*.*" "$(SolutionDir)Web Studio\bin\Debug\Plugins\Check"
-if $(ConfigurationName) == Release echo d | xcopy /sy "$(TargetDir)*.*" "$(SolutionDir)Web Studio\bin\Release\Plugins\Check"</PostBuildEvent>
+    <PostBuildEvent>if $(ConfigurationName) == Debug echo d | xcopy /sy "$(TargetDir)*.*" "$(SolutionDir)Web Studio\bin\Debug\Plugins\Check\$(ProjectName)"
+if $(ConfigurationName) == Release echo d | xcopy /sy "$(TargetDir)*.*" "$(SolutionDir)Web Studio\bin\Release\Plugins\Check\$(ProjectName)"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

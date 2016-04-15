@@ -10,11 +10,7 @@ namespace ValidationInterface
     /// </summary>
     public interface IValidation
     {
-        /// <summary>
-        /// View showed when you select the plugin
-        /// </summary>
-        UserControl View { get; } 
-
+      
         /// <summary>
         ///     Name of the plugin
         /// </summary>
@@ -28,12 +24,7 @@ namespace ValidationInterface
         /// <summary>
         ///     Category of the plugin
         /// </summary>
-        ICategoryType Type { get; }
-
-        /// <summary>
-        ///     Results of the check method.
-        /// </summary>
-        List<AnalysisResult> AnalysisResults { get; }
+        ICategoryType Type { get; }  
 
         /// <summary>
         ///     can we automatically fix some errors?
@@ -56,6 +47,11 @@ namespace ValidationInterface
         ///     Method to fix automatically some errors
         /// </summary>
         /// <param name="projectPath"></param>
-        void Fix(string projectPath);
+        List<AnalysisResult> Fix(string projectPath);
+
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        UserControl GetView();
     }
 }

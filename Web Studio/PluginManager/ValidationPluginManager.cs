@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Documents;
@@ -11,14 +12,14 @@ namespace Web_Studio.PluginManager
     /// <summary>
     ///    Class to manage the validation plugins
     /// </summary>
-    public class ValidationPluginManager
+    public static class ValidationPluginManager
     {
-        private static List<Lazy<IValidation, IValidationMetadata>> _plugins;
+        private static ObservableCollection<Lazy<IValidation, IValidationMetadata>> _plugins;
 
         /// <summary>
         /// List of plugins that implements IValidation interface
         /// </summary>
-        public static List<Lazy<IValidation, IValidationMetadata>> Plugins
+        public static ObservableCollection<Lazy<IValidation, IValidationMetadata>> Plugins
         {
             get
             {
@@ -38,11 +39,14 @@ namespace Web_Studio.PluginManager
                 GenericMefPluginLoader<Lazy<IValidation, IValidationMetadata>> loader = new GenericMefPluginLoader<Lazy<IValidation, IValidationMetadata>>("Plugins\\Check");
                 Sort(loader.Plugins);
             }
-            catch (Exception)
+            catch (Exception e )
             {
-              File.AppendAllText("webStudio.log","Error when it was loading plugins\n");  
+                 File.AppendAllText("webStudio.log","Error when it was loading plugins\n");
+                 File.AppendAllText("webStudio.log", "Message:" + e.Message +"\n");
+                 File.AppendAllText("webStudio.log", "Stack:" + e.StackTrace + "\n");
+
             }
-          
+
         }
 
         /// <summary>
@@ -73,7 +77,7 @@ namespace Web_Studio.PluginManager
                 }
 
             }
-            Plugins = sortedList;
+            Plugins = new ObservableCollection<Lazy<IValidation, IValidationMetadata>>(sortedList);
         }
     }
 }

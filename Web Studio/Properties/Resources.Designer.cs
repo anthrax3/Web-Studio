@@ -59,5 +59,14 @@ namespace Web_Studio.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a WebStudio.
+        /// </summary>
+        internal static string AppId {
+            get {
+                return ResourceManager.GetString("AppId", resourceCulture);
+            }
+        }
     }
 }

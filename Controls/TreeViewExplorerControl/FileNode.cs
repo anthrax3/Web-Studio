@@ -27,9 +27,9 @@ namespace TreeViewExplorerControl
         public string Name { get; set; }
 
         /// <summary>
-        /// MLD2 imagen code
+        ///     MLD2 imagen code
         /// </summary>
-        public string Image { get; set; } 
+        public string Image { get; set; }
 
         /// <summary>
         ///     We need it for treeview implementation, always 0 elements

@@ -88,6 +88,15 @@ namespace RobotPlugin.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Robots.txt generated correctly.
+        /// </summary>
+        internal static string Generated {
+            get {
+                return ResourceManager.GetString("Generated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Robots.
         /// </summary>
         internal static string Name {

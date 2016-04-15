@@ -3,20 +3,26 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Threading;
 using FastObservableCollection;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Interactivity.InteractionRequest;
 using Prism.Mvvm;
+using TreeViewExplorerControl;
 using ValidationInterface;
+using ValidationInterface.MessageTypes;
 using Web_Studio.Editor;
 using Web_Studio.Events;
 using Web_Studio.Localization;
 using Web_Studio.Models;
 using Web_Studio.PluginManager;
 using Web_Studio.Properties;
+using Web_Studio.Utils;
 
 namespace Web_Studio.ViewModels
 {
@@ -48,6 +54,7 @@ namespace Web_Studio.ViewModels
             NewProjectRequest = new InteractionRequest<INotification>();
             PluginsWindowRequest = new InteractionRequest<INotification>();
             SaveChangesInteractionRequest = new InteractionRequest<IConfirmation>();
+            ItemRemovedRequest = new InteractionRequest<IConfirmation>();
 
             //Manage commands
             SelectedItemChangedCommand = new DelegateCommand(SelectedItemChanged);
@@ -60,16 +67,23 @@ namespace Web_Studio.ViewModels
             SaveProjectCommand = new DelegateCommand(SaveProject);
             AddFileCommand = new DelegateCommand(AddFile);
             NewFileCommand = new DelegateCommand(NewFile);
+            BusyControlCancelCommand = new DelegateCommand(BusyControlCancel);
+            ExplorerControlItemRemovedCommand = new DelegateCommand<INode>(ExplorerControlItemRemoved);
 
             //Manage events
             EventSystem.Subscribe<FontSizeChangedEvent>(ManageChangedFont);
             EventSystem.Subscribe<ShowLineNumbersEvent>(ManageChangedShowLineNumbers);
             EventSystem.Subscribe<ClosedDocumentEvent>(ManageDocumentClosed);
             EventSystem.Subscribe<ChangedProjectEvent>(ManageChangedProject);
+
+            //Worker
+            GenerationWorker = new BackgroundWorker();
+            GenerationWorker.DoWork += GenerationWorkerOnDoWork;
+            GenerationWorker.RunWorkerCompleted += GenerationWorkerOnRunWorkerCompleted;
+            GenerationWorker.WorkerSupportsCancellation = true;
         }
 
-    
-
+         
 
         /// <summary>
         ///     Path to the loaded project
@@ -160,7 +174,7 @@ namespace Web_Studio.ViewModels
                 if (saveFile.ShowDialog() == true)
                 {
                    File.WriteAllText(saveFile.FileName,String.Empty); //Create file
-                   SearchOrCreateDocument(saveFile.FileName,Path.GetFileName(saveFile.FileName));  
+                   SearchOrCreateDocument(saveFile.FileName);  
                 }
             }
         }
@@ -273,8 +287,14 @@ namespace Web_Studio.ViewModels
             OptionWindowRequest.Raise(new Notification {Title = Strings.Options});
         }
 
+        /// <summary>
+        /// Raise plugin window request
+        /// </summary>
         private void PluginsWindow()
         {
+            ValidationPluginsViewModel.ConfigurationUI = null;
+            ValidationPluginsViewModel.Plugins = null;
+            ValidationPluginsViewModel.Plugins = ValidationPluginManager.Plugins;
             PluginsWindowRequest.Raise( new Notification {Title = "Plugins"});
         }
 
@@ -404,6 +424,85 @@ namespace Web_Studio.ViewModels
 
         #region Explorer control
 
+        /// <summary>
+        ///     Command to manage removed item changed
+        /// </summary>
+        public DelegateCommand<INode> ExplorerControlItemRemovedCommand { get; private set; }
+
+        /// <summary>
+        /// Request to show the removed item window
+        /// </summary>
+        public InteractionRequest<IConfirmation> ItemRemovedRequest { get; }
+
+        /// <summary>
+        /// Method to manage the remove command, ask for confirmation, and close removed documents
+        /// </summary>
+        /// <param name="node"></param>
+        private void ExplorerControlItemRemoved(INode node)
+        {
+            if (node is FileNode) //Is a File
+            {
+                Application.Current.Dispatcher.Invoke(delegate
+                {
+                    var contenTextBox = new TextBlock
+                    {
+                        Text = Strings.RemoveFileDescription,
+                        Foreground = new SolidColorBrush(Colors.White)
+                    };
+                    ItemRemovedRequest.Raise(
+                        new Confirmation {Content = contenTextBox, Title = Strings.RemoveFolderTitle},
+                        c =>
+                        {
+                            if (c.Confirmed)
+                            {
+                                try
+                                {
+                                    File.Delete(node.FullPath);
+                                    Documents.Remove(Documents.FirstOrDefault(t => t.ToolTip == node.FullPath));
+                                    //Remove document
+                                }
+                                catch (Exception)
+                                {
+                                    //TODO:
+                                }
+                            }
+                        });
+                });
+            }
+            if (node is FolderNode)
+            {
+                Application.Current.Dispatcher.Invoke(delegate
+                {
+                    var contenTextBox = new TextBlock
+                    {
+                        Text = Strings.RemoveFolderDescription,
+                        Foreground = new SolidColorBrush(Colors.White)
+                    };
+                    ItemRemovedRequest.Raise(
+                        new Confirmation {Content = contenTextBox, Title = Strings.RemoveFolderTitle},
+                        c =>
+                        {
+                            if (c.Confirmed)
+                            {
+                                try
+                                {
+                                    Directory.Delete(node.FullPath, true);
+                                    var documentsToRemove = Documents.Where(t => t.ToolTip.Contains(node.FullPath));
+                                    foreach (var document in documentsToRemove.ToList())
+                                    {
+                                        Documents.Remove(document); //Remove document
+                                    }
+                                }
+                                catch (Exception)
+                                {
+                                    //TODO:
+                                }
+                            }
+                        });
+                });
+            }
+        }
+
         private bool _selectedItemIsFolder;
         private string _selectedItemName;
         private string _selectedItemPath;
@@ -441,34 +540,45 @@ namespace Web_Studio.ViewModels
         public DelegateCommand SelectedItemChangedCommand { get; private set; }
 
         /// <summary>
-        ///     Open the selected file and display it
+        ///     Open the selected file and display it if you can do it
         /// </summary>
         private void SelectedItemChanged()
         {
-            if (!SelectedItemIsFolder)
+            var s = Path.GetExtension(SelectedItemPath);
+            if (SelectedItemIsFolder || s==null) return;
+            var extension = s.ToLower();
+          
+            switch (extension)  //Only open these extensions
             {
-                foreach (var doc in Documents)
-                {
-                    doc.IsSelected = false;
-                }
-
-                EditorViewModel myEditor = SearchOrCreateDocument(SelectedItemPath, SelectedItemName);
-                myEditor.IsSelected = true;
+                case ".html":
+                case ".css":
+                case ".js":
+                case ".ws":
+                    break;
+                default:
+                    return;
             }
+
+            foreach (var doc in Documents)
+            {
+                doc.IsSelected = false;
+            }
+
+            EditorViewModel myEditor = SearchOrCreateDocument(SelectedItemPath);
+            myEditor.IsSelected = true;
         }
 
         /// <summary>
         /// Search for a document if it finds it, it returns it, else it creates a new Document and return it
         /// </summary>
-        /// <param name="path"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        private EditorViewModel SearchOrCreateDocument(string path, string name)
+        /// <param name="path"></param> 
+        private EditorViewModel SearchOrCreateDocument(string path)
         {
             var editorViewModel = Documents.Where(doc => doc.ToolTip == path);
             if (!editorViewModel.Any())
             {
-                EditorViewModel myEditor = new EditorViewModel(name, path, EditorShowLineNumbers,
+                var nuevoNombre = path.Replace(ProjectPath+@"\", String.Empty);
+                EditorViewModel myEditor = new EditorViewModel(nuevoNombre, path, EditorShowLineNumbers,
                     EditorLinkTextForegroundBrush, EditorFontSize);
                 Documents.Add(myEditor);
                 return myEditor;
@@ -501,47 +611,104 @@ namespace Web_Studio.ViewModels
             {
                 Results.Clear();
                 NumberOfRulesProcessed = 0;
-                NumberOfRules = ValidationPluginManager.Plugins.Count*2; //Check and fix each plugin
+                int counter = 0;
+                foreach (Lazy<IValidation, IValidationMetadata> plugin in ValidationPluginManager.Plugins)
+                {
+                    if (plugin.Value.IsEnabled)
+                    {
+                        counter++;
+                        if (plugin.Value.IsAutoFixeable)
+                        {
+                            counter += 2; //1º Fix and then Check 
+                        }
+                    }
+                    if (plugin.Value.IsAutoFixeable) counter++;
+                }
+                NumberOfRules = counter; //Check and fix each plugin
                 IsGeneratingProject = true;
                 CopySourceToRelease();
                 EventSystem.Publish(new MessageContainerVisibilityChangedEvent {IsVisible = true});  //Make visible messages container
-                string releasePath = Path.Combine(ProjectPath, "release");
-
-
-                BackgroundWorker worker = new BackgroundWorker();
-
-                worker.DoWork += (o, ea) =>
-                {
-                    //Check loop
-                    for (int i = 0; i < ValidationPluginManager.Plugins.Count; i++)
-                    {
-                        var tempResults = ValidationPluginManager.Plugins[i].Value.Check(releasePath);
-                        System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
-                        {
-                            Results.AddRange(tempResults);
-                            NumberOfRulesProcessed++;
-                        });
-                    }
-
-                    //Fix loop
-                    for (int i = 0; i < ValidationPluginManager.Plugins.Count; i++)
-                    {
-                        ValidationPluginManager.Plugins[i].Value.Fix(releasePath);
-                        System.Windows.Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
-                        {
-                            NumberOfRulesProcessed++;
-                        });
-                    }
-                };
-
-                worker.RunWorkerCompleted += (sender, args) => //Finished
-                {
-                    IsGeneratingProject = false;
-                };
-
-                worker.RunWorkerAsync();
+                 
+                GenerationWorker.RunWorkerAsync();
+                
             }
         }
+
+        /// <summary>
+        /// Run plugins and fixes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="doWorkEventArgs"></param>
+        private void GenerationWorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
+        {
+            string releasePath = Path.Combine(ProjectPath, "release");
+
+            //Check loop
+            foreach (Lazy<IValidation, IValidationMetadata> t in ValidationPluginManager.Plugins)
+            {
+                if (GenerationWorker.CancellationPending)  //Manage the cancelation event
+                {
+                    doWorkEventArgs.Cancel = true;
+                    return;
+                }
+                var plugin = t.Value;
+                if (plugin.IsEnabled)
+                {
+                    var tempResults = plugin.Check(releasePath);
+                    Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
+                    {
+                        Results.AddRange(tempResults);
+                        NumberOfRulesProcessed++;
+                    });
+                }
+            }
+
+            //Fix loop and recheck loop
+            foreach (Lazy<IValidation, IValidationMetadata> t in ValidationPluginManager.Plugins)
+            {
+                if (GenerationWorker.CancellationPending)  ////Manage the cancelation event
+                {
+                    doWorkEventArgs.Cancel = true;
+                    return;
+                }
+                var plugin = t.Value;
+                if (plugin.IsAutoFixeable && plugin.IsEnabled)
+                {
+                    var tempResults = t.Value.Fix(releasePath);
+                    Application.Current.Dispatcher.BeginInvoke((Action) delegate //Update UI
+                    {
+                        Results.AddRange(tempResults);
+                        NumberOfRulesProcessed++;
+                    });
+                    var checkResults = plugin.Check(releasePath);
+                    Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
+                    {
+                        Results.AddRange(checkResults);
+                        NumberOfRulesProcessed++;
+                    });
+                }
+            }
+
+        }
+
+        /// <summary>
+        ///  When worker finishes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="runWorkerCompletedEventArgs"></param>
+        private void GenerationWorkerOnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs runWorkerCompletedEventArgs)
+        {
+            IsGeneratingProject = false;
+            int errors = Results.Count(t => t.Type == ErrorType.Instance);
+            int warnings = Results.Count(t => t.Type == WarningType.Instance);
+            Notifications.RaiseGeneratedNotification(errors,warnings);
+        }
+        
+        /// <summary>
+        /// the worker for project generation
+        /// </summary>
+        private BackgroundWorker GenerationWorker { get; set; }
+
         /// <summary>
         /// Method to copy all files in source to release
         /// </summary>
@@ -577,7 +744,7 @@ namespace Web_Studio.ViewModels
             set
             {
                 SetProperty(ref _messageSelected, value);
-                if (_messageSelected.File != "")  //Project message
+                if (_messageSelected!= null && _messageSelected.File != "" && File.Exists(_messageSelected.File))  //Project message
                 {
                     GoToMessageLine();  
                 }
@@ -593,7 +760,7 @@ namespace Web_Studio.ViewModels
             {
                 doc.IsSelected = false;
             }
-            var myEditor = SearchOrCreateDocument(MessageSelected.File, Path.GetFileName(MessageSelected.File));
+            var myEditor = SearchOrCreateDocument(MessageSelected.File);
             myEditor.IsSelected = true;
             myEditor.ScrollToLine = MessageSelected.Line;
         }
@@ -629,6 +796,19 @@ namespace Web_Studio.ViewModels
         {
             get { return _numberOfRulesProcessed; }
             set { SetProperty(ref _numberOfRulesProcessed, value); }
+        }
+
+        /// <summary>
+        /// Manage the cancel button
+        /// </summary>
+        public DelegateCommand BusyControlCancelCommand { get; private set; }
+
+        /// <summary>
+        /// Cancel the project generation
+        /// </summary>
+        private void BusyControlCancel()
+        {
+          GenerationWorker.CancelAsync();  
         }
 
 

@@ -15,27 +15,16 @@ namespace RobotPlugin
     /// </summary>
     [Export(typeof (IValidation))]
     [ExportMetadata("Name", "Robot")]
-    [ExportMetadata("After", "")]
+    [ExportMetadata("After", "Links")]
     public class RobotPlugin : IValidation
     {
-        /// <summary>
-        ///     Default constructor
-        /// </summary>
-        public RobotPlugin()
-        {
-            View = new View(this);
-        }
+      
 
         /// <summary>
         ///     Text of AutoFix for binding
         /// </summary>
         public string AutoFixText => Strings.AutoFix;
-
-        /// <summary>
-        ///     View showed when you select the plugin
-        /// </summary>
-        public UserControl View { get; }
-
+        
         /// <summary>
         ///     Name of the plugin
         /// </summary>
@@ -50,12 +39,7 @@ namespace RobotPlugin
         ///     Category of the plugin
         /// </summary>
         public ICategoryType Type { get; } = DevelopmentType.Instance;
-
-        /// <summary>
-        ///     Results of the check method.
-        /// </summary>
-        public List<AnalysisResult> AnalysisResults { get; } = new List<AnalysisResult>();
-
+        
         /// <summary>
         ///     can we automatically fix some errors?
         /// </summary>
@@ -73,7 +57,8 @@ namespace RobotPlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            AnalysisResults.Clear();
+            List<AnalysisResult> AnalysisResults  = new List<AnalysisResult>();
+       
             if (!IsEnabled) return AnalysisResults;
 
             var robotsPath = Path.Combine(projectPath, "robots.txt");
@@ -116,13 +101,41 @@ namespace RobotPlugin
         ///     Method to fix automatically some errors
         /// </summary>
         /// <param name="projectPath"></param>
-        public void Fix(string projectPath)
+        public List<AnalysisResult> Fix(string projectPath)
         {
-            if (!IsAutoFixeable) return;
+            if (!IsAutoFixeable || !IsEnabled) return null;
 
             var robotsPath = Path.Combine(projectPath, "robots.txt");
             File.WriteAllText(robotsPath, @"User-agent: *
 Allow: /");
+
+            List<AnalysisResult> list = new List<AnalysisResult> {RobotsGenerated(robotsPath)};
+            return list;
+        }
+
+        /// <summary>
+        /// View showed when you select the plugin
+        /// </summary>
+        public UserControl GetView()
+        {
+            return new View(this);
+        }
+
+        /// <summary>
+        /// Creates the generated message
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        private AnalysisResult RobotsGenerated(string file)
+        {
+          return   new AnalysisResult
+          {
+              File = file,
+              Line = 0,
+              PluginName = Name,
+              Type = InfoType.Instance,
+              Message =  Strings.Generated
+          };
         }
     }
 }
