@@ -63,8 +63,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName) == Debug echo d | xcopy /sy "$(TargetDir)*.*" "$(SolutionDir)Web Studio\bin\Debug\Plugins\Social"\$(ProjectName)"
-if $(ConfigurationName) == Release echo d | xcopy /sy "$(TargetDir)*.*" "$(SolutionDir)Web Studio\bin\Release\Plugins\Social"\$(ProjectName)"</PostBuildEvent>
+    <PostBuildEvent>if $(ConfigurationName) == Debug echo d | xcopy /sy "$(TargetDir)*.*" "$(SolutionDir)Web Studio\bin\Debug\Plugins\Social\$(ProjectName)"
+if $(ConfigurationName) == Release echo d | xcopy /sy "$(TargetDir)*.*" "$(SolutionDir)Web Studio\bin\Release\Plugins\Social\$(ProjectName)"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
