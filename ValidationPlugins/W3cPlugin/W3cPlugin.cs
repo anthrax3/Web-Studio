@@ -20,6 +20,7 @@ namespace W3cPlugin
     [Export(typeof (IValidation))]
     [ExportMetadata("Name", "W3cValidator")]
     [ExportMetadata("After", "Include")]
+    // ReSharper disable once InconsistentNaming
     public class W3cPlugin : IValidation
     {
        
