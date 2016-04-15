@@ -28,6 +28,7 @@ namespace Web_Studio.ViewModels
             {    //Grouping
                 CollectionViewSource.GetDefaultView(Plugins)
                     .GroupDescriptions.Add(new PropertyGroupDescription("Value.Type"));
+                //TODO:
             }
                
         }
