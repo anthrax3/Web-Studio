@@ -35,8 +35,7 @@ namespace Web_Studio
             else
             {
                 var cultureInfo = CultureInfo.CurrentCulture;
-                Thread.CurrentThread.CurrentUICulture = cultureInfo;
-                Thread.CurrentThread.CurrentCulture = cultureInfo;
+                Localization.Localization.ChangeLanguage(cultureInfo);
             }
          
         
