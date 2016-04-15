@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
+using System.Threading;
 using System.Windows;
 using MS.WindowsAPICodePack.Internal;
 using Web_Studio.Models;
@@ -25,15 +27,19 @@ namespace Web_Studio
         {
             
             ResxLocalizationProvider.Instance.UpdateCultureList(GetType().Assembly.FullName, "Strings");
-            LocalizeDictionary.Instance.IncludeInvariantCulture = false;
-            /* Creo que no hace falta, probar en un windows con otro idioma
-            var cultureInfo = CultureInfo.CurrentUICulture;
 
-            LocalizeDictionary.Instance.Culture = cultureInfo;
-            Thread.CurrentThread.CurrentUICulture = cultureInfo;
-            Thread.CurrentThread.CurrentCulture = cultureInfo;
-            */
-
+            if (!string.IsNullOrEmpty(Settings.Default.Language))
+            {
+                Localization.Localization.ChangeLanguage(new CultureInfo(Settings.Default.Language));
+            }
+            else
+            {
+                var cultureInfo = CultureInfo.CurrentCulture;
+                Thread.CurrentThread.CurrentUICulture = cultureInfo;
+                Thread.CurrentThread.CurrentCulture = cultureInfo;
+            }
+         
+        
             TryCreateShortcut();
 
             //Open with file as argument

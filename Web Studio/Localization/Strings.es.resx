@@ -148,7 +148,7 @@
     <value>Abrir</value>
   </data>
   <data name="CloseFile" xml:space="preserve">
-    <value>Cerar Archivo</value>
+    <value>Cerrar Archivo</value>
   </data>
   <data name="SaveFile" xml:space="preserve">
     <value>Guardar Archivo</value>
