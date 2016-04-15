@@ -20,7 +20,7 @@ using System.Windows;
 // para los componentes COM.  Si necesita obtener acceso a un tipo de este ensamblado desde 
 // COM, establezca el atributo ComVisible en true en este tipo.
 
-[assembly: ComVisible(true)]
+[assembly: ComVisible(false)]
 
 //Para comenzar a compilar aplicaciones que se puedan traducir, establezca 
 //<UICulture>CultureYouAreCodingWith</UICulture> en el archivo .csproj
