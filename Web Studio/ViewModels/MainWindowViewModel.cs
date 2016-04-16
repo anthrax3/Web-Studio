@@ -590,6 +590,8 @@ namespace Web_Studio.ViewModels
 
         #region Messages
 
+        private int _errorMessages;
+        private int _warningMessages;
        
 
         /// <summary>
@@ -642,6 +644,8 @@ namespace Web_Studio.ViewModels
         private void GenerationWorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
         {
             string releasePath = Path.Combine(ProjectPath, "release");
+            _errorMessages = 0;
+            _warningMessages = 0;
 
             //Check loop
             foreach (Lazy<IValidation, IValidationMetadata> t in ValidationPluginManager.Plugins)
@@ -655,6 +659,11 @@ namespace Web_Studio.ViewModels
                 if (plugin.IsEnabled)
                 {
                     var tempResults = plugin.Check(releasePath);
+                    foreach (AnalysisResult analysisResult in tempResults)
+                    {
+                        if (analysisResult.Type == ErrorType.Instance) _errorMessages++;
+                        if (analysisResult.Type == WarningType.Instance) _warningMessages++;
+                    }
                     Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
                     {
                         Results.AddRange(tempResults);
@@ -674,13 +683,26 @@ namespace Web_Studio.ViewModels
                 var plugin = t.Value;
                 if (plugin.IsAutoFixeable && plugin.IsEnabled)
                 {
+                    //Fix
                     var tempResults = t.Value.Fix(releasePath);
+                    foreach (AnalysisResult analysisResult in tempResults)
+                    {
+                        if (analysisResult.Type == ErrorType.Instance) _errorMessages++;
+                        if (analysisResult.Type == WarningType.Instance) _warningMessages++;
+                    }
                     Application.Current.Dispatcher.BeginInvoke((Action) delegate //Update UI
                     {
                         Results.AddRange(tempResults);
                         NumberOfRulesProcessed++;
                     });
+
+                    //Recheck
                     var checkResults = plugin.Check(releasePath);
+                    foreach (AnalysisResult analysisResult in tempResults)
+                    {
+                        if (analysisResult.Type == ErrorType.Instance) _errorMessages++;
+                        if (analysisResult.Type == WarningType.Instance) _warningMessages++;
+                    }
                     Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
                     {
                         Results.AddRange(checkResults);
@@ -698,10 +720,8 @@ namespace Web_Studio.ViewModels
         /// <param name="runWorkerCompletedEventArgs"></param>
         private void GenerationWorkerOnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs runWorkerCompletedEventArgs)
         {
-            IsGeneratingProject = false;
-            int errors = Results.Count(t => t.Type == ErrorType.Instance);
-            int warnings = Results.Count(t => t.Type == WarningType.Instance);
-            Notifications.RaiseGeneratedNotification(errors,warnings);
+            IsGeneratingProject = false;  
+            Notifications.RaiseGeneratedNotification(_errorMessages,_warningMessages);
         }
         
         /// <summary>

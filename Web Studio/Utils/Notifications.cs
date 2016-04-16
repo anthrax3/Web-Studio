@@ -22,7 +22,6 @@ namespace Web_Studio.Utils
         {
             // Get a toast XML template
             XmlDocument toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastImageAndText04);
-            var a = toastXml.GetXml();
             
             // Fill in the text elements
             XmlNodeList stringElements = toastXml.GetElementsByTagName("text");
