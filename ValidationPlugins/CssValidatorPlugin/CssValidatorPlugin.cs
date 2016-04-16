@@ -113,8 +113,7 @@ namespace CssValidatorPlugin
                             }
                         }
                         catch (Exception)
-                        {
-                           //TODO
+                        { 
                            
                         }
                        

@@ -61,8 +61,9 @@ namespace Web_Studio.ViewModels
                     ProjectPath = folderBrowserDialog.SelectedPath;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Telemetry.Telemetry.TelemetryClient.TrackException(e);
                 // ignored IO exception or null exception
             }
         }

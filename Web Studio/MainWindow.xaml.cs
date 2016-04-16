@@ -30,9 +30,9 @@ namespace Web_Studio
                 messagesContainer.IsActive = IsVisible;
 
             }
-            catch (Exception)
+            catch (Exception e)
             {
-               //TODO: 
+              Telemetry.Telemetry.TelemetryClient.TrackException(e);
             }
         }
 

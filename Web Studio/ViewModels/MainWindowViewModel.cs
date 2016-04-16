@@ -461,9 +461,9 @@ namespace Web_Studio.ViewModels
                                     Documents.Remove(Documents.FirstOrDefault(t => t.ToolTip == node.FullPath));
                                     //Remove document
                                 }
-                                catch (Exception)
+                                catch (Exception e)
                                 {
-                                    //TODO:
+                                    Telemetry.Telemetry.TelemetryClient.TrackException(e);
                                 }
                             }
                         });
@@ -493,9 +493,9 @@ namespace Web_Studio.ViewModels
                                         Documents.Remove(document); //Remove document
                                     }
                                 }
-                                catch (Exception)
+                                catch (Exception e)
                                 {
-                                    //TODO:
+                                   Telemetry.Telemetry.TelemetryClient.TrackException(e);
                                 }
                             }
                         });
@@ -611,6 +611,7 @@ namespace Web_Studio.ViewModels
         {
             if (ProjectPath != null && !IsGeneratingProject)
             {
+                Telemetry.Telemetry.TelemetryClient.TrackEvent("Generation");
                 Results.Clear();
                 NumberOfRulesProcessed = 0;
                 int counter = 0;
@@ -720,7 +721,9 @@ namespace Web_Studio.ViewModels
         /// <param name="runWorkerCompletedEventArgs"></param>
         private void GenerationWorkerOnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs runWorkerCompletedEventArgs)
         {
-            IsGeneratingProject = false;  
+            IsGeneratingProject = false;
+            Telemetry.Telemetry.TelemetryClient.TrackMetric("Errors",_errorMessages);  
+            Telemetry.Telemetry.TelemetryClient.TrackMetric("Warnings",_warningMessages);
             Notifications.RaiseGeneratedNotification(_errorMessages,_warningMessages);
         }
         
@@ -828,7 +831,8 @@ namespace Web_Studio.ViewModels
         /// </summary>
         private void BusyControlCancel()
         {
-          GenerationWorker.CancelAsync();  
+          GenerationWorker.CancelAsync();
+          Telemetry.Telemetry.TelemetryClient.TrackEvent("Cancel Generation");    
         }
 
 

@@ -27,6 +27,7 @@ namespace Web_Studio
         {
             
             ResxLocalizationProvider.Instance.UpdateCultureList(GetType().Assembly.FullName, "Strings");
+            Telemetry.Telemetry.Initialize();
 
             if (!string.IsNullOrEmpty(Settings.Default.Language))
             {
@@ -60,6 +61,7 @@ namespace Web_Studio
         {
             Settings.Default.Save();
             ProjectModel.Instance.Save();
+            Telemetry.Telemetry.TelemetryClient.Flush();
         }
 
         /// <summary>

@@ -88,7 +88,7 @@ namespace Web_Studio.Editor
                 }
                 catch (Exception e)
                 {
-                   //TODO 
+                   Telemetry.Telemetry.TelemetryClient.TrackException(e);
                 }
                
             }
