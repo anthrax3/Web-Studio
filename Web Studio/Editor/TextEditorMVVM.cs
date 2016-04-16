@@ -78,11 +78,19 @@ namespace Web_Studio.Editor
             get { return (int)GetValue(ScrollToLineProperty); }
             set
             {
-                SetValue(ScrollToLineProperty, value);
-                double visualTop = TextArea.TextView.GetVisualTopByDocumentLine(value);
-                ScrollToVerticalOffset(visualTop);
-                DocumentLine line = Document.GetLineByNumber(value);
-                Select(line.Offset, line.Length);
+                try      //Can raise an error if the line doesn't exist
+                {
+                    SetValue(ScrollToLineProperty, value);
+                    double visualTop = TextArea.TextView.GetVisualTopByDocumentLine(value);
+                    ScrollToVerticalOffset(visualTop);
+                    DocumentLine line = Document.GetLineByNumber(value);
+                    Select(line.Offset, line.Length);
+                }
+                catch (Exception e)
+                {
+                   //TODO 
+                }
+               
             }
         }
 
