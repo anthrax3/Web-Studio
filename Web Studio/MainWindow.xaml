@@ -72,6 +72,14 @@
             </windowAction:MetroPopupWindowAction>
         </interactionRequest:InteractionRequestTrigger>
 
+        <interactionRequest:InteractionRequestTrigger SourceObject="{Binding AboutWindowRequest, Mode=OneWay}">
+            <windowAction:MetroPopupWindowAction IsModal="True">
+                <windowAction:MetroPopupWindowAction.WindowContent>
+                    <webStudio:About />
+                </windowAction:MetroPopupWindowAction.WindowContent>
+            </windowAction:MetroPopupWindowAction>
+        </interactionRequest:InteractionRequestTrigger>
+
         <interactionRequest:InteractionRequestTrigger
             SourceObject="{Binding SaveChangesInteractionRequest, Mode=OneWay}">
             <windowAction:MetroPopupWindowAction IsModal="True" CenterOverAssociatedObject="True" />
@@ -163,7 +171,13 @@
                           IsChecked="{Binding ElementName=ExplorerLayout,Path=IsVisible,Mode=TwoWay}"
                           Click="ExplorerMenuItem_OnClick" />
             </MenuItem>
-            <MenuItem Header="{lex:Loc Help}" />
+            <MenuItem Header="{lex:Loc Help}" >
+                <MenuItem Header="{lex:Loc About}" Command="{Binding AboutWindowCommand}">
+                    <MenuItem.Icon>
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="5,0,0,0"></TextBlock>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
         </Menu>
         <avalonDock:DockingManager x:Name="dockingManager" DocumentsSource="{Binding Documents}" Grid.Row="1" ActiveContent="{Binding ActiveDocument, Mode=TwoWay, Converter={StaticResource ActiveDocumentConverter}}">
             <avalonDock:DockingManager.Theme>

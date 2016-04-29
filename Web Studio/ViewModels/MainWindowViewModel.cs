@@ -56,6 +56,7 @@ namespace Web_Studio.ViewModels
             SaveChangesInteractionRequest = new InteractionRequest<IConfirmation>();
             ItemRemovedRequest = new InteractionRequest<IConfirmation>();
             FtpClientWindowRequest = new InteractionRequest<INotification>();
+            AboutWindowRequest = new InteractionRequest<INotification>();
 
             //Manage commands
             SelectedItemChangedCommand = new DelegateCommand(SelectedItemChanged);
@@ -65,6 +66,7 @@ namespace Web_Studio.ViewModels
             GenerateCommand = new DelegateCommand(Generate);
             PluginsWindowCommand = new DelegateCommand(PluginsWindow);
             FtpClientCommand = new DelegateCommand(FtpClientWindow);
+            AboutWindowCommand = new DelegateCommand(AboutWindow);
             CloseProjectCommand = new DelegateCommand(CloseProject);
             SaveProjectCommand = new DelegateCommand(SaveProject);
             AddFileCommand = new DelegateCommand(AddFile);
@@ -84,9 +86,6 @@ namespace Web_Studio.ViewModels
             GenerationWorker.RunWorkerCompleted += GenerationWorkerOnRunWorkerCompleted;
             GenerationWorker.WorkerSupportsCancellation = true;
         }
-
-    
-
 
         /// <summary>
         ///     Path to the loaded project
@@ -125,6 +124,11 @@ namespace Web_Studio.ViewModels
         /// It request the view to open the FTP client window
         /// </summary>
         public InteractionRequest<INotification> FtpClientWindowRequest { get; set; }
+
+        /// <summary>
+        /// It request the view to open the about window
+        /// </summary>
+        public InteractionRequest<INotification> AboutWindowRequest { get; set; }
 
         /// <summary>
         /// Add file menu command
@@ -170,6 +174,11 @@ namespace Web_Studio.ViewModels
         /// FTP client menu command
         /// </summary>
         public DelegateCommand FtpClientCommand { get; private set; }
+
+        /// <summary>
+        /// About window command
+        /// </summary>
+        public DelegateCommand AboutWindowCommand { get; private set; }
 
         /// <summary>
         /// Create and open a new file
@@ -317,6 +326,14 @@ namespace Web_Studio.ViewModels
         private void FtpClientWindow()
         {
             FtpClientWindowRequest.Raise(new Notification {Title = Strings.FtpClient});
+        }
+
+        /// <summary>
+        /// Raise About window request
+        /// </summary>
+        private void AboutWindow()
+        {
+            AboutWindowRequest.Raise(new Notification { Title = Strings.About });
         }
 
         /// <summary>

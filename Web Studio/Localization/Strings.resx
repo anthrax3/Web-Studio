@@ -287,4 +287,10 @@ This process is going to move the folder and its content to recycle bin</value>
   <data name="FtpClient" xml:space="preserve">
     <value>FTP client</value>
   </data>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>Created by Jorge Durán</value>
+  </data>
+  <data name="ThanksTo" xml:space="preserve">
+    <value>Thanks to these awesome tools and libraries</value>
+  </data>
 </root>

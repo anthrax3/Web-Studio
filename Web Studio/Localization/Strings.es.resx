@@ -287,4 +287,10 @@ Este proceso moverá la carpeta y su contenido a la papelera de reciclaje</value
   <data name="FtpClient" xml:space="preserve">
     <value>Cliente FTP</value>
   </data>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>Creado por Jorge Durán</value>
+  </data>
+  <data name="ThanksTo" xml:space="preserve">
+    <value>Gracias a estas increíbles herramientas y bibliotecas</value>
+  </data>
 </root>
