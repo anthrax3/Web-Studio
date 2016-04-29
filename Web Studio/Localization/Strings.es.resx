@@ -284,4 +284,7 @@ Este proceso moverá la carpeta y su contenido a la papelera de reciclaje</value
   <data name="Path" xml:space="preserve">
     <value>Ruta:</value>
   </data>
+  <data name="FtpClient" xml:space="preserve">
+    <value>Cliente FTP</value>
+  </data>
 </root>

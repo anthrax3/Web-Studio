@@ -7,11 +7,11 @@ using System.Windows;
 // La información general de un ensamblado se controla mediante el siguiente 
 // conjunto de atributos. Cambie estos valores de atributo para modificar la información
 // asociada con un ensamblado.
-[assembly: AssemblyTitle("HTMLParser")]
+[assembly: AssemblyTitle("FtpClient")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("HTMLParser")]
+[assembly: AssemblyProduct("FtpClient")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -31,13 +31,13 @@ using System.Windows;
 //[assembly: NeutralResourcesLanguage("en-US", UltimateResourceFallbackLocation.Satellite)]
 
 
-[assembly: ThemeInfo(
+[assembly:ThemeInfo(
     ResourceDictionaryLocation.None, //donde se encuentran los diccionarios de recursos específicos del tema
-                                     //(se utiliza si no se encuentra ningún recurso en la página 
-                                     // ni diccionarios de recursos de la aplicación)
+                             //(se utiliza si no se encuentra ningún recurso en la página 
+                             // ni diccionarios de recursos de la aplicación)
     ResourceDictionaryLocation.SourceAssembly //donde se encuentra el diccionario de recursos genérico
-                                              //(se utiliza si no se encuentra ningún recurso en la página, 
-                                              // aplicación o diccionarios de recursos específicos del tema)
+                                      //(se utiliza si no se encuentra ningún recurso en la página, 
+                                      // aplicación o diccionarios de recursos específicos del tema)
 )]
 
 

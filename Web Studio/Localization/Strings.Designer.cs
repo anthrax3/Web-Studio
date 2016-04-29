@@ -241,6 +241,15 @@ namespace Web_Studio.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a FTP client.
+        /// </summary>
+        public static string FtpClient {
+            get {
+                return ResourceManager.GetString("FtpClient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Generate.
         /// </summary>
         public static string Generate {

@@ -55,6 +55,7 @@ namespace Web_Studio.ViewModels
             PluginsWindowRequest = new InteractionRequest<INotification>();
             SaveChangesInteractionRequest = new InteractionRequest<IConfirmation>();
             ItemRemovedRequest = new InteractionRequest<IConfirmation>();
+            FtpClientWindowRequest = new InteractionRequest<INotification>();
 
             //Manage commands
             SelectedItemChangedCommand = new DelegateCommand(SelectedItemChanged);
@@ -63,6 +64,7 @@ namespace Web_Studio.ViewModels
             NewProjectCommand = new DelegateCommand(NewProject);
             GenerateCommand = new DelegateCommand(Generate);
             PluginsWindowCommand = new DelegateCommand(PluginsWindow);
+            FtpClientCommand = new DelegateCommand(FtpClientWindow);
             CloseProjectCommand = new DelegateCommand(CloseProject);
             SaveProjectCommand = new DelegateCommand(SaveProject);
             AddFileCommand = new DelegateCommand(AddFile);
@@ -83,7 +85,8 @@ namespace Web_Studio.ViewModels
             GenerationWorker.WorkerSupportsCancellation = true;
         }
 
-         
+    
+
 
         /// <summary>
         ///     Path to the loaded project
@@ -116,7 +119,12 @@ namespace Web_Studio.ViewModels
         /// <summary>
         /// It request the view to open the plugins window
         /// </summary>
-        public InteractionRequest<INotification> PluginsWindowRequest { get; set; } 
+        public InteractionRequest<INotification> PluginsWindowRequest { get; set; }
+
+        /// <summary>
+        /// It request the view to open the FTP client window
+        /// </summary>
+        public InteractionRequest<INotification> FtpClientWindowRequest { get; set; }
 
         /// <summary>
         /// Add file menu command
@@ -157,6 +165,11 @@ namespace Web_Studio.ViewModels
         ///     Plugins menu command
         /// </summary>
         public DelegateCommand PluginsWindowCommand { get; private set; }
+
+        /// <summary>
+        /// FTP client menu command
+        /// </summary>
+        public DelegateCommand FtpClientCommand { get; private set; }
 
         /// <summary>
         /// Create and open a new file
@@ -296,6 +309,14 @@ namespace Web_Studio.ViewModels
             ValidationPluginsViewModel.Plugins = null;
             ValidationPluginsViewModel.Plugins = ValidationPluginManager.Plugins;
             PluginsWindowRequest.Raise( new Notification {Title = "Plugins"});
+        }
+
+        /// <summary>
+        /// Raise Ftp client window request
+        /// </summary>
+        private void FtpClientWindow()
+        {
+            FtpClientWindowRequest.Raise(new Notification {Title = Strings.FtpClient});
         }
 
         /// <summary>

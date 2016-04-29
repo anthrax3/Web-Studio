@@ -284,4 +284,7 @@ This process is going to move the folder and its content to recycle bin</value>
   <data name="Path" xml:space="preserve">
     <value>Path:</value>
   </data>
+  <data name="FtpClient" xml:space="preserve">
+    <value>FTP client</value>
+  </data>
 </root>

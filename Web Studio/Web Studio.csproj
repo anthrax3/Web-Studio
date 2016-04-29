@@ -205,6 +205,9 @@
     <Compile Include="Events\EventSystem.cs" />
     <Compile Include="Events\FontSizeChangedEvent.cs" />
     <Compile Include="Events\MessageContainerVisibilityChangedEvent.cs" />
+    <Compile Include="FtpClient.xaml.cs">
+      <DependentUpon>FtpClient.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Telemetry\Telemetry.cs" />
     <Compile Include="Utils\SetPropertiesResolver.cs" />
     <Compile Include="Utils\Notifications.cs" />
@@ -260,6 +263,10 @@
     <Page Include="Editor\EditorView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="FtpClient.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WindowAction\MetroConfirmationWindow.xaml">
       <SubType>Designer</SubType>
@@ -370,6 +377,10 @@
     <ProjectReference Include="..\Controls\BusyControl\BusyControl.csproj">
       <Project>{ed4769d3-abfa-4bb5-92b8-c3d0b38f29d1}</Project>
       <Name>BusyControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Controls\FtpClient\FtpClient.csproj">
+      <Project>{3bdf3d08-ef20-496c-a91f-382edf1299e5}</Project>
+      <Name>FtpClient</Name>
     </ProjectReference>
     <ProjectReference Include="..\CustomClasses\FastObservableCollection\FastObservableCollection.csproj">
       <Project>{1d97ecda-d9e1-4fe0-981b-c865a4373ea9}</Project>
