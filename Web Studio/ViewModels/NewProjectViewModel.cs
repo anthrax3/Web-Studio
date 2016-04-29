@@ -20,6 +20,7 @@ namespace Web_Studio.ViewModels
         /// <summary>
         ///     default constructor
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public NewProjectViewModel()
         {
             WizardFinish = new DelegateCommand(WizardFinishRun);
