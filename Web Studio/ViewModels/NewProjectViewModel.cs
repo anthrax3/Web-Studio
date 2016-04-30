@@ -148,6 +148,7 @@ namespace Web_Studio.ViewModels
         {
             var loader = new GenericMefPluginLoader<ISocialCheck>("Plugins\\Social");
             var name = ProjectName.Replace(" ", string.Empty); //Name without spaces
+            SocialCheckItems.Clear();
 
             BackgroundWorker worker = new BackgroundWorker();
 
