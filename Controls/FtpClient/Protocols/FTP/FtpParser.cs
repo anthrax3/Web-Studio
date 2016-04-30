@@ -5,53 +5,54 @@ using FtpClient.Protocols.ItemTypes;
 namespace FtpClient.Protocols.FTP
 {
     /// <summary>
-    /// Class for parse the result of ftp list directory (ls -l) to Protocol Item
+    ///     Class for parse the result of ftp list directory (ls -l) to Protocol Item
     /// </summary>
     public static class FtpParser
     {
         /// <summary>
-        /// Method for parse the ls -l output
+        ///     Method for parse the ls -l output
         /// </summary>
         /// <param name="data"></param>
         /// <param name="currentPath"></param>
         /// <returns></returns>
         public static List<ProtocolItem> Parse(string data, string currentPath)
         {
-            string[] lines = data.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-            List<ProtocolItem> items = new List<ProtocolItem>();
-            foreach (string line in lines)
+            var lines = data.Split(new[] {"\r\n", "\n"}, StringSplitOptions.RemoveEmptyEntries);
+            var items = new List<ProtocolItem>();
+            foreach (var line in lines)
             {
-                items.Add(ItemParser(line,currentPath));
+                items.Add(ItemParser(line, currentPath));
             }
             return items;
         }
 
         /// <summary>
-        /// Method for parse a line of the ls -l output
+        ///     Method for parse a line of the ls -l output
         /// </summary>
         /// <param name="item"></param>
         /// <param name="currentPath"></param>
         /// <returns></returns>
         private static ProtocolItem ItemParser(string item, string currentPath)
         {
-            var parts = item.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+            var parts = item.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries);
 
 
             var date = DateParser(parts[5], parts[6], parts[7]);
-            if (parts[0][0]=='d') //Folder
+            if (parts[0][0] == 'd') //Folder
             {
-                return new ProtocolItem(parts[8],currentPath+PortablePath.PathSeparator(currentPath)+parts[8],0, date, FolderType.Instance );
+                return new ProtocolItem(parts[8], currentPath + PortablePath.PathSeparator(currentPath) + parts[8], 0,
+                    date, FolderType.Instance);
             }
-            if (parts[0][0]=='-') //File
+            if (parts[0][0] == '-') //File
             {
-                return new ProtocolItem(parts[8], currentPath + PortablePath.PathSeparator(currentPath) + parts[8], Convert.ToInt64(parts[4]), date, FileType.Instance);
-
+                return new ProtocolItem(parts[8], currentPath + PortablePath.PathSeparator(currentPath) + parts[8],
+                    Convert.ToInt64(parts[4]), date, FileType.Instance);
             }
-            return new ProtocolItem("aaa","aaa",0,DateTime.Today, FileType.Instance);
+            return new ProtocolItem("aaa", "aaa", 0, DateTime.Today, FileType.Instance);
         }
 
         /// <summary>
-        /// Method to get a date from ls -l output (Apr 28 15:55)
+        ///     Method to get a date from ls -l output (Apr 28 15:55)
         /// </summary>
         /// <param name="month"></param>
         /// <param name="day"></param>
@@ -59,7 +60,7 @@ namespace FtpClient.Protocols.FTP
         /// <returns></returns>
         private static DateTime DateParser(string month, string day, string hourAndMinutes)
         {
-            int monthNumber=1;
+            var monthNumber = 1;
             switch (month)
             {
                 case "Jan":
@@ -98,12 +99,12 @@ namespace FtpClient.Protocols.FTP
                 case "Dec":
                     monthNumber = 12;
                     break;
-               }
-            int dayNumber = Convert.ToInt32(day);
+            }
+            var dayNumber = Convert.ToInt32(day);
             var parts = hourAndMinutes.Split(':');
-            int hoursNumber = Convert.ToInt32(parts[0]);
-            int minutesNumber = Convert.ToInt32(parts[1]);
-            return new DateTime(DateTime.Today.Year, monthNumber,dayNumber,hoursNumber,minutesNumber,0);
+            var hoursNumber = Convert.ToInt32(parts[0]);
+            var minutesNumber = Convert.ToInt32(parts[1]);
+            return new DateTime(DateTime.Today.Year, monthNumber, dayNumber, hoursNumber, minutesNumber, 0);
         }
     }
 }

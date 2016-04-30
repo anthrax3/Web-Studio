@@ -6,7 +6,7 @@ using FtpClient.Protocols.FTP;
 namespace FtpClient.Protocols
 {
     /// <summary>
-    /// Class to manage FTPS protocol
+    ///     Class to manage FTPS protocol
     /// </summary>
     public class Ftps : Ftp
     {
@@ -24,14 +24,14 @@ namespace FtpClient.Protocols
             {
                 _client = new FTPSClient();
                 //it doesn't validate the certificate due to some errors with selfsigned certificates
-                _client.Connect(server, new NetworkCredential(user, password), ESSLSupportMode.All,(sender, certificate, chain, errors) => true);
+                _client.Connect(server, new NetworkCredential(user, password), ESSLSupportMode.All,
+                    (sender, certificate, chain, errors) => true);
                 return true;
             }
             catch (Exception)
             {
                 return false;
             }
-
         }
     }
 }

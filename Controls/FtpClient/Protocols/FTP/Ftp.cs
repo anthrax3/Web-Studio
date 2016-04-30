@@ -7,12 +7,12 @@ using FtpClient.Protocols.ItemTypes;
 namespace FtpClient.Protocols.FTP
 {
     /// <summary>
-    /// Class to manage the FTP protocol
+    ///     Class to manage the FTP protocol
     /// </summary>
-    public class Ftp  : IProtocol
+    public class Ftp : IProtocol
     {
         /// <summary>
-        /// Client to manage the protocol
+        ///     Client to manage the protocol
         /// </summary>
         protected FTPSClient _client;
 
@@ -25,18 +25,17 @@ namespace FtpClient.Protocols.FTP
         /// <param name="password"></param>
         /// <returns></returns>
         public virtual bool Connect(string server, string port, string user, string password)
-        {  
+        {
             try
             {
                 _client = new FTPSClient();
-                _client.Connect(server, new NetworkCredential(user, password),ESSLSupportMode.ClearText); 
+                _client.Connect(server, new NetworkCredential(user, password), ESSLSupportMode.ClearText);
                 return true;
             }
             catch (Exception)
             {
                 return false;
             }
-          
         }
 
         /// <summary>
@@ -46,7 +45,7 @@ namespace FtpClient.Protocols.FTP
         /// <returns></returns>
         public List<ProtocolItem> ListDirectory(string path)
         {
-            return FtpParser.Parse(_client.GetDirectoryListUnparsed(path),path);  
+            return FtpParser.Parse(_client.GetDirectoryListUnparsed(path), path);
         }
 
         /// <summary>
@@ -77,10 +76,10 @@ namespace FtpClient.Protocols.FTP
         {
             try
             {
-                return _client.PutFile(sourcePath, destinationPath) > 0; 
+                return _client.PutFile(sourcePath, destinationPath) > 0;
             }
             catch (Exception)
-            {                
+            {
                 return false;
             }
         }
@@ -107,7 +106,7 @@ namespace FtpClient.Protocols.FTP
                 return true;
             }
             catch (Exception)
-            {                
+            {
                 return false;
             }
         }

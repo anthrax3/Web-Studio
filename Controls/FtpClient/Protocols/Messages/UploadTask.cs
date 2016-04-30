@@ -57,8 +57,8 @@ namespace FtpClient.Protocols.Messages
             {
                 var folderToPress = foldersToProcess.Dequeue();
                 //Create the folder
-              protocol.CreateDirectory(PortablePath.ReplaceAndNormalize(folderToPress, localParentDirectory,
-                               remoteParentDirectory));
+                protocol.CreateDirectory(PortablePath.ReplaceAndNormalize(folderToPress, localParentDirectory,
+                    remoteParentDirectory));
 
                 //Upload folder files
                 var filesToProcess = Directory.GetFiles(folderToPress);

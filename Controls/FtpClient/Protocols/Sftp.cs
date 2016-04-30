@@ -53,7 +53,7 @@ namespace FtpClient.Protocols
                 }
             }
             items = new List<ProtocolItem>(items.Where(i => !(i.Name.Equals(".") || i.Name.Equals(".."))));
-                //Remove . and .. element
+            //Remove . and .. element
             return items;
         }
 

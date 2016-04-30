@@ -30,7 +30,7 @@ namespace FtpClient
         {
             ConnectCommand = new DelegateCommand<PasswordBox>(Connect);
             Protocols = new ObservableCollection<string> {"SFTP", "FTP", "FTPS"};
-            IsConnected = false;  
+            IsConnected = false;
 
             LocalBrowserCommand = new DelegateCommand<ProtocolItem>(LocalBrowser);
             ParentFolderLocalCommand = new DelegateCommand(ParentLocalFolder);
@@ -53,7 +53,7 @@ namespace FtpClient
             RemoveTaskCommand = new DelegateCommand(RemoveTask);
             Tasks = new ObservableCollection<ProtocolTask>();
             CollectionViewSource.GetDefaultView(Tasks).GroupDescriptions.Add(new PropertyGroupDescription("Type"));
-                //Group Property
+            //Group Property
             InitLocal();
         }
 
@@ -325,7 +325,7 @@ namespace FtpClient
                 {
                     if (ProtocolMode.Equals("SFTP"))
                     {
-                        _protocol = new Sftp(); 
+                        _protocol = new Sftp();
                     }
                     if (ProtocolMode.Equals("FTP"))
                     {
@@ -515,7 +515,7 @@ namespace FtpClient
         {
             foreach (var task in Tasks)
             {
-                if(task.Status == Strings.Completed) continue;
+                if (task.Status == Strings.Completed) continue;
                 task.Process(_protocol);
                 ProgressBarValue++;
             }

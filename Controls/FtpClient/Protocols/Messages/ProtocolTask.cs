@@ -58,7 +58,7 @@ namespace FtpClient.Protocols.Messages
         /// <summary>
         ///     MVVM binding
         /// </summary>
-        /// <param name="propertyName"></param>   
+        /// <param name="propertyName"></param>
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

@@ -7,12 +7,12 @@ using FtpClient.Protocols.Messages;
 namespace FtpClient
 {
     /// <summary>
-    /// Code Behind FtpClientUI.xaml
+    ///     Code Behind FtpClientUI.xaml
     /// </summary>
     public partial class FtpClientUI : UserControl
     {
         /// <summary>
-        /// Default constructor
+        ///     Default constructor
         /// </summary>
         public FtpClientUI()
         {
@@ -27,16 +27,16 @@ namespace FtpClient
         private void LocalSelectionChanged(object sender, RoutedEventArgs e)
         {
             var data = e as SelectionChangedEventArgs;
-            var items = ((ViewModel)DataContext).LocalSelectedItems;
+            var items = ((ViewModel) DataContext).LocalSelectedItems;
             if (data != null)
             {
                 items.AddRange(data.AddedItems.Cast<ProtocolItem>());
                 foreach (var removedItem in data.RemovedItems)
                 {
-                    items.Remove((ProtocolItem)removedItem);
+                    items.Remove((ProtocolItem) removedItem);
                 }
             }
-        } 
+        }
 
         /// <summary>
         ///     Selection changed in remote explorewr
@@ -46,13 +46,13 @@ namespace FtpClient
         private void RemoteSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var data = e;
-            var items = ((ViewModel)DataContext).RemoteSelectedItems;
+            var items = ((ViewModel) DataContext).RemoteSelectedItems;
             if (data != null)
             {
                 items.AddRange(data.AddedItems.Cast<ProtocolItem>());
                 foreach (var removedItem in data.RemovedItems)
                 {
-                    items.Remove((ProtocolItem)removedItem);
+                    items.Remove((ProtocolItem) removedItem);
                 }
             }
         }
@@ -65,16 +65,15 @@ namespace FtpClient
         private void TasksSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var data = e;
-            var items = ((ViewModel)DataContext).SelectedTasks;
+            var items = ((ViewModel) DataContext).SelectedTasks;
             if (data != null)
             {
                 items.AddRange(data.AddedItems.Cast<ProtocolTask>());
                 foreach (var removedItem in data.RemovedItems)
                 {
-                    items.Remove((ProtocolTask)removedItem);
+                    items.Remove((ProtocolTask) removedItem);
                 }
             }
-        }  
-      
+        }
     }
 }
