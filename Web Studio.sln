@@ -54,8 +54,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Controls", "Controls", "{1D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xceed.Wpf.AvalonDock.Themes.WebStudio", "Controls\AvalonDock.Themes.WebStudio\Xceed.Wpf.AvalonDock.Themes.WebStudio.csproj", "{89286EB4-B4A1-418C-839A-067B00F442D8}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{A7193941-6452-45D3-AAEA-F16C7BB00FE9}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ValidationPlugins", "ValidationPlugins", "{3E8395CA-55DA-4EB1-B787-2E521E6AABC8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidationInterface", "ValidationPlugins\ValidationInterface\ValidationInterface.csproj", "{303EEC5A-AF5E-40B5-8CC8-546D42EC168B}"
@@ -125,6 +123,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlCompressionPlugin", "ValidationPlugins\HtmlCompressionPlugin\HtmlCompressionPlugin.csproj", "{4AED7488-31D5-4C34-826A-17A974F3C30E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FtpClient", "Controls\FtpClient\FtpClient.csproj", "{3BDF3D08-EF20-496C-A91F-382EDF1299E5}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SetupWebStudio", "SetupWebStudio\SetupWebStudio.vdproj", "{684DF71D-4744-4C96-A117-BF8AA788A675}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -250,20 +250,6 @@ Global
 		{89286EB4-B4A1-418C-839A-067B00F442D8}.Release|x64.Build.0 = Release|Any CPU
 		{89286EB4-B4A1-418C-839A-067B00F442D8}.Release|x86.ActiveCfg = Release|Any CPU
 		{89286EB4-B4A1-418C-839A-067B00F442D8}.Release|x86.Build.0 = Release|Any CPU
-		{A7193941-6452-45D3-AAEA-F16C7BB00FE9}.Debug|Any CPU.ActiveCfg = Debug
-		{A7193941-6452-45D3-AAEA-F16C7BB00FE9}.Debug|ARM.ActiveCfg = Debug
-		{A7193941-6452-45D3-AAEA-F16C7BB00FE9}.Debug|ARM.Build.0 = Debug
-		{A7193941-6452-45D3-AAEA-F16C7BB00FE9}.Debug|x64.ActiveCfg = Debug
-		{A7193941-6452-45D3-AAEA-F16C7BB00FE9}.Debug|x64.Build.0 = Debug
-		{A7193941-6452-45D3-AAEA-F16C7BB00FE9}.Debug|x86.ActiveCfg = Debug
-		{A7193941-6452-45D3-AAEA-F16C7BB00FE9}.Debug|x86.Build.0 = Debug
-		{A7193941-6452-45D3-AAEA-F16C7BB00FE9}.Release|Any CPU.ActiveCfg = Release
-		{A7193941-6452-45D3-AAEA-F16C7BB00FE9}.Release|ARM.ActiveCfg = Release
-		{A7193941-6452-45D3-AAEA-F16C7BB00FE9}.Release|ARM.Build.0 = Release
-		{A7193941-6452-45D3-AAEA-F16C7BB00FE9}.Release|x64.ActiveCfg = Release
-		{A7193941-6452-45D3-AAEA-F16C7BB00FE9}.Release|x64.Build.0 = Release
-		{A7193941-6452-45D3-AAEA-F16C7BB00FE9}.Release|x86.ActiveCfg = Release
-		{A7193941-6452-45D3-AAEA-F16C7BB00FE9}.Release|x86.Build.0 = Release
 		{303EEC5A-AF5E-40B5-8CC8-546D42EC168B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{303EEC5A-AF5E-40B5-8CC8-546D42EC168B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{303EEC5A-AF5E-40B5-8CC8-546D42EC168B}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -792,6 +778,14 @@ Global
 		{3BDF3D08-EF20-496C-A91F-382EDF1299E5}.Release|x64.Build.0 = Release|Any CPU
 		{3BDF3D08-EF20-496C-A91F-382EDF1299E5}.Release|x86.ActiveCfg = Release|Any CPU
 		{3BDF3D08-EF20-496C-A91F-382EDF1299E5}.Release|x86.Build.0 = Release|Any CPU
+		{684DF71D-4744-4C96-A117-BF8AA788A675}.Debug|Any CPU.ActiveCfg = Debug
+		{684DF71D-4744-4C96-A117-BF8AA788A675}.Debug|ARM.ActiveCfg = Debug
+		{684DF71D-4744-4C96-A117-BF8AA788A675}.Debug|x64.ActiveCfg = Debug
+		{684DF71D-4744-4C96-A117-BF8AA788A675}.Debug|x86.ActiveCfg = Debug
+		{684DF71D-4744-4C96-A117-BF8AA788A675}.Release|Any CPU.ActiveCfg = Release
+		{684DF71D-4744-4C96-A117-BF8AA788A675}.Release|ARM.ActiveCfg = Release
+		{684DF71D-4744-4C96-A117-BF8AA788A675}.Release|x64.ActiveCfg = Release
+		{684DF71D-4744-4C96-A117-BF8AA788A675}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
