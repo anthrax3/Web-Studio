@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
+using System.Text;
 using System.Windows.Controls;
 using HtmlAgilityPack;
 using JoinAndMinifyCssPlugin.Properties;
@@ -105,12 +106,14 @@ namespace JoinAndMinifyCssPlugin
         /// <param name="projectPath"></param>
         public List<AnalysisResult> Fix(string projectPath)
         {
-            if (!IsAutoFixeable || !IsEnabled || string.IsNullOrWhiteSpace(Domain)) return null;
+            if (!IsAutoFixeable || !IsEnabled ) return null;
+            if(string.IsNullOrWhiteSpace(Domain)) return new List<AnalysisResult> {new AnalysisResult("",0,Name,Strings.DomainNotFound,ErrorType.Instance)};
             var results = new List<AnalysisResult>();
             //it takes all css files
             var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
-            var cssUrls = new HashSet<string>();
             FileModel.Domain = Domain;
+            Dictionary<string,string> cssDictionary = new Dictionary<string, string>();
+            int counter = 0;
 
             foreach (var file in filesToCheck) //For each html file
             {
@@ -118,19 +121,40 @@ namespace JoinAndMinifyCssPlugin
                 document.OptionWriteEmptyNodes = true; //Close tags
                 document.Load(file);
 
-
+                string resultCssFile = null;
                 var cssFiles = document.DocumentNode.SelectNodes("//link[@rel='stylesheet']"); //Get styles
                 if (cssFiles == null) continue;
-                foreach (var cssFile in cssFiles) //Minify css files
+                StringBuilder key = new StringBuilder();
+                foreach (var cssFile in cssFiles)    //Create the key
                 {
                     var url = cssFile.GetAttributeValue("href", null);
-                    if (url == null) continue;
-                    if (!cssUrls.Add(url)) continue; //that css was minified before
-
-                    var fileModel = new FileModel(url, projectPath);
-                    fileModel.Minify(results);
-                    cssFile.Remove(); //Remove
+                    if(url==null) continue;
+                    key.Append("-" + url);
                 }
+                if (cssDictionary.ContainsKey(key.ToString())) // We already have the result file
+                {
+                    resultCssFile = cssDictionary[key.ToString()];
+                    foreach (var cssFile in cssFiles) //Remove css files
+                    {
+                        cssFile.Remove();
+                    }
+                }
+                else
+                {
+                    foreach (var cssFile in cssFiles) //Minify css files
+                    {
+                        var url = cssFile.GetAttributeValue("href", null);
+                        if (url == null) continue;
+
+                        var fileModel = new FileModel(url, projectPath);
+                        resultCssFile = counter + ".css";
+                        fileModel.Minify(results, resultCssFile);
+                        cssFile.Remove(); //Remove
+                    }
+                    cssDictionary[key.ToString()] = resultCssFile; //Add to dictionary
+                    counter++; 
+                }
+
 
                 var headNode = document.DocumentNode.SelectSingleNode("//head"); //Put the css after join and minify
                 if (headNode != null)
@@ -139,12 +163,20 @@ namespace JoinAndMinifyCssPlugin
                     var linkTag = document.CreateElement("link");
 
                     linkTag.Attributes.Add("rel", "stylesheet");
-                    linkTag.Attributes.Add("href", Domain + "/css/style.css");
+                    linkTag.Attributes.Add("href", Domain + "/css/"+resultCssFile);
                     linkTag.Attributes.Add("type", "text/css");
                     //Add to head
                     headNode.AppendChild(linkTag);
                     document.Save(file);
                 }
+            }
+
+            //Remove unused CSS files
+            var cssFilesToRemove = Directory.GetFiles(projectPath, "*.css", SearchOption.AllDirectories);
+            foreach (string cssFile in cssFilesToRemove)
+            {
+                var cssFileName = Path.GetFileName(cssFile);
+                if(!cssDictionary.ContainsValue(cssFileName)) File.Delete(cssFile);
             }
 
             results.Add(new AnalysisResult("", 0, Name,

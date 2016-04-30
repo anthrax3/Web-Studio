@@ -21,7 +21,7 @@ namespace JoinAndMinifyCssPlugin
         /// </summary>
         public static string Domain;
 
-        private readonly string _file;
+        private string _file;
         private readonly string _projectPath;
 
         /// <summary>
@@ -39,13 +39,18 @@ namespace JoinAndMinifyCssPlugin
         ///     method to minify the file
         /// </summary>
         /// <param name="results"></param>
-        public void Minify(List<AnalysisResult> results)
+        public void Minify(List<AnalysisResult> results,string resultCss)
         {
             try
             {
                 string fileToProcess;
                 if (InternalLinkCheck()) //Local file
                 {
+                    if (_file[0].Equals('/'))
+                    {
+                        _file = _file.Replace('/', Path.DirectorySeparatorChar);
+                        _file = _file.Substring(1); //Remove first char
+                    }
                     fileToProcess = Path.Combine(_projectPath, _file);
                 }
                 else //Download
@@ -60,7 +65,7 @@ namespace JoinAndMinifyCssPlugin
                 var minifier = new MsAjaxCssMinifier();
                 var minifyResult = minifier.Minify(content, false);
                 //Save file
-                File.AppendAllText(Path.Combine(_projectPath, "css", "style.css"), minifyResult.MinifiedContent);
+                File.AppendAllText(Path.Combine(_projectPath, "css", resultCss), minifyResult.MinifiedContent);
 
                 //Errors
                 results.AddRange(
@@ -72,9 +77,7 @@ namespace JoinAndMinifyCssPlugin
                     minifyResult.Warnings.Select(
                         warning =>
                             new AnalysisResult(_file.Replace("release", "src"), warning.LineNumber, Strings.Name,
-                                warning.Message, WarningType.Instance)));
-
-                File.Delete(fileToProcess); //Remove file
+                                warning.Message, WarningType.Instance)));   
             }
             catch (Exception)
             {
