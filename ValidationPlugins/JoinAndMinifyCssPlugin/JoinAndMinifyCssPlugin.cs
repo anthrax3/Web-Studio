@@ -14,13 +14,11 @@ namespace JoinAndMinifyCssPlugin
     /// <summary>
     ///     Join all CSS files and minify it
     /// </summary>
-    [Export(typeof (IValidation))]
+    [Export(typeof(IValidation))]
     [ExportMetadata("Name", "JoinAndMinifyCss")]
     [ExportMetadata("After", "PrintCss")]
     public class JoinAndMinifyCssPlugin : IValidation
     {
-     
-
         /// <summary>
         ///     Text of AutoFix for binding
         /// </summary>
@@ -38,7 +36,6 @@ namespace JoinAndMinifyCssPlugin
 
         #region IValidation
 
-        
         /// <summary>
         ///     Name of the plugin
         /// </summary>
@@ -76,8 +73,8 @@ namespace JoinAndMinifyCssPlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            List<AnalysisResult> analysisResults  = new List<AnalysisResult>();
-       
+            var analysisResults = new List<AnalysisResult>();
+
             if (!IsEnabled) return analysisResults;
             //it takes all css files
             var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
@@ -106,14 +103,18 @@ namespace JoinAndMinifyCssPlugin
         /// <param name="projectPath"></param>
         public List<AnalysisResult> Fix(string projectPath)
         {
-            if (!IsAutoFixeable || !IsEnabled ) return null;
-            if(string.IsNullOrWhiteSpace(Domain)) return new List<AnalysisResult> {new AnalysisResult("",0,Name,Strings.DomainNotFound,ErrorType.Instance)};
+            if (!IsAutoFixeable || !IsEnabled) return null;
+            if (string.IsNullOrWhiteSpace(Domain))
+                return new List<AnalysisResult>
+                {
+                    new AnalysisResult("", 0, Name, Strings.DomainNotFound, ErrorType.Instance)
+                };
             var results = new List<AnalysisResult>();
             //it takes all css files
             var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
             FileModel.Domain = Domain;
-            Dictionary<string,string> cssDictionary = new Dictionary<string, string>();
-            int counter = 0;
+            var cssDictionary = new Dictionary<string, string>();
+            var counter = 0;
 
             foreach (var file in filesToCheck) //For each html file
             {
@@ -124,11 +125,11 @@ namespace JoinAndMinifyCssPlugin
                 string resultCssFile = null;
                 var cssFiles = document.DocumentNode.SelectNodes("//link[@rel='stylesheet']"); //Get styles
                 if (cssFiles == null) continue;
-                StringBuilder key = new StringBuilder();
-                foreach (var cssFile in cssFiles)    //Create the key
+                var key = new StringBuilder();
+                foreach (var cssFile in cssFiles) //Create the key
                 {
                     var url = cssFile.GetAttributeValue("href", null);
-                    if(url==null) continue;
+                    if (url == null) continue;
                     key.Append("-" + url);
                 }
                 if (cssDictionary.ContainsKey(key.ToString())) // We already have the result file
@@ -152,7 +153,7 @@ namespace JoinAndMinifyCssPlugin
                         cssFile.Remove(); //Remove
                     }
                     cssDictionary[key.ToString()] = resultCssFile; //Add to dictionary
-                    counter++; 
+                    counter++;
                 }
 
 
@@ -163,7 +164,7 @@ namespace JoinAndMinifyCssPlugin
                     var linkTag = document.CreateElement("link");
 
                     linkTag.Attributes.Add("rel", "stylesheet");
-                    linkTag.Attributes.Add("href", Domain + "/css/"+resultCssFile);
+                    linkTag.Attributes.Add("href", Domain + "/css/" + resultCssFile);
                     linkTag.Attributes.Add("type", "text/css");
                     //Add to head
                     headNode.AppendChild(linkTag);
@@ -173,10 +174,10 @@ namespace JoinAndMinifyCssPlugin
 
             //Remove unused CSS files
             var cssFilesToRemove = Directory.GetFiles(projectPath, "*.css", SearchOption.AllDirectories);
-            foreach (string cssFile in cssFilesToRemove)
+            foreach (var cssFile in cssFilesToRemove)
             {
                 var cssFileName = Path.GetFileName(cssFile);
-                if(!cssDictionary.ContainsValue(cssFileName)) File.Delete(cssFile);
+                if (!cssDictionary.ContainsValue(cssFileName)) File.Delete(cssFile);
             }
 
             results.Add(new AnalysisResult("", 0, Name,
@@ -185,7 +186,7 @@ namespace JoinAndMinifyCssPlugin
         }
 
         /// <summary>
-        /// View showed when you select the plugin
+        ///     View showed when you select the plugin
         /// </summary>
         public UserControl GetView()
         {

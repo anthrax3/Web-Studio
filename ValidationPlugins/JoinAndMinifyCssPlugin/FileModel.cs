@@ -21,8 +21,9 @@ namespace JoinAndMinifyCssPlugin
         /// </summary>
         public static string Domain;
 
-        private string _file;
         private readonly string _projectPath;
+
+        private string _file;
 
         /// <summary>
         ///     Default constructor
@@ -39,7 +40,8 @@ namespace JoinAndMinifyCssPlugin
         ///     method to minify the file
         /// </summary>
         /// <param name="results"></param>
-        public void Minify(List<AnalysisResult> results,string resultCss)
+        /// <param name="resultCss"></param>
+        public void Minify(List<AnalysisResult> results, string resultCss)
         {
             try
             {
@@ -77,7 +79,7 @@ namespace JoinAndMinifyCssPlugin
                     minifyResult.Warnings.Select(
                         warning =>
                             new AnalysisResult(_file.Replace("release", "src"), warning.LineNumber, Strings.Name,
-                                warning.Message, WarningType.Instance)));   
+                                warning.Message, WarningType.Instance)));
             }
             catch (Exception)
             {
