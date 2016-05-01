@@ -21,8 +21,9 @@ namespace JoinAndMinifyJsPlugin
         /// </summary>
         public static string Domain;
 
-        private readonly string _file;
         private readonly string _projectPath;
+
+        private string _file;
 
         /// <summary>
         ///     Default constructor
@@ -39,13 +40,19 @@ namespace JoinAndMinifyJsPlugin
         ///     method to minify the file
         /// </summary>
         /// <param name="results"></param>
-        public void Minify(List<AnalysisResult> results)
+        /// <param name="resultJs"></param>
+        public void Minify(List<AnalysisResult> results, string resultJs)
         {
             try
             {
                 string fileToProcess;
                 if (InternalLinkCheck()) //Local file
                 {
+                    if (_file[0].Equals('/'))
+                    {
+                        _file = _file.Replace('/', Path.DirectorySeparatorChar);
+                        _file = _file.Substring(1); //Remove first char
+                    }
                     fileToProcess = Path.Combine(_projectPath, _file);
                 }
                 else //Download
@@ -60,7 +67,7 @@ namespace JoinAndMinifyJsPlugin
                 var minifier = new MsAjaxJsMinifier();
                 var minifyResult = minifier.Minify(content, false);
                 //Save file
-                File.AppendAllText(Path.Combine(_projectPath, "js", "script.js"), minifyResult.MinifiedContent);
+                File.AppendAllText(Path.Combine(_projectPath, "js", resultJs), minifyResult.MinifiedContent);
 
                 //Errors
                 results.AddRange(
@@ -73,8 +80,6 @@ namespace JoinAndMinifyJsPlugin
                         warning =>
                             new AnalysisResult(_file.Replace("release", "src"), warning.LineNumber, Strings.Name,
                                 warning.Message, WarningType.Instance)));
-
-                File.Delete(fileToProcess); //Remove file
             }
             catch (Exception)
             {
