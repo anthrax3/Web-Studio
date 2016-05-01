@@ -7,8 +7,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using FastObservableCollection;
-using MahApps.Metro.Controls;
-using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Interactivity.InteractionRequest;
@@ -36,6 +34,7 @@ namespace Web_Studio.ViewModels
         /// <summary>
         ///     Default constructor, it loads the values from user config.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public MainWindowViewModel()
         {
             if (ProjectModel.Instance.FullPath != null)
@@ -50,11 +49,15 @@ namespace Web_Studio.ViewModels
             EditorLinkTextForegroundBrush =
                 (SolidColorBrush) new BrushConverter().ConvertFrom(Settings.Default.EditorLinkTextForegroundBrush);
 
+            Results = new FastObservableCollection<AnalysisResult>();
+
             OptionWindowRequest = new InteractionRequest<INotification>();
             NewProjectRequest = new InteractionRequest<INotification>();
             PluginsWindowRequest = new InteractionRequest<INotification>();
             SaveChangesInteractionRequest = new InteractionRequest<IConfirmation>();
             ItemRemovedRequest = new InteractionRequest<IConfirmation>();
+            FtpClientWindowRequest = new InteractionRequest<INotification>();
+            AboutWindowRequest = new InteractionRequest<INotification>();
 
             //Manage commands
             SelectedItemChangedCommand = new DelegateCommand(SelectedItemChanged);
@@ -63,6 +66,8 @@ namespace Web_Studio.ViewModels
             NewProjectCommand = new DelegateCommand(NewProject);
             GenerateCommand = new DelegateCommand(Generate);
             PluginsWindowCommand = new DelegateCommand(PluginsWindow);
+            FtpClientCommand = new DelegateCommand(FtpClientWindow);
+            AboutWindowCommand = new DelegateCommand(AboutWindow);
             CloseProjectCommand = new DelegateCommand(CloseProject);
             SaveProjectCommand = new DelegateCommand(SaveProject);
             AddFileCommand = new DelegateCommand(AddFile);
@@ -82,8 +87,6 @@ namespace Web_Studio.ViewModels
             GenerationWorker.RunWorkerCompleted += GenerationWorkerOnRunWorkerCompleted;
             GenerationWorker.WorkerSupportsCancellation = true;
         }
-
-         
 
         /// <summary>
         ///     Path to the loaded project
@@ -116,7 +119,17 @@ namespace Web_Studio.ViewModels
         /// <summary>
         /// It request the view to open the plugins window
         /// </summary>
-        public InteractionRequest<INotification> PluginsWindowRequest { get; set; } 
+        public InteractionRequest<INotification> PluginsWindowRequest { get; set; }
+
+        /// <summary>
+        /// It request the view to open the FTP client window
+        /// </summary>
+        public InteractionRequest<INotification> FtpClientWindowRequest { get; set; }
+
+        /// <summary>
+        /// It request the view to open the about window
+        /// </summary>
+        public InteractionRequest<INotification> AboutWindowRequest { get; set; }
 
         /// <summary>
         /// Add file menu command
@@ -157,6 +170,16 @@ namespace Web_Studio.ViewModels
         ///     Plugins menu command
         /// </summary>
         public DelegateCommand PluginsWindowCommand { get; private set; }
+
+        /// <summary>
+        /// FTP client menu command
+        /// </summary>
+        public DelegateCommand FtpClientCommand { get; private set; }
+
+        /// <summary>
+        /// About window command
+        /// </summary>
+        public DelegateCommand AboutWindowCommand { get; private set; }
 
         /// <summary>
         /// Create and open a new file
@@ -296,6 +319,22 @@ namespace Web_Studio.ViewModels
             ValidationPluginsViewModel.Plugins = null;
             ValidationPluginsViewModel.Plugins = ValidationPluginManager.Plugins;
             PluginsWindowRequest.Raise( new Notification {Title = "Plugins"});
+        }
+
+        /// <summary>
+        /// Raise Ftp client window request
+        /// </summary>
+        private void FtpClientWindow()
+        {
+            FtpClientWindowRequest.Raise(new Notification {Title = Strings.FtpClient});
+        }
+
+        /// <summary>
+        /// Raise About window request
+        /// </summary>
+        private void AboutWindow()
+        {
+            AboutWindowRequest.Raise(new Notification { Title = Strings.About });
         }
 
         /// <summary>
@@ -461,9 +500,9 @@ namespace Web_Studio.ViewModels
                                     Documents.Remove(Documents.FirstOrDefault(t => t.ToolTip == node.FullPath));
                                     //Remove document
                                 }
-                                catch (Exception)
+                                catch (Exception e)
                                 {
-                                    //TODO:
+                                    Telemetry.Telemetry.TelemetryClient.TrackException(e);
                                 }
                             }
                         });
@@ -493,9 +532,9 @@ namespace Web_Studio.ViewModels
                                         Documents.Remove(document); //Remove document
                                     }
                                 }
-                                catch (Exception)
+                                catch (Exception e)
                                 {
-                                    //TODO:
+                                   Telemetry.Telemetry.TelemetryClient.TrackException(e);
                                 }
                             }
                         });
@@ -590,12 +629,14 @@ namespace Web_Studio.ViewModels
 
         #region Messages
 
-       
+        private int _errorMessages;
+        private int _warningMessages;
+
 
         /// <summary>
         /// Collection with the messages generated by the plugins
         /// </summary>
-        public FastObservableCollection<AnalysisResult> Results { get; set; } = new FastObservableCollection<AnalysisResult>();
+        public FastObservableCollection<AnalysisResult> Results { get; set; } 
 
         /// <summary>
         /// Command to manage the generate option
@@ -609,6 +650,7 @@ namespace Web_Studio.ViewModels
         {
             if (ProjectPath != null && !IsGeneratingProject)
             {
+                Telemetry.Telemetry.TelemetryClient.TrackEvent("Generation");
                 Results.Clear();
                 NumberOfRulesProcessed = 0;
                 int counter = 0;
@@ -642,6 +684,8 @@ namespace Web_Studio.ViewModels
         private void GenerationWorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
         {
             string releasePath = Path.Combine(ProjectPath, "release");
+            _errorMessages = 0;
+            _warningMessages = 0;
 
             //Check loop
             foreach (Lazy<IValidation, IValidationMetadata> t in ValidationPluginManager.Plugins)
@@ -655,6 +699,11 @@ namespace Web_Studio.ViewModels
                 if (plugin.IsEnabled)
                 {
                     var tempResults = plugin.Check(releasePath);
+                    foreach (AnalysisResult analysisResult in tempResults)
+                    {
+                        if (analysisResult.Type == ErrorType.Instance) _errorMessages++;
+                        if (analysisResult.Type == WarningType.Instance) _warningMessages++;
+                    }
                     Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
                     {
                         Results.AddRange(tempResults);
@@ -674,13 +723,26 @@ namespace Web_Studio.ViewModels
                 var plugin = t.Value;
                 if (plugin.IsAutoFixeable && plugin.IsEnabled)
                 {
+                    //Fix
                     var tempResults = t.Value.Fix(releasePath);
+                    foreach (AnalysisResult analysisResult in tempResults)
+                    {
+                        if (analysisResult.Type == ErrorType.Instance) _errorMessages++;
+                        if (analysisResult.Type == WarningType.Instance) _warningMessages++;
+                    }
                     Application.Current.Dispatcher.BeginInvoke((Action) delegate //Update UI
                     {
                         Results.AddRange(tempResults);
                         NumberOfRulesProcessed++;
                     });
+
+                    //Recheck
                     var checkResults = plugin.Check(releasePath);
+                    foreach (AnalysisResult analysisResult in tempResults)
+                    {
+                        if (analysisResult.Type == ErrorType.Instance) _errorMessages++;
+                        if (analysisResult.Type == WarningType.Instance) _warningMessages++;
+                    }
                     Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
                     {
                         Results.AddRange(checkResults);
@@ -699,9 +761,9 @@ namespace Web_Studio.ViewModels
         private void GenerationWorkerOnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs runWorkerCompletedEventArgs)
         {
             IsGeneratingProject = false;
-            int errors = Results.Count(t => t.Type == ErrorType.Instance);
-            int warnings = Results.Count(t => t.Type == WarningType.Instance);
-            Notifications.RaiseGeneratedNotification(errors,warnings);
+            Telemetry.Telemetry.TelemetryClient.TrackMetric("Errors",_errorMessages);  
+            Telemetry.Telemetry.TelemetryClient.TrackMetric("Warnings",_warningMessages);
+            Notifications.RaiseGeneratedNotification(_errorMessages,_warningMessages);
         }
         
         /// <summary>
@@ -808,7 +870,8 @@ namespace Web_Studio.ViewModels
         /// </summary>
         private void BusyControlCancel()
         {
-          GenerationWorker.CancelAsync();  
+          GenerationWorker.CancelAsync();
+          Telemetry.Telemetry.TelemetryClient.TrackEvent("Cancel Generation");    
         }
 
 

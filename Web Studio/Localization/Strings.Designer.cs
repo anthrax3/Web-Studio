@@ -151,6 +151,15 @@ namespace Web_Studio.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Created by Jorge Durán.
+        /// </summary>
+        public static string CreatedBy {
+            get {
+                return ResourceManager.GetString("CreatedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Edit.
         /// </summary>
         public static string Edit {
@@ -237,6 +246,15 @@ namespace Web_Studio.Localization {
         public static string FontSize {
             get {
                 return ResourceManager.GetString("FontSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a FTP client.
+        /// </summary>
+        public static string FtpClient {
+            get {
+                return ResourceManager.GetString("FtpClient", resourceCulture);
             }
         }
         
@@ -473,6 +491,15 @@ namespace Web_Studio.Localization {
         public static string Software {
             get {
                 return ResourceManager.GetString("Software", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Thanks to these awesome tools and libraries.
+        /// </summary>
+        public static string ThanksTo {
+            get {
+                return ResourceManager.GetString("ThanksTo", resourceCulture);
             }
         }
         

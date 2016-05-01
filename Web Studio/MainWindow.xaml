@@ -64,6 +64,22 @@
             </windowAction:MetroPopupWindowAction>
         </interactionRequest:InteractionRequestTrigger>
 
+        <interactionRequest:InteractionRequestTrigger SourceObject="{Binding FtpClientWindowRequest, Mode=OneWay}">
+            <windowAction:MetroPopupWindowAction IsModal="False">
+                <windowAction:MetroPopupWindowAction.WindowContent>
+                    <webStudio:FtpClient />
+                </windowAction:MetroPopupWindowAction.WindowContent>
+            </windowAction:MetroPopupWindowAction>
+        </interactionRequest:InteractionRequestTrigger>
+
+        <interactionRequest:InteractionRequestTrigger SourceObject="{Binding AboutWindowRequest, Mode=OneWay}">
+            <windowAction:MetroPopupWindowAction IsModal="True">
+                <windowAction:MetroPopupWindowAction.WindowContent>
+                    <webStudio:About />
+                </windowAction:MetroPopupWindowAction.WindowContent>
+            </windowAction:MetroPopupWindowAction>
+        </interactionRequest:InteractionRequestTrigger>
+
         <interactionRequest:InteractionRequestTrigger
             SourceObject="{Binding SaveChangesInteractionRequest, Mode=OneWay}">
             <windowAction:MetroPopupWindowAction IsModal="True" CenterOverAssociatedObject="True" />
@@ -135,7 +151,11 @@
                     </MenuItem.Icon> 
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="{lex:Loc View}" />
+            <MenuItem Header="{lex:Loc FtpClient}" Command="{Binding FtpClientCommand}" >
+                <MenuItem.Icon>
+                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="0,0,-5,0" ></TextBlock>
+                </MenuItem.Icon>
+            </MenuItem>
             <MenuItem Header="{lex:Loc Generate}" Command="{Binding GenerateCommand}">
                 <MenuItem.Icon>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="0,0,-5,0" ></TextBlock>
@@ -151,7 +171,13 @@
                           IsChecked="{Binding ElementName=ExplorerLayout,Path=IsVisible,Mode=TwoWay}"
                           Click="ExplorerMenuItem_OnClick" />
             </MenuItem>
-            <MenuItem Header="{lex:Loc Help}" />
+            <MenuItem Header="{lex:Loc Help}" >
+                <MenuItem Header="{lex:Loc About}" Command="{Binding AboutWindowCommand}">
+                    <MenuItem.Icon>
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="5,0,0,0"></TextBlock>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
         </Menu>
         <avalonDock:DockingManager x:Name="dockingManager" DocumentsSource="{Binding Documents}" Grid.Row="1" ActiveContent="{Binding ActiveDocument, Mode=TwoWay, Converter={StaticResource ActiveDocumentConverter}}">
             <avalonDock:DockingManager.Theme>
@@ -213,7 +239,7 @@
                 <avalonDock:LayoutRoot.BottomSide>
                     <avalonDock:LayoutAnchorSide>
                         <avalonDock:LayoutAnchorGroup>
-                            <avalonDock:LayoutAnchorable x:Name="messagesContainer" Title="{lex:Loc Messages}" CanHide="False" CanClose="False" AutoHideHeight="250"  >
+                            <avalonDock:LayoutAnchorable x:Name="messagesContainer" Title="{lex:Loc Messages}" CanAutoHide="False" CanHide="False" CanClose="False" >
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"></RowDefinition>

@@ -1,0 +1,246 @@
+﻿<UserControl x:Class="FtpClient.FtpClientUI"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:FtpClient"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.DataContext>
+        <local:ViewModel />
+    </UserControl.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="4*" />
+            <RowDefinition Height="2*" />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10">
+            <TextBlock VerticalAlignment="Center" Text="{lex:Loc FtpClient:Strings:Server}" />
+            <Separator Width="5" Background="{x:Null}" />
+            <TextBox VerticalAlignment="Center" Width="100" Text="{Binding Server}" />
+            <Separator Width="20" Background="{x:Null}" />
+            <TextBlock VerticalAlignment="Center" Text="{lex:Loc FtpClient:Strings:UserName}" />
+            <Separator Width="5" Background="{x:Null}" />
+            <TextBox VerticalAlignment="Center" Width="100" Text="{Binding User}" />
+            <Separator Width="20" Background="{x:Null}" />
+            <TextBlock VerticalAlignment="Center" Text="{lex:Loc FtpClient:Strings:Password}" />
+            <Separator Width="5" Background="{x:Null}" />
+            <PasswordBox VerticalAlignment="Center" Width="100" x:Name="Password" PasswordChar="*" />
+            <Separator Width="20" Background="{x:Null}" />
+            <TextBlock VerticalAlignment="Center" Text="{lex:Loc FtpClient:Strings:Port}" />
+            <Separator Width="5" Background="{x:Null}" />
+            <TextBox VerticalAlignment="Center" Width="50" Text="{Binding Port}" />
+            <Separator Width="20" Background="{x:Null}" />
+            <TextBlock VerticalAlignment="Center" Text="{lex:Loc FtpClient:Strings:Mode}" />
+            <Separator Width="5" Background="{x:Null}" />
+            <ComboBox VerticalAlignment="Center" ItemsSource="{Binding Protocols}"
+                      SelectedItem="{Binding ProtocolMode}" />
+            <Separator Width="20" Background="{x:Null}" />
+
+            <Button VerticalAlignment="Center" Content="{Binding Status}" Command="{Binding ConnectCommand}"
+                    CommandParameter="{Binding ElementName=Password}" />
+        </StackPanel>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
+                <Separator Width="10" Background="{x:Null}" />
+                <TextBlock VerticalAlignment="Center" Text="{lex:Loc FtpClient:Strings:Local}" />
+                <Separator Width="10" Background="{x:Null}" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding LocalPath}" />
+                <Separator Width="10" Background="{x:Null}" />
+                <Button VerticalAlignment="Center" Command="{Binding RefreshLocalCommand}">
+                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Text="" />
+                        <Separator Width="4" Background="{x:Null}" />
+                        <TextBlock VerticalAlignment="Center" Text="{lex:Loc FtpClient:Strings:Refresh}" />
+                    </StackPanel>
+                </Button>
+                <Separator Width="10" Background="{x:Null}" />
+                <Button VerticalAlignment="Center" Command="{Binding ParentFolderLocalCommand}">
+                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Text="" />
+                        <Separator Width="4" Background="{x:Null}" />
+                        <TextBlock VerticalAlignment="Center" Text="{lex:Loc FtpClient:Strings:ParentFolder}" />
+
+                    </StackPanel>
+                </Button>
+                <Separator Width="10" Background="{x:Null}" />
+                <Button VerticalAlignment="Center" Command="{Binding UploadCommand}">
+                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Text="" />
+                        <Separator Width="4" Background="{x:Null}" />
+                        <TextBlock VerticalAlignment="Center" Text="{lex:Loc FtpClient:Strings:Upload}" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+                <Separator Width="10" Background="{x:Null}" />
+                <TextBlock VerticalAlignment="Center" Text="{lex:Loc FtpClient:Strings:Remote}" />
+                <Separator Width="10" Background="{x:Null}" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding RemotePath}" />
+                <Separator Width="10" Background="{x:Null}" />
+                <Button VerticalAlignment="Center" Command="{Binding RefreshRemoteCommand}">
+                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Text="" />
+                        <Separator Width="4" Background="{x:Null}" />
+                        <TextBlock VerticalAlignment="Center" Text="{lex:Loc FtpClient:Strings:Refresh}" />
+                    </StackPanel>
+                </Button>
+                <Separator Width="10" Background="{x:Null}" />
+                <Button VerticalAlignment="Center" Command="{Binding ParentFolderRemoteCommand}">
+                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Text="" />
+                        <Separator Width="4" Background="{x:Null}" />
+                        <TextBlock VerticalAlignment="Center" Text="{lex:Loc FtpClient:Strings:ParentFolder}" />
+                    </StackPanel>
+                </Button>
+                <Separator Width="10" Background="{x:Null}" />
+                <Button VerticalAlignment="Center" Command="{Binding DownloadCommand}">
+                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Text="" />
+                        <Separator Width="4" Background="{x:Null}" />
+                        <TextBlock VerticalAlignment="Center" Text="{lex:Loc FtpClient:Strings:Download}" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <DataGrid Grid.Row="1" Grid.Column="0" AutoGenerateColumns="False" EnableColumnVirtualization="True"
+                      EnableRowVirtualization="True"
+                      ItemsSource="{Binding LocalItems}" MaxHeight="1500" MaxColumnWidth="500" IsReadOnly="True"
+                      SelectionMode="Extended" SelectionChanged="LocalSelectionChanged" x:Name="LocalExplorer">
+                <DataGrid.InputBindings>
+                    <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding LocalBrowserCommand}"
+                                  CommandParameter="{Binding ElementName=LocalExplorer, Path=SelectedItem}" />
+                </DataGrid.InputBindings>
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="{lex:Loc FtpClient:Strings:Type}" CanUserSort="True"
+                                            SortMemberPath="Type.Name">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Margin="5,0,0,0" Text="{Binding Type.Icon}" FontFamily="Segoe MDL2 Assets"
+                                           VerticalAlignment="Center" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="{lex:Loc FtpClient:Strings:Name}" Binding="{Binding Name}" />
+                    <DataGridTextColumn Header="{lex:Loc FtpClient:Strings:Size}" Binding="{Binding Size}" />
+                    <DataGridTextColumn Header="{lex:Loc FtpClient:Strings:LastMod}" Binding="{Binding LastWrite}" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <DataGrid Grid.Row="1" Grid.Column="1" AutoGenerateColumns="False" EnableColumnVirtualization="True"
+                      EnableRowVirtualization="True"
+                      ItemsSource="{Binding RemoteItems}" MaxHeight="1500" MaxColumnWidth="500" IsReadOnly="True"
+                      SelectionChanged="RemoteSelectionChanged" x:Name="RemoteExplorer">
+                <DataGrid.InputBindings>
+                    <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding RemoteBrowserCommand}"
+                                  CommandParameter="{Binding ElementName=RemoteExplorer, Path=SelectedItem}" />
+                </DataGrid.InputBindings>
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="{lex:Loc FtpClient:Strings:Type}" CanUserSort="True"
+                                            SortMemberPath="Type.Name">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Margin="5,0,0,0" Text="{Binding Type.Icon}" FontFamily="Segoe MDL2 Assets"
+                                           VerticalAlignment="Center" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="{lex:Loc FtpClient:Strings:Name}" Binding="{Binding Name}" />
+                    <DataGridTextColumn Header="{lex:Loc FtpClient:Strings:Size}" Binding="{Binding Size}" />
+                    <DataGridTextColumn Header="{lex:Loc FtpClient:Strings:LastMod}" Binding="{Binding LastWrite}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <TextBlock VerticalAlignment="Center">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0}-{1}">
+                            <Binding Source="{lex:Loc FtpClient:Strings:PendingTasks}" />
+                            <Binding Path="Tasks.Count" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+                <Separator Width="10" Background="{x:Null}" />
+                <Button Command="{Binding RunTasksCommand}">
+                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Text="" />
+                        <Separator Width="4" Background="{x:Null}" />
+                        <TextBlock VerticalAlignment="Center" Text="{lex:Loc FtpClient:Strings:Run}" />
+                    </StackPanel>
+                </Button>
+                <Separator Width="10" Background="{x:Null}" />
+                <Button Command="{Binding CleanCompletedTasksCommand}">
+                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Text="" />
+                        <Separator Width="4" Background="{x:Null}" />
+                        <TextBlock VerticalAlignment="Center" Text="{lex:Loc FtpClient:Strings:CleanCompletedTasks}" />
+                    </StackPanel>
+                </Button>
+                <Separator Width="10" Background="{x:Null}" />
+                <ProgressBar Width="300" Minimum="0" Maximum="{Binding Tasks.Count}" Value="{Binding ProgressBarValue}"
+                             Visibility="{Binding ProgressBarVisibility}" />
+            </StackPanel>
+            <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding Tasks}"
+                      IsReadOnly="True" SelectionChanged="TasksSelectionChanged">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="{lex:Loc FtpClient:Strings:Source}" Binding="{Binding Source}" />
+                    <DataGridTextColumn Header="{lex:Loc FtpClient:Strings:Destination}"
+                                        Binding="{Binding Destination}" />
+                    <DataGridTextColumn Header="{lex:Loc FtpClient:Strings:Status}" Binding="{Binding Status}" />
+                </DataGrid.Columns>
+                <DataGrid.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.ContainerStyle>
+                            <Style TargetType="{x:Type GroupItem}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type GroupItem}">
+                                            <Expander IsExpanded="True">
+                                                <Expander.Header>
+                                                    <TextBlock>
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} - {1}">
+                                                                <Binding Path="Name" />
+                                                                <Binding Path="ItemCount" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
+                                                </Expander.Header>
+                                                <ItemsPresenter />
+                                                <!-- Items in this group -->
+                                            </Expander>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </GroupStyle.ContainerStyle>
+                    </GroupStyle>
+                </DataGrid.GroupStyle>
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="{lex:Loc FtpClient:Strings:Remove}" Command="{Binding RemoveTaskCommand}">
+                            <MenuItem.Icon>
+                                <TextBlock VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Text=""
+                                           Margin="5,0,0,0" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</UserControl>

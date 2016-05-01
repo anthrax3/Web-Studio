@@ -138,4 +138,7 @@
   <data name="Compression" xml:space="preserve">
     <value>Hemos comprimido tus archivos JavaScript con un ratio del {0:P2}</value>
   </data>
+  <data name="DomainNotFound" xml:space="preserve">
+    <value>Necesitas rellenar el campo dominio, en la configuración del plugin</value>
+  </data>
 </root>

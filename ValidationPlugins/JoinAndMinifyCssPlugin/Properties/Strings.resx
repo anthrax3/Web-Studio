@@ -138,4 +138,7 @@
   <data name="TooFiles" xml:space="preserve">
     <value>You have more than one style in this page, you should join them and minify them</value>
   </data>
+  <data name="DomainNotFound" xml:space="preserve">
+    <value>You need to fill the domain field in the plugin configuration</value>
+  </data>
 </root>

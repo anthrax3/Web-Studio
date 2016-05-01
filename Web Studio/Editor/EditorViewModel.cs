@@ -42,6 +42,7 @@ namespace Web_Studio.Editor
         /// <summary>
         ///     Default constructor
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public EditorViewModel(string title, string path, bool showLineNumbers, Brush linkTextForeground, int fontSize)
         {
             //Config editor

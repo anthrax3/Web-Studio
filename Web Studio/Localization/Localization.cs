@@ -12,7 +12,7 @@ namespace Web_Studio.Localization
     /// <summary>
     /// Class to manage the app language
     /// </summary>
-    public class Localization
+    public static class Localization
     {
         /// <summary>
         /// It changes the language with the culture provided

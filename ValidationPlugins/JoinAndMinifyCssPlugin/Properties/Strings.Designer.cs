@@ -97,6 +97,15 @@ namespace JoinAndMinifyCssPlugin.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a You need to fill the domain field in the plugin configuration.
+        /// </summary>
+        internal static string DomainNotFound {
+            get {
+                return ResourceManager.GetString("DomainNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a We have found a problem with this file.
         /// </summary>
         internal static string FileProblem {

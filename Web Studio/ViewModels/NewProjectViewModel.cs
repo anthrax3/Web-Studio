@@ -20,6 +20,7 @@ namespace Web_Studio.ViewModels
         /// <summary>
         ///     default constructor
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public NewProjectViewModel()
         {
             WizardFinish = new DelegateCommand(WizardFinishRun);
@@ -61,8 +62,9 @@ namespace Web_Studio.ViewModels
                     ProjectPath = folderBrowserDialog.SelectedPath;
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Telemetry.Telemetry.TelemetryClient.TrackException(e);
                 // ignored IO exception or null exception
             }
         }
@@ -146,6 +148,7 @@ namespace Web_Studio.ViewModels
         {
             var loader = new GenericMefPluginLoader<ISocialCheck>("Plugins\\Social");
             var name = ProjectName.Replace(" ", string.Empty); //Name without spaces
+            SocialCheckItems.Clear();
 
             BackgroundWorker worker = new BackgroundWorker();
 

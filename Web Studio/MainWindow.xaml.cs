@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using Web_Studio.Events;
+using Xceed.Wpf.AvalonDock.Layout;
 
 namespace Web_Studio
 {
@@ -15,6 +16,9 @@ namespace Web_Studio
         public MainWindow()
         {
             InitializeComponent();
+            messagesContainer.ToggleAutoHide();
+            var root = (LayoutAnchorablePane)messagesContainer.Parent;
+            root.DockHeight = new GridLength(200);
             EventSystem.Subscribe<ChangedLanguageEvent>(ManageChangedLanguage);
             EventSystem.Subscribe<MessageContainerVisibilityChangedEvent>(MessageContainerVisibilityChanged);
         }
@@ -30,9 +34,9 @@ namespace Web_Studio
                 messagesContainer.IsActive = IsVisible;
 
             }
-            catch (Exception)
+            catch (Exception e)
             {
-               //TODO: 
+              Telemetry.Telemetry.TelemetryClient.TrackException(e);
             }
         }
 

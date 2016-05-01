@@ -38,13 +38,11 @@ namespace Web_Studio.PluginManager
             {
                 GenericMefPluginLoader<Lazy<IValidation, IValidationMetadata>> loader = new GenericMefPluginLoader<Lazy<IValidation, IValidationMetadata>>("Plugins\\Check");
                 Sort(loader.Plugins);
+                Telemetry.Telemetry.TelemetryClient.TrackMetric("Number of check plugins loaded",_plugins.Count);
             }
             catch (Exception e )
             {
-                 File.AppendAllText("webStudio.log","Error when it was loading plugins\n");
-                 File.AppendAllText("webStudio.log", "Message:" + e.Message +"\n");
-                 File.AppendAllText("webStudio.log", "Stack:" + e.StackTrace + "\n");
-
+                 Telemetry.Telemetry.TelemetryClient.TrackException(e);
             }
 
         }
