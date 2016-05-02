@@ -45,7 +45,7 @@ namespace Web_Studio
             //Open with file as argument
             if (e.Args.Length > 0 && File.Exists(e.Args[0]) && Path.GetExtension(e.Args[0]) == ".ws")
             {
-                ProjectModel.Instance.FullPath = Path.GetDirectoryName(e.Args[0]);
+                ProjectModel.Open(e.Args[0]);
             }
 
 
