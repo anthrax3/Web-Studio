@@ -293,4 +293,10 @@ Este proceso moverá la carpeta y su contenido a la papelera de reciclaje</value
   <data name="ThanksTo" xml:space="preserve">
     <value>Gracias a estas increíbles herramientas y bibliotecas</value>
   </data>
+  <data name="FixMessages" xml:space="preserve">
+    <value>Los siguientes mensajes se deben a la ejecución de las correcciones</value>
+  </data>
+  <data name="NotFixedErrors" xml:space="preserve">
+    <value>Los siguientes mensajes no pudieron ser solventados de manera automática.</value>
+  </data>
 </root>

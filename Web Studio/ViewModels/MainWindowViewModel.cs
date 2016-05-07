@@ -730,6 +730,8 @@ namespace Web_Studio.ViewModels
                         if (analysisResult.Type == ErrorType.Instance) _errorMessages++;
                         if (analysisResult.Type == WarningType.Instance) _warningMessages++;
                     }
+                    if (tempResults.Count > 0)  tempResults.Insert(0,new AnalysisResult("",0,plugin.Name,Strings.FixMessages,InfoType.Instance));
+                    
                     Application.Current.Dispatcher.BeginInvoke((Action) delegate //Update UI
                     {
                         Results.AddRange(tempResults);
@@ -743,6 +745,7 @@ namespace Web_Studio.ViewModels
                         if (analysisResult.Type == ErrorType.Instance) _errorMessages++;
                         if (analysisResult.Type == WarningType.Instance) _warningMessages++;
                     }
+                    if(checkResults.Count > 0) checkResults.Insert(0,new AnalysisResult("",0,plugin.Name,Strings.NotFixedErrors,InfoType.Instance));
                     Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
                     {
                         Results.AddRange(checkResults);
