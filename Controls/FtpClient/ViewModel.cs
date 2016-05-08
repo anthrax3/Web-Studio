@@ -11,6 +11,7 @@ using FtpClient.Protocols;
 using FtpClient.Protocols.FTP;
 using FtpClient.Protocols.ItemTypes;
 using FtpClient.Protocols.Messages;
+using MahApps.Metro.Controls;
 using Prism.Commands;
 using Prism.Mvvm;
 
@@ -31,6 +32,7 @@ namespace FtpClient
             ConnectCommand = new DelegateCommand<PasswordBox>(Connect);
             Protocols = new ObservableCollection<string> {"SFTP", "FTP", "FTPS"};
             IsConnected = false;
+            ShowSitesManagerCommand = new DelegateCommand(ShowSitesManager);
 
             LocalBrowserCommand = new DelegateCommand<ProtocolItem>(LocalBrowser);
             ParentFolderLocalCommand = new DelegateCommand(ParentLocalFolder);
@@ -42,6 +44,9 @@ namespace FtpClient
             ParentFolderRemoteCommand = new DelegateCommand(ParentFolderRemote);
             RemoteBrowserCommand = new DelegateCommand<ProtocolItem>(RemoteBrowser);
             DownloadCommand = new DelegateCommand(Download);
+
+            NewSiteCommand = new DelegateCommand(NewSite);
+            DeleteSiteCommand = new DelegateCommand(DeleteSite);
 
             RunTasksCommand = new DelegateCommand(RunTasks);
             CleanCompletedTasksCommand = new DelegateCommand(CleanCompletedTasks);
@@ -56,6 +61,8 @@ namespace FtpClient
             //Group Property
             InitLocal();
         }
+
+     
 
         #region Local
 
@@ -314,6 +321,47 @@ namespace FtpClient
         #region TopMenu
 
         /// <summary>
+        /// Command to show the Sites Manager window
+        /// </summary>
+        public DelegateCommand ShowSitesManagerCommand { get; private set; }
+
+        /// <summary>
+        /// Method to show the sites manager window
+        /// </summary>
+        private void ShowSitesManager()
+        {
+            if(SelectedSite == null) SelectedSite = new Site();
+            if (String.IsNullOrEmpty(SelectedSite.Server))
+            {
+                SelectedSite.Server = "www.web.com";
+            }
+            if(Sites.Count==0) //Add one if Sites are empty
+            Sites.Add(SelectedSite);
+
+            SitesManager sm = new SitesManager
+            {
+                DataContext = this
+            };
+            MetroWindow window = new MetroWindow
+            {
+                Title = Strings.SitesManager,
+                Content = sm,
+                Height = 300,
+                Width = 400,
+                TitleCaps = false
+            };
+            window.ShowDialog();
+            if (SelectedSite != null)
+            {
+                Server = SelectedSite.Server;
+                User = SelectedSite.User;
+                Port = SelectedSite.Port;
+                ProtocolMode = SelectedSite.ProtocolMode;
+            }
+        }
+
+
+        /// <summary>
         ///     Connect with remote host
         /// </summary>
         /// <param name="obj"></param>
@@ -554,6 +602,57 @@ namespace FtpClient
             ProgressBarVisibility = Visibility.Hidden;
         }
 
+        #endregion
+
+        #region SitesManager
+        /// <summary>
+        /// Sites availables
+        /// </summary>
+        public static ObservableCollection<Site> Sites { get; set; } = new ObservableCollection<Site>();
+
+        /// <summary>
+        /// Command to create a new site
+        /// </summary>
+        public DelegateCommand NewSiteCommand { get; private set; }
+
+        /// <summary>
+        /// Command to delete the selected site
+        /// </summary>
+        public DelegateCommand DeleteSiteCommand { get; private set; }
+
+        /// <summary>
+        /// Method to delete the selected site
+        /// </summary>
+        private void DeleteSite()
+        {
+            if(SelectedSite!=null)
+            Sites.Remove(SelectedSite);
+        }
+
+        /// <summary>
+        /// Method to create a new site
+        /// </summary>
+        private void NewSite()
+        {
+            Sites.Add(new Site
+            {
+                Server = "www.web.com"
+            });
+        }
+
+        private Site _selectedSite = new Site();
+
+        /// <summary>
+        /// Selected site
+        /// </summary> 
+        public Site SelectedSite {
+            get { return _selectedSite; }
+            set
+            {
+                _selectedSite = value;
+                OnPropertyChanged();
+            }
+        }
         #endregion
     }
 }

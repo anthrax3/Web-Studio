@@ -9,6 +9,9 @@
 //------------------------------------------------------------------------------
 
 namespace FtpClient {
+    using System;
+    
+    
     /// <summary>
     ///   Clase de recurso fuertemente tipado, para buscar cadenas traducidas, etc.
     /// </summary>
@@ -19,7 +22,7 @@ namespace FtpClient {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Strings {
+    public class Strings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -33,7 +36,7 @@ namespace FtpClient {
         ///   Devuelve la instancia de ResourceManager almacenada en caché utilizada por esta clase.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FtpClient.Strings", typeof(Strings).Assembly);
@@ -48,7 +51,7 @@ namespace FtpClient {
         ///   búsquedas de recursos mediante esta clase de recurso fuertemente tipado.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -60,7 +63,7 @@ namespace FtpClient {
         /// <summary>
         ///   Busca una cadena traducida similar a Clean completed tasks.
         /// </summary>
-        internal static string CleanCompletedTasks {
+        public static string CleanCompletedTasks {
             get {
                 return ResourceManager.GetString("CleanCompletedTasks", resourceCulture);
             }
@@ -69,7 +72,7 @@ namespace FtpClient {
         /// <summary>
         ///   Busca una cadena traducida similar a Close connection.
         /// </summary>
-        internal static string CloseConnection {
+        public static string CloseConnection {
             get {
                 return ResourceManager.GetString("CloseConnection", resourceCulture);
             }
@@ -78,7 +81,7 @@ namespace FtpClient {
         /// <summary>
         ///   Busca una cadena traducida similar a Completed.
         /// </summary>
-        internal static string Completed {
+        public static string Completed {
             get {
                 return ResourceManager.GetString("Completed", resourceCulture);
             }
@@ -87,16 +90,25 @@ namespace FtpClient {
         /// <summary>
         ///   Busca una cadena traducida similar a Connect.
         /// </summary>
-        internal static string Connect {
+        public static string Connect {
             get {
                 return ResourceManager.GetString("Connect", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Delete.
+        /// </summary>
+        public static string Delete {
+            get {
+                return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Destination.
         /// </summary>
-        internal static string Destination {
+        public static string Destination {
             get {
                 return ResourceManager.GetString("Destination", resourceCulture);
             }
@@ -105,16 +117,16 @@ namespace FtpClient {
         /// <summary>
         ///   Busca una cadena traducida similar a Download.
         /// </summary>
-        internal static string Download {
+        public static string Download {
             get {
                 return ResourceManager.GetString("Download", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a Descargas.
+        ///   Busca una cadena traducida similar a Downloads.
         /// </summary>
-        internal static string Downloads {
+        public static string Downloads {
             get {
                 return ResourceManager.GetString("Downloads", resourceCulture);
             }
@@ -123,7 +135,7 @@ namespace FtpClient {
         /// <summary>
         ///   Busca una cadena traducida similar a Error.
         /// </summary>
-        internal static string Error {
+        public static string Error {
             get {
                 return ResourceManager.GetString("Error", resourceCulture);
             }
@@ -132,7 +144,7 @@ namespace FtpClient {
         /// <summary>
         ///   Busca una cadena traducida similar a Last write.
         /// </summary>
-        internal static string LastMod {
+        public static string LastMod {
             get {
                 return ResourceManager.GetString("LastMod", resourceCulture);
             }
@@ -141,7 +153,7 @@ namespace FtpClient {
         /// <summary>
         ///   Busca una cadena traducida similar a Local.
         /// </summary>
-        internal static string Local {
+        public static string Local {
             get {
                 return ResourceManager.GetString("Local", resourceCulture);
             }
@@ -150,7 +162,7 @@ namespace FtpClient {
         /// <summary>
         ///   Busca una cadena traducida similar a Mode.
         /// </summary>
-        internal static string Mode {
+        public static string Mode {
             get {
                 return ResourceManager.GetString("Mode", resourceCulture);
             }
@@ -159,16 +171,25 @@ namespace FtpClient {
         /// <summary>
         ///   Busca una cadena traducida similar a Name.
         /// </summary>
-        internal static string Name {
+        public static string Name {
             get {
                 return ResourceManager.GetString("Name", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a New.
+        /// </summary>
+        public static string New {
+            get {
+                return ResourceManager.GetString("New", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Parent folder.
         /// </summary>
-        internal static string ParentFolder {
+        public static string ParentFolder {
             get {
                 return ResourceManager.GetString("ParentFolder", resourceCulture);
             }
@@ -177,7 +198,7 @@ namespace FtpClient {
         /// <summary>
         ///   Busca una cadena traducida similar a Password.
         /// </summary>
-        internal static string Password {
+        public static string Password {
             get {
                 return ResourceManager.GetString("Password", resourceCulture);
             }
@@ -186,7 +207,7 @@ namespace FtpClient {
         /// <summary>
         ///   Busca una cadena traducida similar a Pending.
         /// </summary>
-        internal static string Pending {
+        public static string Pending {
             get {
                 return ResourceManager.GetString("Pending", resourceCulture);
             }
@@ -195,7 +216,7 @@ namespace FtpClient {
         /// <summary>
         ///   Busca una cadena traducida similar a Pending tasks.
         /// </summary>
-        internal static string PendingTasks {
+        public static string PendingTasks {
             get {
                 return ResourceManager.GetString("PendingTasks", resourceCulture);
             }
@@ -204,7 +225,7 @@ namespace FtpClient {
         /// <summary>
         ///   Busca una cadena traducida similar a Port.
         /// </summary>
-        internal static string Port {
+        public static string Port {
             get {
                 return ResourceManager.GetString("Port", resourceCulture);
             }
@@ -213,7 +234,7 @@ namespace FtpClient {
         /// <summary>
         ///   Busca una cadena traducida similar a Refresh.
         /// </summary>
-        internal static string Refresh {
+        public static string Refresh {
             get {
                 return ResourceManager.GetString("Refresh", resourceCulture);
             }
@@ -222,7 +243,7 @@ namespace FtpClient {
         /// <summary>
         ///   Busca una cadena traducida similar a Remote.
         /// </summary>
-        internal static string Remote {
+        public static string Remote {
             get {
                 return ResourceManager.GetString("Remote", resourceCulture);
             }
@@ -231,7 +252,7 @@ namespace FtpClient {
         /// <summary>
         ///   Busca una cadena traducida similar a Remove.
         /// </summary>
-        internal static string Remove {
+        public static string Remove {
             get {
                 return ResourceManager.GetString("Remove", resourceCulture);
             }
@@ -240,25 +261,43 @@ namespace FtpClient {
         /// <summary>
         ///   Busca una cadena traducida similar a Run.
         /// </summary>
-        internal static string Run {
+        public static string Run {
             get {
                 return ResourceManager.GetString("Run", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Save.
+        /// </summary>
+        public static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Server.
         /// </summary>
-        internal static string Server {
+        public static string Server {
             get {
                 return ResourceManager.GetString("Server", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Sites manager.
+        /// </summary>
+        public static string SitesManager {
+            get {
+                return ResourceManager.GetString("SitesManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Size.
         /// </summary>
-        internal static string Size {
+        public static string Size {
             get {
                 return ResourceManager.GetString("Size", resourceCulture);
             }
@@ -267,7 +306,7 @@ namespace FtpClient {
         /// <summary>
         ///   Busca una cadena traducida similar a Source.
         /// </summary>
-        internal static string Source {
+        public static string Source {
             get {
                 return ResourceManager.GetString("Source", resourceCulture);
             }
@@ -276,7 +315,7 @@ namespace FtpClient {
         /// <summary>
         ///   Busca una cadena traducida similar a Status.
         /// </summary>
-        internal static string Status {
+        public static string Status {
             get {
                 return ResourceManager.GetString("Status", resourceCulture);
             }
@@ -285,7 +324,7 @@ namespace FtpClient {
         /// <summary>
         ///   Busca una cadena traducida similar a Type.
         /// </summary>
-        internal static string Type {
+        public static string Type {
             get {
                 return ResourceManager.GetString("Type", resourceCulture);
             }
@@ -294,7 +333,7 @@ namespace FtpClient {
         /// <summary>
         ///   Busca una cadena traducida similar a Upload.
         /// </summary>
-        internal static string Upload {
+        public static string Upload {
             get {
                 return ResourceManager.GetString("Upload", resourceCulture);
             }
@@ -303,7 +342,7 @@ namespace FtpClient {
         /// <summary>
         ///   Busca una cadena traducida similar a Uploads.
         /// </summary>
-        internal static string Uploads {
+        public static string Uploads {
             get {
                 return ResourceManager.GetString("Uploads", resourceCulture);
             }
@@ -312,7 +351,7 @@ namespace FtpClient {
         /// <summary>
         ///   Busca una cadena traducida similar a Username.
         /// </summary>
-        internal static string UserName {
+        public static string UserName {
             get {
                 return ResourceManager.GetString("UserName", resourceCulture);
             }
