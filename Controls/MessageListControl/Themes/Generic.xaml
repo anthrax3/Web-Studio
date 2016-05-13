@@ -90,7 +90,7 @@
                             <DataGrid
                                 ItemsSource="{Binding RelativeSource={RelativeSource TemplatedParent},Path=ItemsSource}"
                                 Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True"
-                                EnableRowVirtualization="True" EnableColumnVirtualization="True" SelectionMode="Single" SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent},Path=SelectedItem}" MaxHeight="1500" MaxColumnWidth="500">
+                                EnableRowVirtualization="True" EnableColumnVirtualization="True" SelectionMode="Single" SelectedItem="{Binding RelativeSource={RelativeSource TemplatedParent},Path=SelectedItem}" MaxHeight="1500" MaxColumnWidth="1000">
                                 <DataGrid.Columns>
                                     <DataGridTemplateColumn Header="{lex:Loc MessageListControl:Strings:Type}"
                                                             SortMemberPath="Type.Name" CanUserSort="True">
