@@ -781,22 +781,28 @@ namespace Web_Studio.ViewModels
         {
             string srcPath = Path.Combine(ProjectPath, "src");
             string releasePath = Path.Combine(ProjectPath, "release");
-
-            if (Directory.Exists(releasePath))     //Remove old release
+            try
             {
-                Directory.Delete(releasePath,true);
+                if (Directory.Exists(releasePath))     //Remove old release
+                {
+                    Directory.Delete(releasePath, true);  
+                }
+                Directory.CreateDirectory(releasePath);
+
+                foreach (string dirPath in Directory.GetDirectories(srcPath, "*", SearchOption.AllDirectories)) //Crete all directories
+                {
+                    Directory.CreateDirectory(dirPath.Replace(srcPath, releasePath));
+                }
+
+                foreach (string newPath in Directory.GetFiles(srcPath, "*.*", SearchOption.AllDirectories))
+                {
+                    File.Copy(newPath, newPath.Replace(srcPath, releasePath), true); 
+                }
             }
-            Directory.CreateDirectory(releasePath);
-
-            foreach (string dirPath in Directory.GetDirectories(srcPath, "*", SearchOption.AllDirectories)) //Crete all directories
+            catch (Exception e)
             {
-                Directory.CreateDirectory(dirPath.Replace(srcPath, releasePath));
+                Telemetry.Telemetry.TelemetryClient.TrackException(e);
             }
-
-            foreach (string newPath in Directory.GetFiles(srcPath, "*.*", SearchOption.AllDirectories))
-            {
-                File.Copy(newPath, newPath.Replace(srcPath, releasePath), true); 
-            } 
         }
 
         private AnalysisResult _messageSelected;
