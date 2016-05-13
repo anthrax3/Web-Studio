@@ -149,4 +149,7 @@ In the case of you don't have a favicon the plugin can create it.</value>
   <data name="DomainNotFound" xml:space="preserve">
     <value>The domain field is empty</value>
   </data>
+  <data name="Generated" xml:space="preserve">
+    <value>The favicon was generated correctly</value>
+  </data>
 </root>

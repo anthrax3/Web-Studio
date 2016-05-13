@@ -164,7 +164,7 @@ namespace FaviconPlugin
             }
 
 
-            return null;
+            return new List<AnalysisResult> {new AnalysisResult("",0,Name,Strings.Generated,InfoType.Instance)};
         }
 
         /// <summary>
