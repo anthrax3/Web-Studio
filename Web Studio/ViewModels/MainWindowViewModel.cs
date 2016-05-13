@@ -699,7 +699,7 @@ namespace Web_Studio.ViewModels
                 if (plugin.IsEnabled)
                 {
                     var tempResults = plugin.Check(releasePath);
-                    foreach (AnalysisResult analysisResult in tempResults)
+                    foreach (AnalysisResult analysisResult in tempResults ?? Enumerable.Empty<AnalysisResult>())
                     {
                         if (analysisResult.Type == ErrorType.Instance) _errorMessages++;
                         if (analysisResult.Type == WarningType.Instance) _warningMessages++;
@@ -725,12 +725,12 @@ namespace Web_Studio.ViewModels
                 {
                     //Fix
                     var tempResults = t.Value.Fix(releasePath);
-                    foreach (AnalysisResult analysisResult in tempResults)
+                    foreach (AnalysisResult analysisResult in tempResults ?? Enumerable.Empty<AnalysisResult>())
                     {
                         if (analysisResult.Type == ErrorType.Instance) _errorMessages++;
                         if (analysisResult.Type == WarningType.Instance) _warningMessages++;
                     }
-                    if (tempResults.Count > 0)  tempResults.Insert(0,new AnalysisResult("",0,plugin.Name,Strings.FixMessages,InfoType.Instance));
+                    if (tempResults != null && tempResults.Count > 0)  tempResults.Insert(0,new AnalysisResult("",0,plugin.Name,Strings.FixMessages,InfoType.Instance));
                     
                     Application.Current.Dispatcher.BeginInvoke((Action) delegate //Update UI
                     {
@@ -740,12 +740,12 @@ namespace Web_Studio.ViewModels
 
                     //Recheck
                     var checkResults = plugin.Check(releasePath);
-                    foreach (AnalysisResult analysisResult in tempResults)
+                    foreach (AnalysisResult analysisResult in tempResults ?? Enumerable.Empty<AnalysisResult>())
                     {
                         if (analysisResult.Type == ErrorType.Instance) _errorMessages++;
                         if (analysisResult.Type == WarningType.Instance) _warningMessages++;
                     }
-                    if(checkResults.Count > 0) checkResults.Insert(0,new AnalysisResult("",0,plugin.Name,Strings.NotFixedErrors,InfoType.Instance));
+                    if(checkResults!=null && checkResults.Count > 0) checkResults.Insert(0,new AnalysisResult("",0,plugin.Name,Strings.NotFixedErrors,InfoType.Instance));
                     Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
                     {
                         Results.AddRange(checkResults);
