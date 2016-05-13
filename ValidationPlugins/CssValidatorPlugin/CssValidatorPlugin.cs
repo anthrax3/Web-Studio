@@ -114,7 +114,7 @@ namespace CssValidatorPlugin
                         }
                         catch (Exception)
                         { 
-                           
+                            //  Ignore JSON error
                         }
                        
                       
