@@ -109,8 +109,7 @@ namespace RobotPlugin
             File.WriteAllText(robotsPath, @"User-agent: *
 Allow: /");
 
-            List<AnalysisResult> list = new List<AnalysisResult> {RobotsGenerated(robotsPath)};
-            return list;
+            return new List<AnalysisResult> {RobotsGenerated(robotsPath)};  
         }
 
         /// <summary>
