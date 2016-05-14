@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 
 namespace JoinAndMinifyCssPlugin
 {
@@ -16,10 +17,15 @@ namespace JoinAndMinifyCssPlugin
         ///     Compress ratio
         /// </summary>
         /// <param name="projectPath"></param>
+        /// <param name="cssDictionary"></param>
         /// <returns></returns>
-        public static double Ratio(string projectPath)
+        public static double Ratio(string projectPath, Dictionary<string, string> cssDictionary)
         {
-            double minified = new FileInfo(Path.Combine(projectPath, "css", "style.css")).Length;
+            double minified = 0;
+            foreach (KeyValuePair<string, string> pair in cssDictionary)
+            {
+                minified += new FileInfo(Path.Combine(projectPath,"css",pair.Value)).Length;                
+            }
             return minified/TotalCssSize;
         }
     }
