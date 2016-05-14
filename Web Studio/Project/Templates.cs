@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Web_Studio.Models
+namespace Web_Studio.Project
 {
     /// <summary>
     /// Class to manage web templates

@@ -240,8 +240,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.es.resx</DependentUpon>
     </Compile>
-    <Compile Include="Models\ProjectModel.cs" />
-    <Compile Include="Models\Templates.cs" />
+    <Compile Include="Project\ProjectModel.cs" />
+    <Compile Include="Project\Templates.cs" />
     <Compile Include="NewProject.xaml.cs">
       <DependentUpon>NewProject.xaml</DependentUpon>
     </Compile>
@@ -250,8 +250,6 @@
     </Compile>
     <Compile Include="PluginManager\ValidationPluginManager.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="Rules\Rules.cs" />
-    <Compile Include="Rules\RulesLanguage.cs" />
     <Compile Include="Localization\Strings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

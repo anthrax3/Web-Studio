@@ -17,8 +17,8 @@ using ValidationInterface.MessageTypes;
 using Web_Studio.Editor;
 using Web_Studio.Events;
 using Web_Studio.Localization;
-using Web_Studio.Models;
 using Web_Studio.PluginManager;
+using Web_Studio.Project;
 using Web_Studio.Properties;
 using Web_Studio.Utils;
 

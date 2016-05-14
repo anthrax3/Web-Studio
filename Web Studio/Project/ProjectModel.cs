@@ -8,7 +8,7 @@ using ValidationInterface;
 using Web_Studio.PluginManager;
 using Web_Studio.Utils;
 
-namespace Web_Studio.Models
+namespace Web_Studio.Project
 {
     /// <summary>
     ///     Class to manage settings of one project
