@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 
 namespace JoinAndMinifyJsPlugin
 {
@@ -16,10 +17,15 @@ namespace JoinAndMinifyJsPlugin
         ///     Compress ratio
         /// </summary>
         /// <param name="projectPath"></param>
+        /// <param name="jsDictionary"></param>
         /// <returns></returns>
-        public static double Ratio(string projectPath)
+        public static double Ratio(string projectPath, Dictionary<string, string> jsDictionary)
         {
-            double minified = new FileInfo(Path.Combine(projectPath, "js", "script.js")).Length;
+            double minified = 0;
+            foreach (KeyValuePair<string, string> pair in jsDictionary)
+            {
+                minified += new FileInfo(Path.Combine(projectPath, "js", pair.Value)).Length;
+            }
             return minified/TotalJsSize;
         }
     }

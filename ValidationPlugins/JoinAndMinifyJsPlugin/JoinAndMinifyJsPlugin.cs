@@ -96,20 +96,15 @@ namespace JoinAndMinifyJsPlugin
         public List<AnalysisResult> Fix(string projectPath)
         {
             if (!IsAutoFixeable || !IsEnabled) return null;
-            if (string.IsNullOrWhiteSpace(Domain))
-                return new List<AnalysisResult>
-                {
-                    new AnalysisResult("", 0, Name, Strings.DomainNotFound, ErrorType.Instance)
-                };
-
+            if (string.IsNullOrWhiteSpace(Domain)) return new List<AnalysisResult>{new AnalysisResult("", 0, Name, Strings.DomainNotFound, ErrorType.Instance)};
 
             var results = new List<AnalysisResult>();
-            //it takes all js files
-            var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
             var jsDictionary = new Dictionary<string, string>();
             FileModel.Domain = Domain;
+            FileModel.ProjectPath = projectPath;
             var counter = 0;
 
+            var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
 
             foreach (var file in filesToCheck) //For each html file
             {
@@ -120,13 +115,7 @@ namespace JoinAndMinifyJsPlugin
                 string resultJsFile = null;
                 var jsFiles = document.DocumentNode.SelectNodes("//script[@src]"); //Get js
                 if (jsFiles == null) continue; //No js files found
-                var key = new StringBuilder();
-                foreach (var jsFile in jsFiles) //Create the key
-                {
-                    var url = jsFile.GetAttributeValue("src", null);
-                    if (url == null) continue;
-                    key.Append("-" + url);
-                }
+                var key = GenerateKey(jsFiles);
                 if (jsDictionary.ContainsKey(key.ToString())) // We already have the result file
                 {
                     resultJsFile = jsDictionary[key.ToString()];
@@ -142,7 +131,7 @@ namespace JoinAndMinifyJsPlugin
                         var url = jsFile.GetAttributeValue("src", null);
                         if (url == null) continue;
 
-                        var fileModel = new FileModel(url, projectPath);
+                        var fileModel = new FileModel(url);
                         resultJsFile = counter + ".js";
                         fileModel.Minify(results, resultJsFile);
                         jsFile.Remove(); //Remove
@@ -151,29 +140,67 @@ namespace JoinAndMinifyJsPlugin
                     counter++;
                 }
 
-                var headNode = document.DocumentNode.SelectSingleNode("//head"); //Put the js after join and minify
-                if (headNode != null)
-                {
-                    //Create meta description
-                    var linkTag = document.CreateElement("script");
-                    linkTag.Attributes.Add("src", Domain + "/js/" + resultJsFile);
-                    //Add to head
-                    headNode.AppendChild(linkTag);
-                    document.Save(file);
-                }
+                AddNewJsFile(document, resultJsFile, file);
             }
 
-            //Remove unused JS files
+            RemoveUnusedJsFiles(projectPath, jsDictionary);
+
+            results.Add(new AnalysisResult("", 0, Name,
+                string.Format(Strings.Compression, Stadistics.Ratio(projectPath,jsDictionary)), InfoType.Instance));
+            return results;
+        }
+
+        /// <summary>
+        /// Remove all unsused js files
+        /// </summary>
+        /// <param name="projectPath"></param>
+        /// <param name="jsDictionary"></param>
+        private void RemoveUnusedJsFiles(string projectPath, Dictionary<string, string> jsDictionary)
+        {
             var jsFilesToRemove = Directory.GetFiles(projectPath, "*.js", SearchOption.AllDirectories);
             foreach (var jsFile in jsFilesToRemove)
             {
                 var jsFileName = Path.GetFileName(jsFile);
                 if (!jsDictionary.ContainsValue(jsFileName)) File.Delete(jsFile);
             }
+        }
 
-            results.Add(new AnalysisResult("", 0, Name,
-                string.Format(Strings.Compression, Stadistics.Ratio(projectPath)), InfoType.Instance));
-            return results;
+
+        /// <summary>
+        /// Puth in the head the new js file
+        /// </summary>
+        /// <param name="document"></param>
+        /// <param name="resultJsFile"></param>
+        /// <param name="file"></param>
+        private void AddNewJsFile(HtmlDocument document, string resultJsFile, string file)
+        {
+            var headNode = document.DocumentNode.SelectSingleNode("//head"); //Put the js after join and minify
+            if (headNode != null)
+            {
+                //Create meta description
+                var linkTag = document.CreateElement("script");
+                linkTag.Attributes.Add("src", Domain + "/js/" + resultJsFile);
+                //Add to head
+                headNode.AppendChild(linkTag);
+                document.Save(file);
+            }
+        }
+
+        /// <summary>
+        /// Method for generate a key like this: pathToFile1-pathToFile2-pathToFile3
+        /// </summary>
+        /// <param name="jsFiles"></param>
+        /// <returns></returns>
+        private StringBuilder GenerateKey(HtmlNodeCollection jsFiles)
+        {
+            var key = new StringBuilder();
+            foreach (var jsFile in jsFiles) //Create the key
+            {
+                var url = jsFile.GetAttributeValue("src", null);
+                if (url == null) continue;
+                key.Append("-" + url);
+            }
+            return key;
         }
 
         /// <summary>

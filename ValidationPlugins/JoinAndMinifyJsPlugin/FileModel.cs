@@ -21,7 +21,10 @@ namespace JoinAndMinifyJsPlugin
         /// </summary>
         public static string Domain;
 
-        private readonly string _projectPath;
+        /// <summary>
+        /// Full path to project
+        /// </summary>
+        public static string ProjectPath;
 
         private string _file;
 
@@ -29,11 +32,9 @@ namespace JoinAndMinifyJsPlugin
         ///     Default constructor
         /// </summary>
         /// <param name="file"></param>
-        /// <param name="projectPath"></param>
-        public FileModel(string file, string projectPath)
+        public FileModel(string file)
         {
             _file = NormalizeUrl(file);
-            _projectPath = projectPath;
         }
 
         /// <summary>
@@ -53,7 +54,7 @@ namespace JoinAndMinifyJsPlugin
                         _file = _file.Replace('/', Path.DirectorySeparatorChar);
                         _file = _file.Substring(1); //Remove first char
                     }
-                    fileToProcess = Path.Combine(_projectPath, _file);
+                    fileToProcess = Path.Combine(ProjectPath, _file);
                 }
                 else //Download
                 {
@@ -67,7 +68,7 @@ namespace JoinAndMinifyJsPlugin
                 var minifier = new MsAjaxJsMinifier();
                 var minifyResult = minifier.Minify(content, false);
                 //Save file
-                File.AppendAllText(Path.Combine(_projectPath, "js", resultJs), minifyResult.MinifiedContent);
+                File.AppendAllText(Path.Combine(ProjectPath, "js", resultJs), minifyResult.MinifiedContent);
 
                 //Errors
                 results.AddRange(
