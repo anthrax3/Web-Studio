@@ -207,7 +207,7 @@
                                 SelectedItemName="{Binding SelectedItemName}"
                                 SelectedItemPath="{Binding SelectedItemPath}"
                                 SelectedItemIsFolder="{Binding SelectedItemIsFolder}"
-                                PathToWatch="{Binding ProjectPath}"
+                                PathToWatch="{Binding Source={x:Static project:ProjectModel.Instance}, Path=FullPath}"
                                 RemoveCommand="{Binding ExplorerControlItemRemovedCommand}"/>
                                 <Grid Grid.Row="1" Margin="10" Visibility="{Binding SelectedItemPath, Converter={StaticResource NullToVisibilityConverter}}">
                                     <Grid.RowDefinitions>

@@ -28,19 +28,14 @@ namespace Web_Studio.ViewModels
     ///     ViewModel for my custom Avalon TextEditor (aka TextEditorMvvm)
     /// </summary>
     public class MainWindowViewModel : BindableBase
-    {
-        private string _projectPath;
-
+    {   
         /// <summary>
         ///     Default constructor, it loads the values from user config.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public MainWindowViewModel()
         {
-            if (ProjectModel.Instance.FullPath != null)
-            {
-                ProjectPath = ProjectModel.Instance.FullPath;
-            }
+       
 
             //Initialize properties
             Documents = new ObservableCollection<EditorViewModel>();
@@ -79,30 +74,13 @@ namespace Web_Studio.ViewModels
             EventSystem.Subscribe<FontSizeChangedEvent>(ManageChangedFont);
             EventSystem.Subscribe<ShowLineNumbersEvent>(ManageChangedShowLineNumbers);
             EventSystem.Subscribe<ClosedDocumentEvent>(ManageDocumentClosed);
-            EventSystem.Subscribe<ChangedProjectEvent>(ManageChangedProject);
 
             //Worker
             GenerationWorker = new BackgroundWorker();
             GenerationWorker.DoWork += GenerationWorkerOnDoWork;
             GenerationWorker.RunWorkerCompleted += GenerationWorkerOnRunWorkerCompleted;
             GenerationWorker.WorkerSupportsCancellation = true;
-        }
-
-        /// <summary>
-        ///     Path to the loaded project
-        /// </summary>
-        public string ProjectPath
-        {
-            get { return _projectPath; }
-            set { SetProperty(ref _projectPath, value); }
-        }
-
-       
-
-        private void ManageChangedProject(ChangedProjectEvent obj)
-        {
-            ProjectPath = ProjectModel.Instance.FullPath;
-        }
+        } 
 
         #region Menu
 
@@ -186,12 +164,12 @@ namespace Web_Studio.ViewModels
         /// </summary>
         private void NewFile()
         {
-            if (ProjectPath != null)
+            if (ProjectModel.Instance.FullPath != null)
             {
                 var saveFile = new SaveFileDialog
                 {
                     CheckPathExists = true,
-                    InitialDirectory = Path.Combine(ProjectPath,"src"),
+                    InitialDirectory = Path.Combine(ProjectModel.Instance.FullPath, "src"),
                     Filter = "HTML (*.html)|*.html|CSS (*.css)|*.css|JavaScript (*.js)|*.js|" + Strings.File + " (*.*)|*.*"
                 };
                 if (saveFile.ShowDialog() == true)
@@ -208,7 +186,7 @@ namespace Web_Studio.ViewModels
         /// </summary>
         private void AddFile()
         {
-            if (ProjectPath != null)
+            if (ProjectModel.Instance.FullPath != null)
             {
                 var openFile = new OpenFileDialog
                 {
@@ -219,7 +197,8 @@ namespace Web_Studio.ViewModels
 
                 if (openFile.ShowDialog() == true)
                 {
-                    File.Copy(openFile.FileName,Path.Combine(ProjectPath,"src",Path.GetFileName(openFile.FileName))); //Copy file
+                    if (openFile.FileName != null)
+                        File.Copy(openFile.FileName,Path.Combine(ProjectModel.Instance.FullPath, "src",Path.GetFileName(openFile.FileName))); //Copy file
                 }
             }
             
@@ -230,7 +209,7 @@ namespace Web_Studio.ViewModels
         /// </summary>
         private void CloseProject()
         {   
-            if (ProjectPath != null) //We have a project open
+            if (ProjectModel.Instance.FullPath != null) //We have a project open
             {
                 var close = CanCloseProject();
                 if (close)
@@ -248,7 +227,6 @@ namespace Web_Studio.ViewModels
         {
             //Save project
             ProjectModel.Instance.Save();
-            ProjectPath = null;
             Documents.Clear();
             ProjectModel.Instance.Clear();
             Results.Clear();
@@ -261,12 +239,12 @@ namespace Web_Studio.ViewModels
         private bool CanCloseProject()
         {
             bool close = true;
-                bool fileModified = Documents.Any(document => document.EditorIsModified);
+            bool fileModified = Documents.Any(document => document.EditorIsModified);
 
-                if (fileModified)
-                {
-                    SaveChangesInteractionRequest.Raise(
-                        new Confirmation {Title = Strings.SaveChanges, Content = Strings.SaveProjectChangesDescription},
+            if (fileModified)
+            {
+                SaveChangesInteractionRequest.Raise(
+                    new Confirmation { Title = Strings.SaveChanges, Content = Strings.SaveProjectChangesDescription },
                         c =>
                         {
                             if (!c.Confirmed)
@@ -274,13 +252,12 @@ namespace Web_Studio.ViewModels
                                 close = false;
 
                             }
-                        }
+                        } 
+                    );
+            }
 
-                        );
-                }
-           
             return close;
-        } 
+        }
 
         /// <summary>
         /// Save project configuration
@@ -342,7 +319,7 @@ namespace Web_Studio.ViewModels
         /// </summary>
         private void OpenProject()
         {
-            if (ProjectPath != null) //If you have an open project
+            if (ProjectModel.Instance.FullPath != null) //If you have an open project
             {
                 var close = CanCloseProject();
                 if (close)
@@ -367,7 +344,6 @@ namespace Web_Studio.ViewModels
             if (openFile.ShowDialog() == true)
             {
                 ProjectModel.Open(openFile.FileName);
-                ProjectPath = ProjectModel.Instance.FullPath;
             }
         }
 
@@ -614,15 +590,16 @@ namespace Web_Studio.ViewModels
         private EditorViewModel SearchOrCreateDocument(string path)
         {
             var editorViewModel = Documents.Where(doc => doc.ToolTip == path);
-            if (!editorViewModel.Any())
+            var editorViewModels = editorViewModel as EditorViewModel[] ?? editorViewModel.ToArray();
+            if (!editorViewModels.Any())
             {
-                var nuevoNombre = path.Replace(ProjectPath+@"\", String.Empty);
+                var nuevoNombre = path.Replace(ProjectModel.Instance.FullPath + @"\", String.Empty);
                 EditorViewModel myEditor = new EditorViewModel(nuevoNombre, path, EditorShowLineNumbers,
                     EditorLinkTextForegroundBrush, EditorFontSize);
                 Documents.Add(myEditor);
                 return myEditor;
             }
-            return editorViewModel.First();
+            return editorViewModels.First();
         }
 
         #endregion
@@ -648,7 +625,7 @@ namespace Web_Studio.ViewModels
         /// </summary>
         private void Generate()
         {
-            if (ProjectPath != null && !IsGeneratingProject)
+            if (ProjectModel.Instance.FullPath != null && !IsGeneratingProject)
             {
                 Telemetry.Telemetry.TelemetryClient.TrackEvent("Generation");
                 Results.Clear();
@@ -683,7 +660,7 @@ namespace Web_Studio.ViewModels
         /// <param name="doWorkEventArgs"></param>
         private void GenerationWorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
         {
-            string releasePath = Path.Combine(ProjectPath, "release");
+            string releasePath = Path.Combine(ProjectModel.Instance.FullPath, "release");
             _errorMessages = 0;
             _warningMessages = 0;
 
@@ -779,8 +756,8 @@ namespace Web_Studio.ViewModels
         /// </summary>
         private void CopySourceToRelease()
         {
-            string srcPath = Path.Combine(ProjectPath, "src");
-            string releasePath = Path.Combine(ProjectPath, "release");
+            string srcPath = Path.Combine(ProjectModel.Instance.FullPath, "src");
+            string releasePath = Path.Combine(ProjectModel.Instance.FullPath, "release");
             try
             {
                 if (Directory.Exists(releasePath))     //Remove old release

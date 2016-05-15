@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
+using System.Runtime.CompilerServices;
+using BusyControl.Annotations;
 using FtpClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -13,7 +16,7 @@ namespace Web_Studio.Models.Project
     /// <summary>
     ///     Class to manage settings of one project
     /// </summary>
-    public class ProjectModel
+    public class ProjectModel : INotifyPropertyChanged
     {
         /// <summary>
         ///     Project full path
@@ -40,7 +43,11 @@ namespace Web_Studio.Models.Project
         public string FullPath
         {
             get { return _fullPath; }
-            set { _fullPath = value; }
+            set
+            {
+                _fullPath = value;
+                OnPropertyChanged();
+            }
         }
           
         /// <summary>
@@ -85,8 +92,9 @@ namespace Web_Studio.Models.Project
 
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Telemetry.Telemetry.TelemetryClient.TrackException(e);
                 return false;
             }
         }
@@ -96,7 +104,8 @@ namespace Web_Studio.Models.Project
         /// </summary>
         public void Clear()
         {
-            Instance = new ProjectModel();
+            Instance.Name = null;
+            Instance.FullPath = null;
             ViewModel.Sites.Clear();
         }
 
@@ -160,6 +169,21 @@ namespace Web_Studio.Models.Project
             }
          
             Instance.FullPath = Path.GetDirectoryName(path);
+        }
+
+        /// <summary>
+        /// Event for binding
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Raise the PropertyChanged event
+        /// </summary>
+        /// <param name="propertyName"></param>
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
