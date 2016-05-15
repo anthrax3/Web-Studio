@@ -19,6 +19,7 @@
     xmlns:events="clr-namespace:Web_Studio.Events"
     xmlns:windowAction="clr-namespace:Web_Studio.WindowAction"
     xmlns:converters="clr-namespace:Web_Studio.Converters"
+    xmlns:project="clr-namespace:Web_Studio.Models.Project"
     x:Class="Web_Studio.MainWindow"
     mc:Ignorable="d"
     lex:LocalizeDictionary.DesignCulture="es"
@@ -135,13 +136,7 @@
                     <MenuItem.Icon>
                         <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="5,0,0,0"></TextBlock>
                     </MenuItem.Icon>
-                </MenuItem>
-                <Separator />
-                <MenuItem Header="{lex:Loc Exit}" >
-                    <MenuItem.Icon>
-                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="5,0,0,0"></TextBlock>
-                    </MenuItem.Icon>
-                </MenuItem>
+                </MenuItem> 
             </MenuItem>
 
             
