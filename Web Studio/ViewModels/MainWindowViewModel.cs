@@ -17,8 +17,8 @@ using ValidationInterface.MessageTypes;
 using Web_Studio.Editor;
 using Web_Studio.Events;
 using Web_Studio.Localization;
-using Web_Studio.Models;
-using Web_Studio.PluginManager;
+using Web_Studio.Models.PluginManager;
+using Web_Studio.Models.Project;
 using Web_Studio.Properties;
 using Web_Studio.Utils;
 
@@ -699,7 +699,7 @@ namespace Web_Studio.ViewModels
                 if (plugin.IsEnabled)
                 {
                     var tempResults = plugin.Check(releasePath);
-                    foreach (AnalysisResult analysisResult in tempResults)
+                    foreach (AnalysisResult analysisResult in tempResults ?? Enumerable.Empty<AnalysisResult>())
                     {
                         if (analysisResult.Type == ErrorType.Instance) _errorMessages++;
                         if (analysisResult.Type == WarningType.Instance) _warningMessages++;
@@ -725,11 +725,13 @@ namespace Web_Studio.ViewModels
                 {
                     //Fix
                     var tempResults = t.Value.Fix(releasePath);
-                    foreach (AnalysisResult analysisResult in tempResults)
+                    foreach (AnalysisResult analysisResult in tempResults ?? Enumerable.Empty<AnalysisResult>())
                     {
                         if (analysisResult.Type == ErrorType.Instance) _errorMessages++;
                         if (analysisResult.Type == WarningType.Instance) _warningMessages++;
                     }
+                    if (tempResults != null && tempResults.Count > 0)  tempResults.Insert(0,new AnalysisResult("",0,plugin.Name,Strings.FixMessages,InfoType.Instance));
+                    
                     Application.Current.Dispatcher.BeginInvoke((Action) delegate //Update UI
                     {
                         Results.AddRange(tempResults);
@@ -738,11 +740,12 @@ namespace Web_Studio.ViewModels
 
                     //Recheck
                     var checkResults = plugin.Check(releasePath);
-                    foreach (AnalysisResult analysisResult in tempResults)
+                    foreach (AnalysisResult analysisResult in tempResults ?? Enumerable.Empty<AnalysisResult>())
                     {
                         if (analysisResult.Type == ErrorType.Instance) _errorMessages++;
                         if (analysisResult.Type == WarningType.Instance) _warningMessages++;
                     }
+                    if(checkResults!=null && checkResults.Count > 0) checkResults.Insert(0,new AnalysisResult("",0,plugin.Name,Strings.NotFixedErrors,InfoType.Instance));
                     Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
                     {
                         Results.AddRange(checkResults);
@@ -778,22 +781,28 @@ namespace Web_Studio.ViewModels
         {
             string srcPath = Path.Combine(ProjectPath, "src");
             string releasePath = Path.Combine(ProjectPath, "release");
-
-            if (Directory.Exists(releasePath))     //Remove old release
+            try
             {
-                Directory.Delete(releasePath,true);
+                if (Directory.Exists(releasePath))     //Remove old release
+                {
+                    Directory.Delete(releasePath, true);  
+                }
+                Directory.CreateDirectory(releasePath);
+
+                foreach (string dirPath in Directory.GetDirectories(srcPath, "*", SearchOption.AllDirectories)) //Crete all directories
+                {
+                    Directory.CreateDirectory(dirPath.Replace(srcPath, releasePath));
+                }
+
+                foreach (string newPath in Directory.GetFiles(srcPath, "*.*", SearchOption.AllDirectories))
+                {
+                    File.Copy(newPath, newPath.Replace(srcPath, releasePath), true); 
+                }
             }
-            Directory.CreateDirectory(releasePath);
-
-            foreach (string dirPath in Directory.GetDirectories(srcPath, "*", SearchOption.AllDirectories)) //Crete all directories
+            catch (Exception e)
             {
-                Directory.CreateDirectory(dirPath.Replace(srcPath, releasePath));
+                Telemetry.Telemetry.TelemetryClient.TrackException(e);
             }
-
-            foreach (string newPath in Directory.GetFiles(srcPath, "*.*", SearchOption.AllDirectories))
-            {
-                File.Copy(newPath, newPath.Replace(srcPath, releasePath), true); 
-            } 
         }
 
         private AnalysisResult _messageSelected;

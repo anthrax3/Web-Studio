@@ -57,14 +57,14 @@ namespace RobotPlugin
         /// <returns></returns>
         public List<AnalysisResult> Check(string projectPath)
         {
-            List<AnalysisResult> AnalysisResults  = new List<AnalysisResult>();
+            List<AnalysisResult> analysisResults  = new List<AnalysisResult>();
        
-            if (!IsEnabled) return AnalysisResults;
+            if (!IsEnabled) return analysisResults;
 
             var robotsPath = Path.Combine(projectPath, "robots.txt");
             if (!File.Exists(robotsPath))
             {
-                AnalysisResults.Add(new AnalysisResult
+                analysisResults.Add(new AnalysisResult
                 {
                     PluginName = Name,
                     File = "",
@@ -82,7 +82,7 @@ namespace RobotPlugin
                     var match = Regex.Match(line, @"(User-agent: .*)|(Disallow: .*)|(Allow: .*)|(Sitemap: .*)");
                     if (!match.Success)
                     {
-                        AnalysisResults.Add(new AnalysisResult
+                        analysisResults.Add(new AnalysisResult
                         {
                             PluginName = Name,
                             File = robotsPath,
@@ -94,7 +94,7 @@ namespace RobotPlugin
                 }
             }
 
-            return AnalysisResults;
+            return analysisResults;
         }
 
         /// <summary>
@@ -109,8 +109,7 @@ namespace RobotPlugin
             File.WriteAllText(robotsPath, @"User-agent: *
 Allow: /");
 
-            List<AnalysisResult> list = new List<AnalysisResult> {RobotsGenerated(robotsPath)};
-            return list;
+            return new List<AnalysisResult> {RobotsGenerated(robotsPath)};  
         }
 
         /// <summary>

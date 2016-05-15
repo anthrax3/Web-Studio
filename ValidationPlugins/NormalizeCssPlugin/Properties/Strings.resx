@@ -131,4 +131,7 @@ The normalize.css code will be added in all CSS files.</value>
   <data name="Disabled" xml:space="preserve">
     <value>The normalize plugin is disabled, you should turn on the auto fix option for improve your style.</value>
   </data>
+  <data name="Added" xml:space="preserve">
+    <value>The normalize.css style was added correctly</value>
+  </data>
 </root>

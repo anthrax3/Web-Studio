@@ -82,18 +82,14 @@ namespace JoinAndMinifyCssPlugin
             foreach (var file in filesToCheck)
             {
                 var document = new HtmlDocument();
-                document.Load(file);
-
-
+                document.Load(file);   
                 var cssFiles = document.DocumentNode.SelectNodes("//link[@rel='stylesheet']");
                 if (cssFiles == null) continue;
                 if (cssFiles.Count > 1)
                 {
                     analysisResults.Add(new AnalysisResult(file, 0, Name, Strings.TooFiles, WarningType.Instance));
                 }
-            }
-
-
+            }   
             return analysisResults;
         }
 
@@ -104,17 +100,16 @@ namespace JoinAndMinifyCssPlugin
         public List<AnalysisResult> Fix(string projectPath)
         {
             if (!IsAutoFixeable || !IsEnabled) return null;
-            if (string.IsNullOrWhiteSpace(Domain))
-                return new List<AnalysisResult>
-                {
-                    new AnalysisResult("", 0, Name, Strings.DomainNotFound, ErrorType.Instance)
-                };
+            if (string.IsNullOrWhiteSpace(Domain)) return new List<AnalysisResult>{new AnalysisResult("", 0, Name, Strings.DomainNotFound, ErrorType.Instance)};
+
             var results = new List<AnalysisResult>();
-            //it takes all css files
-            var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories);
             FileModel.Domain = Domain;
+            FileModel.ProjectPath = projectPath;
             var cssDictionary = new Dictionary<string, string>();
             var counter = 0;
+
+            //it takes all html files
+            var filesToCheck = Directory.GetFiles(projectPath, "*.html", SearchOption.AllDirectories); 
 
             foreach (var file in filesToCheck) //For each html file
             {
@@ -125,13 +120,7 @@ namespace JoinAndMinifyCssPlugin
                 string resultCssFile = null;
                 var cssFiles = document.DocumentNode.SelectNodes("//link[@rel='stylesheet']"); //Get styles
                 if (cssFiles == null) continue;
-                var key = new StringBuilder();
-                foreach (var cssFile in cssFiles) //Create the key
-                {
-                    var url = cssFile.GetAttributeValue("href", null);
-                    if (url == null) continue;
-                    key.Append("-" + url);
-                }
+                var key = GenerateKey(cssFiles);
                 if (cssDictionary.ContainsKey(key.ToString())) // We already have the result file
                 {
                     resultCssFile = cssDictionary[key.ToString()];
@@ -147,7 +136,7 @@ namespace JoinAndMinifyCssPlugin
                         var url = cssFile.GetAttributeValue("href", null);
                         if (url == null) continue;
 
-                        var fileModel = new FileModel(url, projectPath);
+                        var fileModel = new FileModel(url);
                         resultCssFile = counter + ".css";
                         fileModel.Minify(results, resultCssFile);
                         cssFile.Remove(); //Remove
@@ -155,34 +144,70 @@ namespace JoinAndMinifyCssPlugin
                     cssDictionary[key.ToString()] = resultCssFile; //Add to dictionary
                     counter++;
                 }
-
-
-                var headNode = document.DocumentNode.SelectSingleNode("//head"); //Put the css after join and minify
-                if (headNode != null)
-                {
-                    //Create meta description
-                    var linkTag = document.CreateElement("link");
-
-                    linkTag.Attributes.Add("rel", "stylesheet");
-                    linkTag.Attributes.Add("href", Domain + "/css/" + resultCssFile);
-                    linkTag.Attributes.Add("type", "text/css");
-                    //Add to head
-                    headNode.AppendChild(linkTag);
-                    document.Save(file);
-                }
+                AddNewCssFile(document, resultCssFile, file);
             }
 
-            //Remove unused CSS files
+            RemoveUnusedCssFiles(projectPath, cssDictionary);
+
+            results.Add(new AnalysisResult("", 0, Name,
+                string.Format(Strings.Compression, Stadistics.Ratio(projectPath, cssDictionary)), InfoType.Instance));
+            return results;
+        }
+
+        /// <summary>
+        /// Remove all unused CSS files
+        /// </summary>
+        /// <param name="projectPath"></param>
+        /// <param name="cssDictionary"></param>
+        private void RemoveUnusedCssFiles(string projectPath, Dictionary<string, string> cssDictionary)
+        {
             var cssFilesToRemove = Directory.GetFiles(projectPath, "*.css", SearchOption.AllDirectories);
             foreach (var cssFile in cssFilesToRemove)
             {
                 var cssFileName = Path.GetFileName(cssFile);
                 if (!cssDictionary.ContainsValue(cssFileName)) File.Delete(cssFile);
             }
+        }
 
-            results.Add(new AnalysisResult("", 0, Name,
-                string.Format(Strings.Compression, Stadistics.Ratio(projectPath)), InfoType.Instance));
-            return results;
+        /// <summary>
+        /// Add the new css result file in the head tag
+        /// </summary>
+        /// <param name="document"></param>
+        /// <param name="resultCssFile"></param>
+        /// <param name="file"></param>
+        private void AddNewCssFile(HtmlDocument document, string resultCssFile, string file)
+        {
+            var headNode = document.DocumentNode.SelectSingleNode("//head"); //Put the css after join and minify
+            if (headNode != null)
+            {
+                //Create meta description
+                var linkTag = document.CreateElement("link");
+
+                linkTag.Attributes.Add("rel", "stylesheet");
+                linkTag.Attributes.Add("href", Domain + "/css/" + resultCssFile);
+                linkTag.Attributes.Add("type", "text/css");
+                //Add to head
+                headNode.AppendChild(linkTag);
+                document.Save(file);
+            }
+        }
+
+        /// <summary>
+        /// This method generates a key from all css files. Example if we have 3 files: style.css, colors.css and main.css
+        /// It returns style.css-colors.css-main.css
+        /// </summary>
+        /// <param name="cssFiles"></param>
+        /// <returns></returns>
+        private StringBuilder GenerateKey(HtmlNodeCollection cssFiles)
+        {
+            var key = new StringBuilder();
+            foreach (var cssFile in cssFiles) //Create the key
+            {
+                var url = cssFile.GetAttributeValue("href", null);
+                if (url == null) continue;
+                key.Append("-" + url);
+            }
+            return key;
         }
 
         /// <summary>

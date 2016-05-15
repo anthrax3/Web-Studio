@@ -1,9 +1,5 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using FaviconPlugin.Properties;
 
 namespace FaviconPlugin
@@ -11,7 +7,7 @@ namespace FaviconPlugin
     /// <summary>
     ///     Lógica de interacción para View.xaml
     /// </summary>
-    public partial class View : UserControl
+    public partial class View
     {
         /// <summary>
         ///     Default constructor
@@ -46,11 +42,9 @@ namespace FaviconPlugin
                     case ".PNG":
                         ((Favicon) DataContext).PathToImage = files[0];
                         tbInfo.Text = "";
-                        myGrid.Background = new ImageBrush(new BitmapImage(new Uri(files[0])));
                         break;
                     default:
                         tbInfo.Text = Strings.BadExtension;
-                        myGrid.Background = null;
                         break;
                 }
             }

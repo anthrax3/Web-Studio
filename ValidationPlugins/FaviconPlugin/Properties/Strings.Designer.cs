@@ -126,6 +126,15 @@ namespace FaviconPlugin.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a The favicon was generated correctly.
+        /// </summary>
+        internal static string Generated {
+            get {
+                return ResourceManager.GetString("Generated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a You need to drop only one file.
         /// </summary>
         internal static string MoreThanOneFile {

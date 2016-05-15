@@ -16,7 +16,7 @@ namespace HtmlCompressionPlugin
     /// </summary>
     [Export(typeof (IValidation))]
     [ExportMetadata("Name", "HtmlCompression")]
-    [ExportMetadata("After", "NormalizeCss")]
+    [ExportMetadata("After", "TextRatio")]
     public class HtmlCompression : IValidation
     {
         /// <summary>

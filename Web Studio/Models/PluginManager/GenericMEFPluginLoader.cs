@@ -2,9 +2,9 @@
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
-using System.Linq;
+using System.Reflection;
 
-namespace Web_Studio.PluginManager
+namespace Web_Studio.Models.PluginManager
 {
     /// <summary>
     ///     Class for loading plugins in MEF arch
@@ -18,10 +18,10 @@ namespace Web_Studio.PluginManager
         /// <param name="path"></param>
         public GenericMefPluginLoader(string path)
         {
-            //var directoryCatalog = new DirectoryCatalog(path);
+            var appDirectory  = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            if (appDirectory != null) path = Path.Combine(appDirectory, path);
 
             //An aggregate catalog that combines multiple catalogs
-            //var catalog = new AggregateCatalog(directoryCatalog);
             var catalog = new AggregateCatalog();
             RecursivedMefPluginLoader(catalog,path);
 

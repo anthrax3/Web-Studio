@@ -241,6 +241,15 @@ namespace Web_Studio.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a The following messages were produced by the fix execution.
+        /// </summary>
+        public static string FixMessages {
+            get {
+                return ResourceManager.GetString("FixMessages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Font size.
         /// </summary>
         public static string FontSize {
@@ -309,6 +318,15 @@ namespace Web_Studio.Localization {
         public static string Next {
             get {
                 return ResourceManager.GetString("Next", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a The following messages couldn&apos;t be fixed automatically..
+        /// </summary>
+        public static string NotFixedErrors {
+            get {
+                return ResourceManager.GetString("NotFixedErrors", resourceCulture);
             }
         }
         

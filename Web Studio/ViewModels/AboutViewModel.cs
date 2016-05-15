@@ -16,7 +16,7 @@ namespace Web_Studio.ViewModels
             string[] thanks =
             {
                 "Visual Studio 2015", "ReSharper","AjaxMin","AlexFTPS","AvalonEdit","Extended WPF Toolkit","HTML Agility Pack","Magick .Net","MahApps","Microsoft Application Insights",
-                 "Newtonsoft JSON","PRISM", "SSH.NET","WebMarkupMin","WpfLocalizeExtension"
+                 "Newtonsoft JSON","PRISM", "SSH.NET","WebMarkupMin","WpfLocalizeExtension","ResXManager"
             };
             Thanks.AddRange(thanks);
         }

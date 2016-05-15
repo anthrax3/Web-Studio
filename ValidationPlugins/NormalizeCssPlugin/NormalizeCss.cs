@@ -77,7 +77,7 @@ namespace NormalizeCssPlugin
                 var normalizeContent = Normalize.Code;
                 File.WriteAllText(file, normalizeContent + " \n " + oldContent);
             }
-            return null;
+            return new List<AnalysisResult> {new AnalysisResult("",0,Name,Strings.Added,InfoType.Instance)};
         }
 
         /// <summary>

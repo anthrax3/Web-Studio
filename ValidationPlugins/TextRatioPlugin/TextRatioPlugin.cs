@@ -16,7 +16,7 @@ namespace TextRatioPlugin
     /// </summary>
     [Export(typeof (IValidation))]
     [ExportMetadata("Name", "TextRatio")]
-    [ExportMetadata("After", "Twitter")]
+    [ExportMetadata("After", "NormalizeCss")]
     public class TextRatioPlugin : IValidation
     {
        

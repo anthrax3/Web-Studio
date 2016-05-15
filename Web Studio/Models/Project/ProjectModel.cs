@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
-using Windows.Data.Json;
+using FtpClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ValidationInterface;
-using Web_Studio.PluginManager;
+using Web_Studio.Models.PluginManager;
 using Web_Studio.Utils;
 
-namespace Web_Studio.Models
+namespace Web_Studio.Models.Project
 {
     /// <summary>
     ///     Class to manage settings of one project
@@ -97,6 +97,7 @@ namespace Web_Studio.Models
         public void Clear()
         {
             Instance = new ProjectModel();
+            ViewModel.Sites.Clear();
         }
 
         /// <summary>
@@ -124,6 +125,8 @@ namespace Web_Studio.Models
                     //Add an entry with the plugin name and its writable properties
                     jsonJObject[plugin.Metadata.Name] = JObject.FromObject(plugin.Value, JsonSerializer.Create(settings));  
                 }
+
+                jsonJObject["Sites"] = JArray.FromObject(ViewModel.Sites);
                
                 File.WriteAllText(Path.Combine(Instance.FullPath, Instance.Name + ".ws"),jsonJObject.ToString(Formatting.Indented));
 
@@ -136,10 +139,13 @@ namespace Web_Studio.Models
         /// <param name="path"></param>
         public static void Open(string path)
         { 
-
+            
             JObject jsonObject = JObject.Parse(File.ReadAllText(path));
             Instance.FullPath = jsonObject["FullPath"]?.ToString();
             Instance.Name = jsonObject["Name"]?.ToString();
+            var result = (ObservableCollection<Site>)jsonObject["Sites"]?.ToObject(new ObservableCollection<Site>().GetType());
+            if (result != null)
+                ViewModel.Sites = result;
             for (int index = 0; index < ValidationPluginManager.Plugins.Count; index++)
             {
                 Lazy<IValidation, IValidationMetadata> plugin = ValidationPluginManager.Plugins[index];

@@ -7,8 +7,8 @@ using Prism.Commands;
 using Prism.Mvvm;
 using SocialCheckInterface;
 using Web_Studio.Events;
-using Web_Studio.Models;
-using Web_Studio.PluginManager;
+using Web_Studio.Models.PluginManager;
+using Web_Studio.Models.Project;
 
 namespace Web_Studio.ViewModels
 {

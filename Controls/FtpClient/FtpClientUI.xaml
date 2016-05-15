@@ -17,6 +17,10 @@
             <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10">
+            <Button Command="{Binding ShowSitesManagerCommand}">
+                <TextBlock FontFamily="Segoe MDL2 Assets" Text=""></TextBlock>
+            </Button>
+            <Separator Width="20" Background="{x:Null}" />
             <TextBlock VerticalAlignment="Center" Text="{lex:Loc FtpClient:Strings:Server}" />
             <Separator Width="5" Background="{x:Null}" />
             <TextBox VerticalAlignment="Center" Width="100" Text="{Binding Server}" />

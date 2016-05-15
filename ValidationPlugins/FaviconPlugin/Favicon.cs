@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Windows.Controls;
+using FaviconPlugin.Annotations;
 using FaviconPlugin.Properties;
 using HtmlAgilityPack;
 using ImageMagick;
@@ -17,7 +20,7 @@ namespace FaviconPlugin
     [Export(typeof (IValidation))]
     [ExportMetadata("Name", "Favicon")]
     [ExportMetadata("After", "Include")]
-    public class Favicon : IValidation
+    public class Favicon : IValidation,INotifyPropertyChanged
     {
        
         /// <summary>
@@ -30,10 +33,20 @@ namespace FaviconPlugin
         /// </summary>
         public string DragAndDropText => Strings.DragAndDrop;
 
+        private string _pathToImage;
+
         /// <summary>
         ///     Path to image for favicon
         /// </summary>
-        public string PathToImage { get; set; }
+        public string PathToImage {
+            get { return _pathToImage; }
+            set
+            {
+                if (value == _pathToImage) return;
+                _pathToImage = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         ///     Display info about domain property
@@ -151,7 +164,7 @@ namespace FaviconPlugin
             }
 
 
-            return null;
+            return new List<AnalysisResult> {new AnalysisResult("",0,Name,Strings.Generated,InfoType.Instance)};
         }
 
         /// <summary>
@@ -163,5 +176,20 @@ namespace FaviconPlugin
         }
 
         #endregion
+
+        /// <summary>
+        /// Event of INotifyPropertyChanged
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Method of INotifyPropertyChanged
+        /// </summary>
+        /// <param name="propertyName"></param>
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

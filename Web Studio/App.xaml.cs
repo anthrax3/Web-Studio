@@ -5,7 +5,7 @@ using System.IO;
 using System.Threading;
 using System.Windows;
 using MS.WindowsAPICodePack.Internal;
-using Web_Studio.Models;
+using Web_Studio.Models.Project;
 using Web_Studio.Properties;
 using Web_Studio.Utils;
 using WPFLocalizeExtension.Engine;
@@ -45,7 +45,7 @@ namespace Web_Studio
             //Open with file as argument
             if (e.Args.Length > 0 && File.Exists(e.Args[0]) && Path.GetExtension(e.Args[0]) == ".ws")
             {
-                ProjectModel.Instance.FullPath = Path.GetDirectoryName(e.Args[0]);
+                ProjectModel.Open(e.Args[0]);
             }
 
 

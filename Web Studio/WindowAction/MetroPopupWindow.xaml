@@ -6,7 +6,7 @@
                       xmlns:local="clr-namespace:Web_Studio.Events"
                       xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
                       mc:Ignorable="d"
-                      Title="MetroPopupWindow" TitleCaps="False" SizeToContent="WidthAndHeight">
+                      Title="MetroPopupWindow" TitleCaps="False" SizeToContent="WidthAndHeight" BorderThickness="1" GlowBrush="{DynamicResource AccentColorBrush}">
     <Grid>
         <ContentControl HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0"
                         Content="{Binding Content}" />

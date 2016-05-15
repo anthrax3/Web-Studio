@@ -1,24 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Windows.Controls;
+﻿using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using ValidationInterface;
 
 namespace Web_Studio.Utils
 {
     /// <summary>
     /// Custon JSON resolver for Newtonsoft JSON
     /// </summary>
-    public class SetPropertiesResolver : DefaultContractResolver
-    {
-        /// <summary>
-        /// Creates an instance
-        /// </summary>
-        public static readonly SetPropertiesResolver Instance = new SetPropertiesResolver();
-
+    internal class SetPropertiesResolver : DefaultContractResolver
+    {  
         /// <summary>
         /// Only serialize to JSON writables properties
         /// </summary>

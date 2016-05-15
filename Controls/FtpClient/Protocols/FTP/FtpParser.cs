@@ -21,7 +21,8 @@ namespace FtpClient.Protocols.FTP
             var items = new List<ProtocolItem>();
             foreach (var line in lines)
             {
-                items.Add(ItemParser(line, currentPath));
+                var result = ItemParser(line, currentPath);
+                if(result!=null) items.Add(result);
             }
             return items;
         }
@@ -34,21 +35,27 @@ namespace FtpClient.Protocols.FTP
         /// <returns></returns>
         private static ProtocolItem ItemParser(string item, string currentPath)
         {
-            var parts = item.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries);
-
-
-            var date = DateParser(parts[5], parts[6], parts[7]);
-            if (parts[0][0] == 'd') //Folder
+            try
             {
-                return new ProtocolItem(parts[8], currentPath + PortablePath.PathSeparator(currentPath) + parts[8], 0,
-                    date, FolderType.Instance);
+                var parts = item.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
+                var date = DateParser(parts[5], parts[6], parts[7]);
+                if (parts[0][0] == 'd') //Folder
+                {
+                    return new ProtocolItem(parts[8], currentPath + PortablePath.PathSeparator(currentPath) + parts[8], 0,
+                        date, FolderType.Instance);
+                }
+                if (parts[0][0] == '-') //File
+                {
+                    return new ProtocolItem(parts[8], currentPath + PortablePath.PathSeparator(currentPath) + parts[8],
+                        Convert.ToInt64(parts[4]), date, FileType.Instance);
+                }
             }
-            if (parts[0][0] == '-') //File
+            catch (Exception)
             {
-                return new ProtocolItem(parts[8], currentPath + PortablePath.PathSeparator(currentPath) + parts[8],
-                    Convert.ToInt64(parts[4]), date, FileType.Instance);
+                //Ignore. We have a problem parsing the FTP response
             }
-            return new ProtocolItem("aaa", "aaa", 0, DateTime.Today, FileType.Instance);
+            return null;
         }
 
         /// <summary>
@@ -102,9 +109,14 @@ namespace FtpClient.Protocols.FTP
             }
             var dayNumber = Convert.ToInt32(day);
             var parts = hourAndMinutes.Split(':');
-            var hoursNumber = Convert.ToInt32(parts[0]);
-            var minutesNumber = Convert.ToInt32(parts[1]);
-            return new DateTime(DateTime.Today.Year, monthNumber, dayNumber, hoursNumber, minutesNumber, 0);
+            if (parts.Length == 2) //We have Hours:Minutes example 12:55
+            {
+                var hoursNumber = Convert.ToInt32(parts[0]);
+                var minutesNumber = Convert.ToInt32(parts[1]);
+                return new DateTime(DateTime.Today.Year, monthNumber, dayNumber, hoursNumber, minutesNumber, 0);
+            }
+            //We have the Year
+            return new DateTime(hourAndMinutes[0],monthNumber,dayNumber,0,0,0);
         }
     }
 }

@@ -61,6 +61,15 @@ namespace NormalizeCssPlugin.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a The normalize.css style was added correctly.
+        /// </summary>
+        internal static string Added {
+            get {
+                return ResourceManager.GetString("Added", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Fix automatically.
         /// </summary>
         internal static string AutoFix {

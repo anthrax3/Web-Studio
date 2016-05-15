@@ -100,7 +100,7 @@ namespace LinksPlugin
                 result = link.CheckLocalFiles(localFiles);
                 if (result != null) analysisResults.Add(result);
             }
-            foreach (var file in localFiles) //los que no estan marcados sobran
+            foreach (var file in localFiles) // Create a warning message for each unreferenced file
             {
                 if (!file.IsReferenced)
                 {
