@@ -5,10 +5,10 @@ using FtpClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ValidationInterface;
-using Web_Studio.PluginManager;
+using Web_Studio.Models.PluginManager;
 using Web_Studio.Utils;
 
-namespace Web_Studio.Project
+namespace Web_Studio.Models.Project
 {
     /// <summary>
     ///     Class to manage settings of one project

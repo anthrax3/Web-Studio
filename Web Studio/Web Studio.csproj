@@ -228,7 +228,7 @@
     </Compile>
     <Compile Include="WindowAction\MetroPopupWindowAction.cs" />
     <Compile Include="Events\ShowLineNumbersEvent.cs" />
-    <Compile Include="PluginManager\GenericMEFPluginLoader.cs" />
+    <Compile Include="Models\PluginManager\GenericMEFPluginLoader.cs" />
     <Compile Include="Localization\Localization.cs" />
     <Compile Include="Localization\Strings.es.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -240,15 +240,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.es.resx</DependentUpon>
     </Compile>
-    <Compile Include="Project\ProjectModel.cs" />
-    <Compile Include="Project\Templates.cs" />
+    <Compile Include="Models\Project\ProjectModel.cs" />
+    <Compile Include="Models\Project\Templates.cs" />
     <Compile Include="NewProject.xaml.cs">
       <DependentUpon>NewProject.xaml</DependentUpon>
     </Compile>
     <Compile Include="Options.xaml.cs">
       <DependentUpon>Options.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PluginManager\ValidationPluginManager.cs" />
+    <Compile Include="Models\PluginManager\ValidationPluginManager.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Localization\Strings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -443,6 +443,7 @@
       <FileType>Assembly</FileType>
     </PublishFile>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

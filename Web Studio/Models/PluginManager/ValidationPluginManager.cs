@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using ValidationInterface;
 
-namespace Web_Studio.PluginManager
+namespace Web_Studio.Models.PluginManager
 {
     /// <summary>
     ///    Class to manage the validation plugins

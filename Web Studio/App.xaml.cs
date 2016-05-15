@@ -5,7 +5,7 @@ using System.IO;
 using System.Threading;
 using System.Windows;
 using MS.WindowsAPICodePack.Internal;
-using Web_Studio.Project;
+using Web_Studio.Models.Project;
 using Web_Studio.Properties;
 using Web_Studio.Utils;
 using WPFLocalizeExtension.Engine;

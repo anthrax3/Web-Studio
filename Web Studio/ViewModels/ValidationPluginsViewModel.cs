@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using Prism.Mvvm;
 using ValidationInterface;
-using Web_Studio.PluginManager;
+using Web_Studio.Models.PluginManager;
 
 namespace Web_Studio.ViewModels
 {
