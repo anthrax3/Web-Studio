@@ -1,11 +1,9 @@
-﻿using System.Windows.Controls;
-
-namespace ImagesCompressorPlugin
+﻿namespace ImagesCompressorPlugin
 {
     /// <summary>
-    ///     Lógica de interacción para View.xaml
+    ///     Code Behind View.xaml
     /// </summary>
-    public partial class View : UserControl
+    public partial class View 
     {
         /// <summary>
         ///     Default constructor

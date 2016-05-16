@@ -1,7 +1,7 @@
 ﻿namespace Web_Studio
 {
     /// <summary>
-    ///     Lógica de interacción para NewProject.xaml
+    ///     Code Behind NewProject.xaml
     /// </summary>
     public partial class NewProject
     {

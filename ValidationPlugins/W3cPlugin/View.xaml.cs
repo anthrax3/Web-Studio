@@ -1,9 +1,7 @@
-﻿using System.Windows.Controls;
-
-namespace W3cPlugin
+﻿namespace W3cPlugin
 {
     /// <summary>
-    ///     Lógica de interacción para View.xaml
+    ///     Code Behind View.xaml
     /// </summary>
     public partial class View
     {

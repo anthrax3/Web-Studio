@@ -4,7 +4,7 @@ using Prism.Interactivity.InteractionRequest;
 namespace Web_Studio.WindowAction
 {
     /// <summary>
-    /// Lógica de interacción para MetroConfirmationWindow.xaml
+    /// Code Behind MetroConfirmationWindow.xaml
     /// </summary>
     public partial class MetroConfirmationWindow 
     {

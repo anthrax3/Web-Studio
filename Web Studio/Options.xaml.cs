@@ -1,7 +1,7 @@
 ﻿namespace Web_Studio
 {
     /// <summary>
-    ///     Lógica de interacción para Options.xaml
+    ///     Code Behind Options.xaml
     /// </summary>
     public partial class Options
     {

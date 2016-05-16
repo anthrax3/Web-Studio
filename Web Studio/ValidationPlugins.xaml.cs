@@ -1,7 +1,7 @@
 ﻿namespace Web_Studio
 {
     /// <summary>
-    ///     Lógica de interacción para ValidationPlugins.xaml
+    ///     Code Behind ValidationPlugins.xaml
     /// </summary>
     public partial class ValidationPlugins
     {
