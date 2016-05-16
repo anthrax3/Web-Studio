@@ -42,7 +42,6 @@ namespace Web_Studio.ViewModels
             var fullPath = Path.Combine(ProjectModel.Instance.FullPath, ProjectModel.Instance.Name);
             ProjectModel.Instance.FullPath = fullPath;
             ProjectModel.Instance.Create();
-            EventSystem.Publish(new ChangedProjectEvent());
         }
 
         #region Page 1
