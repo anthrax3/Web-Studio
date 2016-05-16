@@ -204,7 +204,6 @@
     <Compile Include="Editor\SyntaxHighlighter\SyntaxHighlighterTool.cs" />
     <Compile Include="Editor\TextEditorMVVM.cs" />
     <Compile Include="Events\ChangedLanguageEvent.cs" />
-    <Compile Include="Events\ChangedProjectEvent.cs" />
     <Compile Include="Events\ClosedDocumentEvent.cs" />
     <Compile Include="Events\EventSystem.cs" />
     <Compile Include="Events\FontSizeChangedEvent.cs" />
