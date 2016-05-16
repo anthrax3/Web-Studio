@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using FastObservableCollection;
-using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Interactivity.InteractionRequest;
 using Prism.Mvvm;
@@ -19,67 +18,34 @@ using Web_Studio.Events;
 using Web_Studio.Localization;
 using Web_Studio.Models.PluginManager;
 using Web_Studio.Models.Project;
-using Web_Studio.Properties;
 using Web_Studio.Utils;
 
 namespace Web_Studio.ViewModels
 {
     /// <summary>
-    ///     ViewModel for my custom Avalon TextEditor (aka TextEditorMvvm)
+    ///     ViewModel for MainWindow
     /// </summary>
     public class MainWindowViewModel : BindableBase
-    {
-        private string _projectPath;
-
+    {   
         /// <summary>
         ///     Default constructor, it loads the values from user config.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public MainWindowViewModel()
-        {
-            if (ProjectModel.Instance.FullPath != null)
-            {
-                ProjectPath = ProjectModel.Instance.FullPath;
-            }
-
+        {  
             //Initialize properties
-            Documents = new ObservableCollection<EditorViewModel>();
-            EditorShowLineNumbers = Settings.Default.EditorShowLineNumbers;
-            EditorFontSize = Settings.Default.EditorFontSize;
-            EditorLinkTextForegroundBrush =
-                (SolidColorBrush) new BrushConverter().ConvertFrom(Settings.Default.EditorLinkTextForegroundBrush);
-
-            Results = new FastObservableCollection<AnalysisResult>();
-
-            OptionWindowRequest = new InteractionRequest<INotification>();
-            NewProjectRequest = new InteractionRequest<INotification>();
-            PluginsWindowRequest = new InteractionRequest<INotification>();
-            SaveChangesInteractionRequest = new InteractionRequest<IConfirmation>();
             ItemRemovedRequest = new InteractionRequest<IConfirmation>();
-            FtpClientWindowRequest = new InteractionRequest<INotification>();
-            AboutWindowRequest = new InteractionRequest<INotification>();
 
             //Manage commands
-            SelectedItemChangedCommand = new DelegateCommand(SelectedItemChanged);
-            OpenProjectCommand = new DelegateCommand(OpenProject);
-            OptionWindowCommand = new DelegateCommand(OptionWindow);
-            NewProjectCommand = new DelegateCommand(NewProject);
-            GenerateCommand = new DelegateCommand(Generate);
-            PluginsWindowCommand = new DelegateCommand(PluginsWindow);
-            FtpClientCommand = new DelegateCommand(FtpClientWindow);
-            AboutWindowCommand = new DelegateCommand(AboutWindow);
-            CloseProjectCommand = new DelegateCommand(CloseProject);
-            SaveProjectCommand = new DelegateCommand(SaveProject);
-            AddFileCommand = new DelegateCommand(AddFile);
-            NewFileCommand = new DelegateCommand(NewFile);
+            SelectedItemChangedCommand = new DelegateCommand(SelectedItemChanged); 
+            GenerateCommand = new DelegateCommand(Generate);  
             BusyControlCancelCommand = new DelegateCommand(BusyControlCancel);
             ExplorerControlItemRemovedCommand = new DelegateCommand<INode>(ExplorerControlItemRemoved);
 
             //Manage events
             EventSystem.Subscribe<FontSizeChangedEvent>(ManageChangedFont);
             EventSystem.Subscribe<ShowLineNumbersEvent>(ManageChangedShowLineNumbers);
-            EventSystem.Subscribe<ClosedDocumentEvent>(ManageDocumentClosed);
-            EventSystem.Subscribe<ChangedProjectEvent>(ManageChangedProject);
+            EventSystem.Subscribe<ClosedDocumentEvent>(ManageDocumentClosed);   
 
             //Worker
             GenerationWorker = new BackgroundWorker();
@@ -89,301 +55,11 @@ namespace Web_Studio.ViewModels
         }
 
         /// <summary>
-        ///     Path to the loaded project
+        /// Datacontext for Menu and popups
         /// </summary>
-        public string ProjectPath
-        {
-            get { return _projectPath; }
-            set { SetProperty(ref _projectPath, value); }
-        }
-
-       
-
-        private void ManageChangedProject(ChangedProjectEvent obj)
-        {
-            ProjectPath = ProjectModel.Instance.FullPath;
-        }
-
-        #region Menu
-
-        /// <summary>
-        ///     It request the view to open the option window
-        /// </summary>
-        public InteractionRequest<INotification> OptionWindowRequest { get; set; }
-
-        /// <summary>
-        ///     It request the view to open the new project window
-        /// </summary>
-        public InteractionRequest<INotification> NewProjectRequest { get; set; }
-
-        /// <summary>
-        /// It request the view to open the plugins window
-        /// </summary>
-        public InteractionRequest<INotification> PluginsWindowRequest { get; set; }
-
-        /// <summary>
-        /// It request the view to open the FTP client window
-        /// </summary>
-        public InteractionRequest<INotification> FtpClientWindowRequest { get; set; }
-
-        /// <summary>
-        /// It request the view to open the about window
-        /// </summary>
-        public InteractionRequest<INotification> AboutWindowRequest { get; set; }
-
-        /// <summary>
-        /// Add file menu command
-        /// </summary>
-        public DelegateCommand AddFileCommand { get; private set; }
-        
-        /// <summary>
-        ///  Close project menu command
-        /// </summary>
-        public DelegateCommand CloseProjectCommand { get; private set; }
-
-        /// <summary>
-        /// Save project menu command
-        /// </summary>
-        public DelegateCommand SaveProjectCommand { get; private set; }
-
-        /// <summary>
-        ///     New project menu option command
-        /// </summary>
-        public DelegateCommand NewProjectCommand { get; private set; }
-
-        /// <summary>
-        /// New file menu option
-        /// </summary>
-        public DelegateCommand NewFileCommand { get; private set; }
-
-        /// <summary>
-        ///     Open project menu command
-        /// </summary>
-        public DelegateCommand OpenProjectCommand { get; private set; }
-
-        /// <summary>
-        ///     Option menu command
-        /// </summary>
-        public DelegateCommand OptionWindowCommand { get; private set; }
-
-        /// <summary>
-        ///     Plugins menu command
-        /// </summary>
-        public DelegateCommand PluginsWindowCommand { get; private set; }
-
-        /// <summary>
-        /// FTP client menu command
-        /// </summary>
-        public DelegateCommand FtpClientCommand { get; private set; }
-
-        /// <summary>
-        /// About window command
-        /// </summary>
-        public DelegateCommand AboutWindowCommand { get; private set; }
-
-        /// <summary>
-        /// Create and open a new file
-        /// </summary>
-        private void NewFile()
-        {
-            if (ProjectPath != null)
-            {
-                var saveFile = new SaveFileDialog
-                {
-                    CheckPathExists = true,
-                    InitialDirectory = Path.Combine(ProjectPath,"src"),
-                    Filter = "HTML (*.html)|*.html|CSS (*.css)|*.css|JavaScript (*.js)|*.js|" + Strings.File + " (*.*)|*.*"
-                };
-                if (saveFile.ShowDialog() == true)
-                {
-                   File.WriteAllText(saveFile.FileName,String.Empty); //Create file
-                   SearchOrCreateDocument(saveFile.FileName);  
-                }
-            }
-        }
-            
-
-        /// <summary>
-        /// Select a file and copy it to project src 
-        /// </summary>
-        private void AddFile()
-        {
-            if (ProjectPath != null)
-            {
-                var openFile = new OpenFileDialog
-                {
-                    Multiselect = false,
-                    CheckFileExists = true,
-                    CheckPathExists = true
-                };
-
-                if (openFile.ShowDialog() == true)
-                {
-                    File.Copy(openFile.FileName,Path.Combine(ProjectPath,"src",Path.GetFileName(openFile.FileName))); //Copy file
-                }
-            }
-            
-        }
-
-        /// <summary>
-        /// Manage the close project event
-        /// </summary>
-        private void CloseProject()
-        {   
-            if (ProjectPath != null) //We have a project open
-            {
-                var close = CanCloseProject();
-                if (close)
-                {
-                    OrderlyCloseProject();
-                }
-               
-            }
-        }
-
-        /// <summary>
-        /// Close project orderly
-        /// </summary>
-        private void OrderlyCloseProject()
-        {
-            //Save project
-            ProjectModel.Instance.Save();
-            ProjectPath = null;
-            Documents.Clear();
-            ProjectModel.Instance.Clear();
-            Results.Clear();
-        }
-
-        /// <summary>
-        /// Check if we can close the project
-        /// </summary>
-        /// <returns></returns>
-        private bool CanCloseProject()
-        {
-            bool close = true;
-                bool fileModified = Documents.Any(document => document.EditorIsModified);
-
-                if (fileModified)
-                {
-                    SaveChangesInteractionRequest.Raise(
-                        new Confirmation {Title = Strings.SaveChanges, Content = Strings.SaveProjectChangesDescription},
-                        c =>
-                        {
-                            if (!c.Confirmed)
-                            {
-                                close = false;
-
-                            }
-                        }
-
-                        );
-                }
-           
-            return close;
-        } 
-
-        /// <summary>
-        /// Save project configuration
-        /// </summary>
-        private void SaveProject()
-        {
-            ProjectModel.Instance.Save();
-        }
-
-        /// <summary>
-        /// Request to open save changes window
-        /// </summary>
-        public  InteractionRequest<IConfirmation> SaveChangesInteractionRequest { get; } 
-        /// <summary>
-        ///     Raise new project request
-        /// </summary>
-        private void NewProject()
-        {
-            NewProjectRequest.Raise(new Notification {Title = Strings.WizardCreateNewProject});
-        }
-
-        /// <summary>
-        ///     Raise option window request
-        /// </summary>
-        private void OptionWindow()
-        {
-            OptionWindowRequest.Raise(new Notification {Title = Strings.Options});
-        }
-
-        /// <summary>
-        /// Raise plugin window request
-        /// </summary>
-        private void PluginsWindow()
-        {
-            ValidationPluginsViewModel.ConfigurationUI = null;
-            ValidationPluginsViewModel.Plugins = null;
-            ValidationPluginsViewModel.Plugins = ValidationPluginManager.Plugins;
-            PluginsWindowRequest.Raise( new Notification {Title = "Plugins"});
-        }
-
-        /// <summary>
-        /// Raise Ftp client window request
-        /// </summary>
-        private void FtpClientWindow()
-        {
-            FtpClientWindowRequest.Raise(new Notification {Title = Strings.FtpClient});
-        }
-
-        /// <summary>
-        /// Raise About window request
-        /// </summary>
-        private void AboutWindow()
-        {
-            AboutWindowRequest.Raise(new Notification { Title = Strings.About });
-        }
-
-        /// <summary>
-        ///     Display a dialog to select a project
-        /// </summary>
-        private void OpenProject()
-        {
-            if (ProjectPath != null) //If you have an open project
-            {
-                var close = CanCloseProject();
-                if (close)
-                {
-                    OrderlyCloseProject();
-                }
-                else
-                {
-                    return; //Can not close
-                }
-            }
-
-            //Config
-            var openFile = new OpenFileDialog
-            {
-                Multiselect = false,
-                CheckFileExists = true,
-                CheckPathExists = true,
-                Filter = "Web Studio (*.ws)|*.ws"
-            };
-
-            if (openFile.ShowDialog() == true)
-            {
-                ProjectModel.Open(openFile.FileName);
-                ProjectPath = ProjectModel.Instance.FullPath;
-            }
-        }
-
-        #endregion
+        public MenuViewModel Menu { get; } = new MenuViewModel();
 
         #region Editor
-
-        /// <summary>
-        ///     Collection of Documents, editor tabs
-        /// </summary>
-        public ObservableCollection<EditorViewModel> Documents { get; }
-
-        private int _editorFontSize;
-        private Brush _editorLinkTextForegroundBrush;
-        private bool _editorShowLineNumbers;
-
         private EditorViewModel _activeDocument;
         /// <summary>
         /// Active document
@@ -395,41 +71,12 @@ namespace Web_Studio.ViewModels
         }
 
         /// <summary>
-        ///     Enable to show line numbers in editor
-        /// </summary>
-        public bool EditorShowLineNumbers
-        {
-            get { return _editorShowLineNumbers; }
-            set { SetProperty(ref _editorShowLineNumbers, value); }
-        }
-
-
-        /// <summary>
-        ///     Color for links
-        /// </summary>
-        public Brush EditorLinkTextForegroundBrush
-        {
-            get { return _editorLinkTextForegroundBrush; }
-            set { SetProperty(ref _editorLinkTextForegroundBrush, value); }
-        }
-
-
-        /// <summary>
-        ///     Font size in editor
-        /// </summary>
-        public int EditorFontSize
-        {
-            get { return _editorFontSize; }
-            set { SetProperty(ref _editorFontSize, value); }
-        }
-
-        /// <summary>
         ///     Remove closed document
         /// </summary>
         /// <param name="obj"></param>
         private void ManageDocumentClosed(ClosedDocumentEvent obj)
         {
-            Documents.Remove(obj.ClosedDocument);
+            ProjectModel.Instance.Documents.Remove(obj.ClosedDocument);
         }
 
         /// <summary>
@@ -438,10 +85,9 @@ namespace Web_Studio.ViewModels
         /// <param name="obj"></param>
         private void ManageChangedShowLineNumbers(ShowLineNumbersEvent obj)
         {
-            EditorShowLineNumbers = obj.ShowLineNumbers;
-            foreach (var editorViewModel in Documents) //Update all editors
+            foreach (var editorViewModel in ProjectModel.Instance.Documents) //Update all editors
             {
-                editorViewModel.EditorShowLineNumbers = EditorShowLineNumbers;
+                editorViewModel.EditorShowLineNumbers = obj.ShowLineNumbers;
             }
         }
 
@@ -450,12 +96,10 @@ namespace Web_Studio.ViewModels
         /// </summary>
         /// <param name="obj"></param>
         private void ManageChangedFont(FontSizeChangedEvent obj)
-        {
-            EditorFontSize = obj.FontSize;
-
-            foreach (var editorViewModel in Documents)
+        {  
+            foreach (var editorViewModel in ProjectModel.Instance.Documents)
             {
-                editorViewModel.EditorFontSize = EditorFontSize;
+                editorViewModel.EditorFontSize = obj.FontSize; 
             }
         }
 
@@ -497,7 +141,7 @@ namespace Web_Studio.ViewModels
                                 try
                                 {
                                     File.Delete(node.FullPath);
-                                    Documents.Remove(Documents.FirstOrDefault(t => t.ToolTip == node.FullPath));
+                                    ProjectModel.Instance.Documents.Remove(ProjectModel.Instance.Documents.FirstOrDefault(t => t.ToolTip == node.FullPath));
                                     //Remove document
                                 }
                                 catch (Exception e)
@@ -526,10 +170,10 @@ namespace Web_Studio.ViewModels
                                 try
                                 {
                                     Directory.Delete(node.FullPath, true);
-                                    var documentsToRemove = Documents.Where(t => t.ToolTip.Contains(node.FullPath));
+                                    var documentsToRemove = ProjectModel.Instance.Documents.Where(t => t.ToolTip.Contains(node.FullPath));
                                     foreach (var document in documentsToRemove.ToList())
                                     {
-                                        Documents.Remove(document); //Remove document
+                                        ProjectModel.Instance.Documents.Remove(document); //Remove document
                                     }
                                 }
                                 catch (Exception e)
@@ -598,45 +242,27 @@ namespace Web_Studio.ViewModels
                     return;
             }
 
-            foreach (var doc in Documents)
+            foreach (var doc in ProjectModel.Instance.Documents)
             {
                 doc.IsSelected = false;
             }
 
-            EditorViewModel myEditor = SearchOrCreateDocument(SelectedItemPath);
+            EditorViewModel myEditor = ProjectModel.Instance.SearchOrCreateDocument(SelectedItemPath);
             myEditor.IsSelected = true;
         }
 
-        /// <summary>
-        /// Search for a document if it finds it, it returns it, else it creates a new Document and return it
-        /// </summary>
-        /// <param name="path"></param> 
-        private EditorViewModel SearchOrCreateDocument(string path)
-        {
-            var editorViewModel = Documents.Where(doc => doc.ToolTip == path);
-            if (!editorViewModel.Any())
-            {
-                var nuevoNombre = path.Replace(ProjectPath+@"\", String.Empty);
-                EditorViewModel myEditor = new EditorViewModel(nuevoNombre, path, EditorShowLineNumbers,
-                    EditorLinkTextForegroundBrush, EditorFontSize);
-                Documents.Add(myEditor);
-                return myEditor;
-            }
-            return editorViewModel.First();
-        }
-
+       
         #endregion
 
-        #region Messages
-
+        #region Messages 
         private int _errorMessages;
         private int _warningMessages;
-
+        private AnalysisResult _messageSelected; 
 
         /// <summary>
         /// Collection with the messages generated by the plugins
         /// </summary>
-        public FastObservableCollection<AnalysisResult> Results { get; set; } 
+        public FastObservableCollection<AnalysisResult> Results => ProjectModel.Instance.Results;
 
         /// <summary>
         /// Command to manage the generate option
@@ -648,7 +274,7 @@ namespace Web_Studio.ViewModels
         /// </summary>
         private void Generate()
         {
-            if (ProjectPath != null && !IsGeneratingProject)
+            if (ProjectModel.Instance.FullPath != null && !IsGeneratingProject)
             {
                 Telemetry.Telemetry.TelemetryClient.TrackEvent("Generation");
                 Results.Clear();
@@ -656,23 +282,15 @@ namespace Web_Studio.ViewModels
                 int counter = 0;
                 foreach (Lazy<IValidation, IValidationMetadata> plugin in ValidationPluginManager.Plugins)
                 {
-                    if (plugin.Value.IsEnabled)
-                    {
-                        counter++;
-                        if (plugin.Value.IsAutoFixeable)
-                        {
-                            counter += 2; //1º Fix and then Check 
-                        }
-                    }
-                    if (plugin.Value.IsAutoFixeable) counter++;
+                    if (!plugin.Value.IsEnabled) continue;
+                    counter++; // first check
+                    if (plugin.Value.IsAutoFixeable) counter += 2; //fix and second check 
                 }
                 NumberOfRules = counter; //Check and fix each plugin
                 IsGeneratingProject = true;
-                CopySourceToRelease();
-                EventSystem.Publish(new MessageContainerVisibilityChangedEvent {IsVisible = true});  //Make visible messages container
-                 
+                ProjectModel.Instance.CopySourceToRelease();
+                EventSystem.Publish(new MessageContainerVisibilityChangedEvent {IsVisible = true});  //Make visible messages container  
                 GenerationWorker.RunWorkerAsync();
-                
             }
         }
 
@@ -683,7 +301,7 @@ namespace Web_Studio.ViewModels
         /// <param name="doWorkEventArgs"></param>
         private void GenerationWorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
         {
-            string releasePath = Path.Combine(ProjectPath, "release");
+            string releasePath = Path.Combine(ProjectModel.Instance.FullPath, "release");
             _errorMessages = 0;
             _warningMessages = 0;
 
@@ -696,20 +314,11 @@ namespace Web_Studio.ViewModels
                     return;
                 }
                 var plugin = t.Value;
-                if (plugin.IsEnabled)
-                {
-                    var tempResults = plugin.Check(releasePath);
-                    foreach (AnalysisResult analysisResult in tempResults ?? Enumerable.Empty<AnalysisResult>())
-                    {
-                        if (analysisResult.Type == ErrorType.Instance) _errorMessages++;
-                        if (analysisResult.Type == WarningType.Instance) _warningMessages++;
-                    }
-                    Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
-                    {
-                        Results.AddRange(tempResults);
-                        NumberOfRulesProcessed++;
-                    });
-                }
+                if (!plugin.IsEnabled) continue;
+
+                var tempResults = plugin.Check(releasePath);
+                CountMessageTypes(tempResults);
+                UpdateStatusOfGeneration(tempResults);
             }
 
             //Fix loop and recheck loop
@@ -721,39 +330,50 @@ namespace Web_Studio.ViewModels
                     return;
                 }
                 var plugin = t.Value;
-                if (plugin.IsAutoFixeable && plugin.IsEnabled)
-                {
-                    //Fix
-                    var tempResults = t.Value.Fix(releasePath);
-                    foreach (AnalysisResult analysisResult in tempResults ?? Enumerable.Empty<AnalysisResult>())
-                    {
-                        if (analysisResult.Type == ErrorType.Instance) _errorMessages++;
-                        if (analysisResult.Type == WarningType.Instance) _warningMessages++;
-                    }
-                    if (tempResults != null && tempResults.Count > 0)  tempResults.Insert(0,new AnalysisResult("",0,plugin.Name,Strings.FixMessages,InfoType.Instance));
-                    
-                    Application.Current.Dispatcher.BeginInvoke((Action) delegate //Update UI
-                    {
-                        Results.AddRange(tempResults);
-                        NumberOfRulesProcessed++;
-                    });
 
-                    //Recheck
-                    var checkResults = plugin.Check(releasePath);
-                    foreach (AnalysisResult analysisResult in tempResults ?? Enumerable.Empty<AnalysisResult>())
-                    {
-                        if (analysisResult.Type == ErrorType.Instance) _errorMessages++;
-                        if (analysisResult.Type == WarningType.Instance) _warningMessages++;
-                    }
-                    if(checkResults!=null && checkResults.Count > 0) checkResults.Insert(0,new AnalysisResult("",0,plugin.Name,Strings.NotFixedErrors,InfoType.Instance));
-                    Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
-                    {
-                        Results.AddRange(checkResults);
-                        NumberOfRulesProcessed++;
-                    });
-                }
+                if (!plugin.IsAutoFixeable || !plugin.IsEnabled) continue;
+
+                //Fix
+                var tempResults = t.Value.Fix(releasePath);
+                CountMessageTypes(tempResults);
+                if (tempResults != null && tempResults.Count > 0)  tempResults.Insert(0,new AnalysisResult("",0,plugin.Name,Strings.FixMessages,InfoType.Instance));
+
+                UpdateStatusOfGeneration(tempResults);
+
+                //Recheck
+                var checkResults = plugin.Check(releasePath);
+                CountMessageTypes(checkResults);  
+
+                if(checkResults!=null && checkResults.Count > 0) checkResults.Insert(0,new AnalysisResult("",0,plugin.Name,Strings.NotFixedErrors,InfoType.Instance));
+                UpdateStatusOfGeneration(checkResults);
             }
 
+        }
+
+        /// <summary>
+        ///  This method update the UI with the actual status of the generation process
+        /// </summary>
+        /// <param name="results"></param>
+        private void UpdateStatusOfGeneration(List<AnalysisResult> results)
+        {
+            Application.Current.Dispatcher.BeginInvoke((Action) delegate //Update UI
+            {
+                Results.AddRange(results);
+                NumberOfRulesProcessed++;
+            });
+        }
+
+        /// <summary>
+        ///  Count how many messages are error messages and the number of warning messages
+        /// </summary>
+        /// <param name="results"></param>
+        private void CountMessageTypes(List<AnalysisResult> results)
+        {
+            foreach (AnalysisResult analysisResult in results ?? Enumerable.Empty<AnalysisResult>())
+            {
+                if (analysisResult.Type == ErrorType.Instance) _errorMessages++;
+                if (analysisResult.Type == WarningType.Instance) _warningMessages++;
+            }
         }
 
         /// <summary>
@@ -772,40 +392,8 @@ namespace Web_Studio.ViewModels
         /// <summary>
         /// the worker for project generation
         /// </summary>
-        private BackgroundWorker GenerationWorker { get; set; }
+        private BackgroundWorker GenerationWorker { get; set; }    
 
-        /// <summary>
-        /// Method to copy all files in source to release
-        /// </summary>
-        private void CopySourceToRelease()
-        {
-            string srcPath = Path.Combine(ProjectPath, "src");
-            string releasePath = Path.Combine(ProjectPath, "release");
-            try
-            {
-                if (Directory.Exists(releasePath))     //Remove old release
-                {
-                    Directory.Delete(releasePath, true);  
-                }
-                Directory.CreateDirectory(releasePath);
-
-                foreach (string dirPath in Directory.GetDirectories(srcPath, "*", SearchOption.AllDirectories)) //Crete all directories
-                {
-                    Directory.CreateDirectory(dirPath.Replace(srcPath, releasePath));
-                }
-
-                foreach (string newPath in Directory.GetFiles(srcPath, "*.*", SearchOption.AllDirectories))
-                {
-                    File.Copy(newPath, newPath.Replace(srcPath, releasePath), true); 
-                }
-            }
-            catch (Exception e)
-            {
-                Telemetry.Telemetry.TelemetryClient.TrackException(e);
-            }
-        }
-
-        private AnalysisResult _messageSelected;
         /// <summary>
         /// Selected message in message list control
         /// </summary>
@@ -827,11 +415,11 @@ namespace Web_Studio.ViewModels
         /// </summary>
         private void GoToMessageLine()
         {
-            foreach (var doc in Documents)     //put select property to false
+            foreach (var doc in ProjectModel.Instance.Documents)     //put select property to false
             {
                 doc.IsSelected = false;
             }
-            var myEditor = SearchOrCreateDocument(MessageSelected.File);
+            var myEditor = ProjectModel.Instance.SearchOrCreateDocument(MessageSelected.File);
             myEditor.IsSelected = true;
             myEditor.ScrollToLine = MessageSelected.Line;
         }
@@ -840,6 +428,9 @@ namespace Web_Studio.ViewModels
 
         #region BusyControl
         private bool _isGeneratingProject;
+        private int _numberOfRules;
+        private int _numberOfRulesProcessed; 
+
         /// <summary>
         /// True if we are generating the project => enable busycontrol
         /// </summary>
@@ -849,7 +440,6 @@ namespace Web_Studio.ViewModels
             set { SetProperty(ref _isGeneratingProject, value); }
         }
 
-        private int _numberOfRules;
         /// <summary>
         /// Total number of rules to process
         /// </summary>
@@ -859,7 +449,6 @@ namespace Web_Studio.ViewModels
             set { SetProperty(ref _numberOfRules, value); }
         }
 
-        private int _numberOfRulesProcessed;
         /// <summary>
         /// Number of rules that we have already processed
         /// </summary>
@@ -881,8 +470,7 @@ namespace Web_Studio.ViewModels
         {
           GenerationWorker.CancelAsync();
           Telemetry.Telemetry.TelemetryClient.TrackEvent("Cancel Generation");    
-        }
-
+        } 
 
         #endregion
     }

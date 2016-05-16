@@ -1,7 +1,7 @@
 ﻿namespace Web_Studio.WindowAction
 {
     /// <summary>
-    ///     Lógica de interacción para MetroPopupWindow.xaml
+    ///     Code Behind MetroPopupWindow.xaml
     /// </summary>
     public partial class MetroPopupWindow
     {

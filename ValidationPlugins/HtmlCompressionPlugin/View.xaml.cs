@@ -3,7 +3,7 @@
 namespace HtmlCompressionPlugin
 {
     /// <summary>
-    ///     Lógica de interacción para View.xaml
+    ///     Code Behind View.xaml
     /// </summary>
     public partial class View : UserControl
     {

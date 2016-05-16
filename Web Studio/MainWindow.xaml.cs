@@ -6,7 +6,7 @@ using Xceed.Wpf.AvalonDock.Layout;
 namespace Web_Studio
 {
     /// <summary>
-    ///     Lógica de interacción para MainWindow.xaml
+    ///     Code Behind MainWindow.xaml
     /// </summary>
     public partial class MainWindow
     {

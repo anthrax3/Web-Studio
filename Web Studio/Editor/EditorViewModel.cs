@@ -84,35 +84,38 @@ namespace Web_Studio.Editor
         /// <param name="sender"></param>
         /// <param name="fileSystemEventArgs"></param>
         private  void WatcherOnChanged(object sender, FileSystemEventArgs fileSystemEventArgs)
-        {    
-                try
+        {
+            try
+            {
+                _watcher.EnableRaisingEvents = false;
+                Application.Current.Dispatcher.Invoke(delegate
                 {
-                    _watcher.EnableRaisingEvents = false;
-                    Application.Current.Dispatcher.Invoke(delegate
+                    var contenTextBox = new TextBlock
                     {
-                        var contenTextBox = new TextBlock
+                        Text = Strings.FileHasChangedDescription,
+                        Foreground = new SolidColorBrush(Colors.White)
+                    };
+                    ReloadConfirmationRequest.Raise(
+                        new Confirmation {Content = contenTextBox, Title = Strings.FileHasChanged},
+                        c =>
                         {
-                            Text = Strings.FileHasChangedDescription,
-                            Foreground = new SolidColorBrush(Colors.White)
-                        };
-                        ReloadConfirmationRequest.Raise(
-                            new Confirmation {Content = contenTextBox, Title = Strings.FileHasChanged},
-                            c =>
+                            if (c.Confirmed)
                             {
-                                if (c.Confirmed)
-                                {
-                                    var streamReader = File.OpenText(ToolTip);
-                                    Document = new TextDocument(streamReader.ReadToEnd());
-                                    streamReader.Close();
-                                }
-                            });
-                    });
-                }
-
-                finally
-                {
-                    _watcher.EnableRaisingEvents = true;
-                }
+                                var streamReader = File.OpenText(ToolTip);
+                                Document = new TextDocument(streamReader.ReadToEnd());
+                                streamReader.Close();
+                            }
+                        });
+                });
+            }
+            catch (Exception e)
+            {
+                Telemetry.Telemetry.TelemetryClient.TrackException(e);
+            }
+            finally
+            {
+                 _watcher.EnableRaisingEvents = true;
+            }
         }
 
         /// <summary>

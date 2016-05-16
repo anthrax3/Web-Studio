@@ -1,11 +1,9 @@
-﻿using System.Windows.Controls;
-
-namespace Error404PagePlugin
+﻿namespace Error404PagePlugin
 {
     /// <summary>
-    ///     Lógica de interacción para View.xaml
+    ///     Code Behind View.xaml
     /// </summary>
-    public partial class View : UserControl
+    public partial class View 
     {
         /// <summary>
         ///     Default constructor

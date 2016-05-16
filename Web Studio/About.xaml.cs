@@ -1,7 +1,7 @@
 ﻿namespace Web_Studio
 {
     /// <summary>
-    /// Lógica de interacción para About.xaml
+    /// Code behind About.xaml
     /// </summary>
     public partial class About
     {

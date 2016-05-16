@@ -204,7 +204,6 @@
     <Compile Include="Editor\SyntaxHighlighter\SyntaxHighlighterTool.cs" />
     <Compile Include="Editor\TextEditorMVVM.cs" />
     <Compile Include="Events\ChangedLanguageEvent.cs" />
-    <Compile Include="Events\ChangedProjectEvent.cs" />
     <Compile Include="Events\ClosedDocumentEvent.cs" />
     <Compile Include="Events\EventSystem.cs" />
     <Compile Include="Events\FontSizeChangedEvent.cs" />
@@ -217,6 +216,7 @@
     <Compile Include="Utils\Notifications.cs" />
     <Compile Include="Utils\ShellHelpers.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
+    <Compile Include="ViewModels\MenuViewModel.cs" />
     <Compile Include="WindowAction\MetroConfirmationWindow.xaml.cs">
       <DependentUpon>MetroConfirmationWindow.xaml</DependentUpon>
     </Compile>

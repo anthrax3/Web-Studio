@@ -3,7 +3,7 @@
 namespace Web_Studio.Editor
 {
     /// <summary>
-    ///     Lógica de interacción para EditorView.xaml
+    ///     Code Behind EditorView.xaml
     /// </summary>
     public partial class EditorView : UserControl
     {

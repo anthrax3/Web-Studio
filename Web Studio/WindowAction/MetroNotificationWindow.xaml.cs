@@ -4,7 +4,7 @@ using Prism.Interactivity.InteractionRequest;
 namespace Web_Studio.WindowAction
 {
     /// <summary>
-    /// Lógica de interacción para MetroNotificationWindow.xaml
+    /// Code Behind MetroNotificationWindow.xaml
     /// </summary>
     public partial class MetroNotificationWindow 
     {

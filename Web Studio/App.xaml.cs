@@ -14,7 +14,7 @@ using WPFLocalizeExtension.Providers;
 namespace Web_Studio
 {
     /// <summary>
-    ///     Lógica de interacción para App.xaml
+    ///     Code Behind App.xaml
     /// </summary>
     public partial class App : Application
     {
