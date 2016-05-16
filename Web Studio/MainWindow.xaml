@@ -42,23 +42,23 @@
 
     <!-- Open windows with MVVM  -->
     <i:Interaction.Triggers>
-        <interactionRequest:InteractionRequestTrigger SourceObject="{Binding OptionWindowRequest, Mode=OneWay}">
+        <interactionRequest:InteractionRequestTrigger SourceObject="{Binding Menu.OptionWindowRequest, Mode=OneWay}">
             <windowAction:MetroPopupWindowAction>
                 <windowAction:MetroPopupWindowAction.WindowContent>
                     <webStudio:Options />
                 </windowAction:MetroPopupWindowAction.WindowContent>
             </windowAction:MetroPopupWindowAction>
         </interactionRequest:InteractionRequestTrigger>
-        
-        <interactionRequest:InteractionRequestTrigger SourceObject="{Binding NewProjectRequest, Mode=OneWay}">
+
+        <interactionRequest:InteractionRequestTrigger SourceObject="{Binding Menu.NewProjectRequest, Mode=OneWay}">
             <windowAction:MetroPopupWindowAction IsModal="True">
                 <windowAction:MetroPopupWindowAction.WindowContent>
                     <webStudio:NewProject />
                 </windowAction:MetroPopupWindowAction.WindowContent>
             </windowAction:MetroPopupWindowAction>
         </interactionRequest:InteractionRequestTrigger>
-        
-        <interactionRequest:InteractionRequestTrigger SourceObject="{Binding PluginsWindowRequest, Mode=OneWay}">
+
+        <interactionRequest:InteractionRequestTrigger SourceObject="{Binding Menu.PluginsWindowRequest, Mode=OneWay}">
             <windowAction:MetroPopupWindowAction IsModal="True">
                 <windowAction:MetroPopupWindowAction.WindowContent>
                     <webStudio:ValidationPlugins />
@@ -66,7 +66,7 @@
             </windowAction:MetroPopupWindowAction>
         </interactionRequest:InteractionRequestTrigger>
 
-        <interactionRequest:InteractionRequestTrigger SourceObject="{Binding FtpClientWindowRequest, Mode=OneWay}">
+        <interactionRequest:InteractionRequestTrigger SourceObject="{Binding Menu.FtpClientWindowRequest, Mode=OneWay}">
             <windowAction:MetroPopupWindowAction IsModal="False">
                 <windowAction:MetroPopupWindowAction.WindowContent>
                     <webStudio:FtpClient />
@@ -74,7 +74,7 @@
             </windowAction:MetroPopupWindowAction>
         </interactionRequest:InteractionRequestTrigger>
 
-        <interactionRequest:InteractionRequestTrigger SourceObject="{Binding AboutWindowRequest, Mode=OneWay}">
+        <interactionRequest:InteractionRequestTrigger SourceObject="{Binding Menu.AboutWindowRequest, Mode=OneWay}">
             <windowAction:MetroPopupWindowAction IsModal="True">
                 <windowAction:MetroPopupWindowAction.WindowContent>
                     <webStudio:About />
@@ -83,7 +83,7 @@
         </interactionRequest:InteractionRequestTrigger>
 
         <interactionRequest:InteractionRequestTrigger
-            SourceObject="{Binding SaveChangesInteractionRequest, Mode=OneWay}">
+            SourceObject="{Binding Menu.SaveChangesInteractionRequest, Mode=OneWay}">
             <windowAction:MetroPopupWindowAction IsModal="True" CenterOverAssociatedObject="True" />
         </interactionRequest:InteractionRequestTrigger>
         
@@ -103,15 +103,15 @@
                     <MenuItem.Icon>
                         <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="5,0,0,0"></TextBlock>
                     </MenuItem.Icon>
-                    <MenuItem Header="{lex:Loc File}" Command="{Binding NewFileCommand}"/>
-                    <MenuItem Header="{lex:Loc Project}" Command="{Binding NewProjectCommand}" />
+                    <MenuItem Header="{lex:Loc File}" Command="{Binding Menu.NewFileCommand}"/>
+                    <MenuItem Header="{lex:Loc Project}" Command="{Binding Menu.NewProjectCommand}" />
                 </MenuItem>
-                <MenuItem Header="{lex:Loc OpenProject}" Command="{Binding OpenProjectCommand}" >
+                <MenuItem Header="{lex:Loc OpenProject}" Command="{Binding Menu.OpenProjectCommand}" >
                     <MenuItem.Icon>
                         <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="5,0,0,0"></TextBlock>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="{lex:Loc AddFile}" Command="{Binding AddFileCommand}" >
+                <MenuItem Header="{lex:Loc AddFile}" Command="{Binding Menu.AddFileCommand}" >
                     <MenuItem.Icon>
                         <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="5,0,0,0"></TextBlock>
                     </MenuItem.Icon>
@@ -122,17 +122,17 @@
                         <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="5,0,0,0"></TextBlock>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="{lex:Loc CloseProject}" Command="{Binding CloseProjectCommand}" >
+                <MenuItem Header="{lex:Loc CloseProject}" Command="{Binding Menu.CloseProjectCommand}" >
                     <MenuItem.Icon>
                         <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="5,0,0,0"></TextBlock>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="{lex:Loc SaveFile}" Command="{Binding ActiveDocument.SaveCommand}">
+                <MenuItem Header="{lex:Loc SaveFile}" Command="{Binding ActiveDocument.SaveCommand}">  
                     <MenuItem.Icon>
                         <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="5,0,0,0"></TextBlock>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="{lex:Loc SaveProject}" Command="{Binding SaveProjectCommand}" >
+                <MenuItem Header="{lex:Loc SaveProject}" Command="{Binding Menu.SaveProjectCommand}" >
                     <MenuItem.Icon>
                         <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="5,0,0,0"></TextBlock>
                     </MenuItem.Icon>
@@ -141,23 +141,23 @@
 
             
             <MenuItem Header="{lex:Loc Edit}">
-                <MenuItem Header="{lex:Loc Options}" Command="{Binding OptionWindowCommand}" >
+                <MenuItem Header="{lex:Loc Options}" Command="{Binding Menu.OptionWindowCommand}" >
                     <MenuItem.Icon>
                         <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="5,0,0,0"></TextBlock>
                     </MenuItem.Icon> 
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="{lex:Loc FtpClient}" Command="{Binding FtpClientCommand}" >
+            <MenuItem Header="{lex:Loc FtpClient}" Command="{Binding Menu.FtpClientCommand}" >
                 <MenuItem.Icon>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="0,0,-5,0" ></TextBlock>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="{lex:Loc Generate}" Command="{Binding GenerateCommand}">
+            <MenuItem Header="{lex:Loc Generate}" Command="{Binding GenerateCommand}"> 
                 <MenuItem.Icon>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="0,0,-5,0" ></TextBlock>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="Plugins" Command="{Binding PluginsWindowCommand}">
+            <MenuItem Header="Plugins" Command="{Binding Menu.PluginsWindowCommand}">
                 <MenuItem.Icon>
                     <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="0,0,-5,0"></TextBlock>
                 </MenuItem.Icon> 
@@ -168,7 +168,7 @@
                           Click="ExplorerMenuItem_OnClick" />
             </MenuItem>
             <MenuItem Header="{lex:Loc Help}" >
-                <MenuItem Header="{lex:Loc About}" Command="{Binding AboutWindowCommand}">
+                <MenuItem Header="{lex:Loc About}" Command="{Binding Menu.AboutWindowCommand}">
                     <MenuItem.Icon>
                         <TextBlock FontFamily="Segoe MDL2 Assets" Text="" Margin="5,0,0,0"></TextBlock>
                     </MenuItem.Icon>
@@ -250,5 +250,6 @@
                 </avalonDock:LayoutRoot.BottomSide>
             </avalonDock:LayoutRoot>
         </avalonDock:DockingManager>
+        
     </Grid>
 </controls:MetroWindow>

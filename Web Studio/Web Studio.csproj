@@ -217,6 +217,7 @@
     <Compile Include="Utils\Notifications.cs" />
     <Compile Include="Utils\ShellHelpers.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
+    <Compile Include="ViewModels\MenuViewModel.cs" />
     <Compile Include="WindowAction\MetroConfirmationWindow.xaml.cs">
       <DependentUpon>MetroConfirmationWindow.xaml</DependentUpon>
     </Compile>
