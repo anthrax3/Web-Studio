@@ -2,13 +2,17 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows.Media;
 using BusyControl.Annotations;
 using FtpClient;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ValidationInterface;
+using Web_Studio.Editor;
 using Web_Studio.Models.PluginManager;
+using Web_Studio.Properties;
 using Web_Studio.Utils;
 
 namespace Web_Studio.Models.Project
@@ -18,6 +22,13 @@ namespace Web_Studio.Models.Project
     /// </summary>
     public class ProjectModel : INotifyPropertyChanged
     {
+
+        /// <summary>
+        ///     Collection of Documents, editor tabs
+        /// </summary>
+        [JsonIgnore]
+        public ObservableCollection<EditorViewModel> Documents { get; } = new ObservableCollection<EditorViewModel>();
+
         /// <summary>
         ///     Project full path
         /// </summary>
@@ -48,7 +59,7 @@ namespace Web_Studio.Models.Project
                 _fullPath = value;
                 OnPropertyChanged();
             }
-        }
+        }  
           
         /// <summary>
         ///     Name of project
@@ -100,12 +111,33 @@ namespace Web_Studio.Models.Project
         }
 
         /// <summary>
+        /// Search for a document if it finds it, it returns it, else it creates a new Document and return it
+        /// </summary>
+        /// <param name="path"></param> 
+        public EditorViewModel SearchOrCreateDocument(string path)
+        {
+            var editorViewModel = Documents.Where(doc => doc.ToolTip == path);
+            var editorViewModels = editorViewModel as EditorViewModel[] ?? editorViewModel.ToArray();
+            if (!editorViewModels.Any())
+            {
+                var nuevoNombre = path.Replace(ProjectModel.Instance.FullPath + @"\", String.Empty);
+                EditorViewModel myEditor = new EditorViewModel(nuevoNombre, path, Settings.Default.EditorShowLineNumbers,
+                    (SolidColorBrush)new BrushConverter().ConvertFrom(Settings.Default.EditorLinkTextForegroundBrush), Settings.Default.EditorFontSize);
+                Documents.Add(myEditor);
+                return myEditor;
+            }
+            return editorViewModels.First();
+        }
+
+
+        /// <summary>
         /// Clear all information of the project and get a new project
         /// </summary>
         public void Clear()
         {
             Instance.Name = null;
             Instance.FullPath = null;
+            Instance.Documents.Clear();
             ViewModel.Sites.Clear();
         }
 

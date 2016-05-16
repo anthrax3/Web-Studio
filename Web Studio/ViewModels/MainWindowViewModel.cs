@@ -38,7 +38,6 @@ namespace Web_Studio.ViewModels
        
 
             //Initialize properties
-            Documents = new ObservableCollection<EditorViewModel>();
             EditorShowLineNumbers = Settings.Default.EditorShowLineNumbers;
             EditorFontSize = Settings.Default.EditorFontSize;
             EditorLinkTextForegroundBrush =
@@ -175,7 +174,7 @@ namespace Web_Studio.ViewModels
                 if (saveFile.ShowDialog() == true)
                 {
                    File.WriteAllText(saveFile.FileName,String.Empty); //Create file
-                   SearchOrCreateDocument(saveFile.FileName);  
+                    ProjectModel.Instance.SearchOrCreateDocument(saveFile.FileName);  
                 }
             }
         }
@@ -227,7 +226,6 @@ namespace Web_Studio.ViewModels
         {
             //Save project
             ProjectModel.Instance.Save();
-            Documents.Clear();
             ProjectModel.Instance.Clear();
             Results.Clear();
         }
@@ -239,7 +237,7 @@ namespace Web_Studio.ViewModels
         private bool CanCloseProject()
         {
             bool close = true;
-            bool fileModified = Documents.Any(document => document.EditorIsModified);
+            bool fileModified = ProjectModel.Instance.Documents.Any(document => document.EditorIsModified);
 
             if (fileModified)
             {
@@ -350,11 +348,7 @@ namespace Web_Studio.ViewModels
         #endregion
 
         #region Editor
-
-        /// <summary>
-        ///     Collection of Documents, editor tabs
-        /// </summary>
-        public ObservableCollection<EditorViewModel> Documents { get; }
+         
 
         private int _editorFontSize;
         private Brush _editorLinkTextForegroundBrush;
@@ -405,7 +399,7 @@ namespace Web_Studio.ViewModels
         /// <param name="obj"></param>
         private void ManageDocumentClosed(ClosedDocumentEvent obj)
         {
-            Documents.Remove(obj.ClosedDocument);
+            ProjectModel.Instance.Documents.Remove(obj.ClosedDocument);
         }
 
         /// <summary>
@@ -415,7 +409,7 @@ namespace Web_Studio.ViewModels
         private void ManageChangedShowLineNumbers(ShowLineNumbersEvent obj)
         {
             EditorShowLineNumbers = obj.ShowLineNumbers;
-            foreach (var editorViewModel in Documents) //Update all editors
+            foreach (var editorViewModel in ProjectModel.Instance.Documents) //Update all editors
             {
                 editorViewModel.EditorShowLineNumbers = EditorShowLineNumbers;
             }
@@ -429,7 +423,7 @@ namespace Web_Studio.ViewModels
         {
             EditorFontSize = obj.FontSize;
 
-            foreach (var editorViewModel in Documents)
+            foreach (var editorViewModel in ProjectModel.Instance.Documents)
             {
                 editorViewModel.EditorFontSize = EditorFontSize;
             }
@@ -473,7 +467,7 @@ namespace Web_Studio.ViewModels
                                 try
                                 {
                                     File.Delete(node.FullPath);
-                                    Documents.Remove(Documents.FirstOrDefault(t => t.ToolTip == node.FullPath));
+                                    ProjectModel.Instance.Documents.Remove(ProjectModel.Instance.Documents.FirstOrDefault(t => t.ToolTip == node.FullPath));
                                     //Remove document
                                 }
                                 catch (Exception e)
@@ -502,10 +496,10 @@ namespace Web_Studio.ViewModels
                                 try
                                 {
                                     Directory.Delete(node.FullPath, true);
-                                    var documentsToRemove = Documents.Where(t => t.ToolTip.Contains(node.FullPath));
+                                    var documentsToRemove = ProjectModel.Instance.Documents.Where(t => t.ToolTip.Contains(node.FullPath));
                                     foreach (var document in documentsToRemove.ToList())
                                     {
-                                        Documents.Remove(document); //Remove document
+                                        ProjectModel.Instance.Documents.Remove(document); //Remove document
                                     }
                                 }
                                 catch (Exception e)
@@ -574,34 +568,16 @@ namespace Web_Studio.ViewModels
                     return;
             }
 
-            foreach (var doc in Documents)
+            foreach (var doc in ProjectModel.Instance.Documents)
             {
                 doc.IsSelected = false;
             }
 
-            EditorViewModel myEditor = SearchOrCreateDocument(SelectedItemPath);
+            EditorViewModel myEditor = ProjectModel.Instance.SearchOrCreateDocument(SelectedItemPath);
             myEditor.IsSelected = true;
         }
 
-        /// <summary>
-        /// Search for a document if it finds it, it returns it, else it creates a new Document and return it
-        /// </summary>
-        /// <param name="path"></param> 
-        private EditorViewModel SearchOrCreateDocument(string path)
-        {
-            var editorViewModel = Documents.Where(doc => doc.ToolTip == path);
-            var editorViewModels = editorViewModel as EditorViewModel[] ?? editorViewModel.ToArray();
-            if (!editorViewModels.Any())
-            {
-                var nuevoNombre = path.Replace(ProjectModel.Instance.FullPath + @"\", String.Empty);
-                EditorViewModel myEditor = new EditorViewModel(nuevoNombre, path, EditorShowLineNumbers,
-                    EditorLinkTextForegroundBrush, EditorFontSize);
-                Documents.Add(myEditor);
-                return myEditor;
-            }
-            return editorViewModels.First();
-        }
-
+       
         #endregion
 
         #region Messages
@@ -804,11 +780,11 @@ namespace Web_Studio.ViewModels
         /// </summary>
         private void GoToMessageLine()
         {
-            foreach (var doc in Documents)     //put select property to false
+            foreach (var doc in ProjectModel.Instance.Documents)     //put select property to false
             {
                 doc.IsSelected = false;
             }
-            var myEditor = SearchOrCreateDocument(MessageSelected.File);
+            var myEditor = ProjectModel.Instance.SearchOrCreateDocument(MessageSelected.File);
             myEditor.IsSelected = true;
             myEditor.ScrollToLine = MessageSelected.Line;
         }

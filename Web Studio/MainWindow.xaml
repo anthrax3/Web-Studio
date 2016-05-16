@@ -175,7 +175,7 @@
                 </MenuItem>
             </MenuItem>
         </Menu>
-        <avalonDock:DockingManager x:Name="dockingManager" DocumentsSource="{Binding Documents}" Grid.Row="1" ActiveContent="{Binding ActiveDocument, Mode=TwoWay, Converter={StaticResource ActiveDocumentConverter}}">
+        <avalonDock:DockingManager x:Name="dockingManager" DocumentsSource="{Binding Source={x:Static project:ProjectModel.Instance},Path=Documents}" Grid.Row="1" ActiveContent="{Binding ActiveDocument, Mode=TwoWay, Converter={StaticResource ActiveDocumentConverter}}">
             <avalonDock:DockingManager.Theme>
                 <avalonDock:WebStudioTheme />
             </avalonDock:DockingManager.Theme>
