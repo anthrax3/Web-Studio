@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -7,7 +6,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using FastObservableCollection;
-using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Interactivity.InteractionRequest;
 using Prism.Mvvm;
@@ -19,7 +17,6 @@ using Web_Studio.Events;
 using Web_Studio.Localization;
 using Web_Studio.Models.PluginManager;
 using Web_Studio.Models.Project;
-using Web_Studio.Properties;
 using Web_Studio.Utils;
 
 namespace Web_Studio.ViewModels
@@ -34,18 +31,9 @@ namespace Web_Studio.ViewModels
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public MainWindowViewModel()
-        {
-       
-
+        {  
             //Initialize properties
-            EditorShowLineNumbers = Settings.Default.EditorShowLineNumbers;
-            EditorFontSize = Settings.Default.EditorFontSize;
-            EditorLinkTextForegroundBrush =
-                (SolidColorBrush) new BrushConverter().ConvertFrom(Settings.Default.EditorLinkTextForegroundBrush);
-
             Results = new FastObservableCollection<AnalysisResult>();
-
-         
             ItemRemovedRequest = new InteractionRequest<IConfirmation>();
 
             //Manage commands
@@ -72,12 +60,6 @@ namespace Web_Studio.ViewModels
         public MenuViewModel Menu { get; } = new MenuViewModel();
 
         #region Editor
-         
-
-        private int _editorFontSize;
-        private Brush _editorLinkTextForegroundBrush;
-        private bool _editorShowLineNumbers;
-
         private EditorViewModel _activeDocument;
         /// <summary>
         /// Active document
@@ -86,35 +68,6 @@ namespace Web_Studio.ViewModels
         {
             get { return _activeDocument; }
             set { SetProperty(ref _activeDocument, value); }
-        }
-
-        /// <summary>
-        ///     Enable to show line numbers in editor
-        /// </summary>
-        public bool EditorShowLineNumbers
-        {
-            get { return _editorShowLineNumbers; }
-            set { SetProperty(ref _editorShowLineNumbers, value); }
-        }
-
-
-        /// <summary>
-        ///     Color for links
-        /// </summary>
-        public Brush EditorLinkTextForegroundBrush
-        {
-            get { return _editorLinkTextForegroundBrush; }
-            set { SetProperty(ref _editorLinkTextForegroundBrush, value); }
-        }
-
-
-        /// <summary>
-        ///     Font size in editor
-        /// </summary>
-        public int EditorFontSize
-        {
-            get { return _editorFontSize; }
-            set { SetProperty(ref _editorFontSize, value); }
         }
 
         /// <summary>
@@ -132,10 +85,9 @@ namespace Web_Studio.ViewModels
         /// <param name="obj"></param>
         private void ManageChangedShowLineNumbers(ShowLineNumbersEvent obj)
         {
-            EditorShowLineNumbers = obj.ShowLineNumbers;
             foreach (var editorViewModel in ProjectModel.Instance.Documents) //Update all editors
             {
-                editorViewModel.EditorShowLineNumbers = EditorShowLineNumbers;
+                editorViewModel.EditorShowLineNumbers = obj.ShowLineNumbers;
             }
         }
 
@@ -144,12 +96,10 @@ namespace Web_Studio.ViewModels
         /// </summary>
         /// <param name="obj"></param>
         private void ManageChangedFont(FontSizeChangedEvent obj)
-        {
-            EditorFontSize = obj.FontSize;
-
+        {  
             foreach (var editorViewModel in ProjectModel.Instance.Documents)
             {
-                editorViewModel.EditorFontSize = EditorFontSize;
+                editorViewModel.EditorFontSize = obj.FontSize; 
             }
         }
 
