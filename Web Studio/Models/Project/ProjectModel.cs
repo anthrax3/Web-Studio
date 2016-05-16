@@ -118,26 +118,6 @@ namespace Web_Studio.Models.Project
         }
 
         /// <summary>
-        /// Search for a document if it finds it, it returns it, else it creates a new Document and return it
-        /// </summary>
-        /// <param name="path"></param> 
-        public EditorViewModel SearchOrCreateDocument(string path)
-        {
-            var editorViewModel = Documents.Where(doc => doc.ToolTip == path);
-            var editorViewModels = editorViewModel as EditorViewModel[] ?? editorViewModel.ToArray();
-            if (!editorViewModels.Any())
-            {
-                var nuevoNombre = path.Replace(Instance.FullPath + @"\", String.Empty);
-                EditorViewModel myEditor = new EditorViewModel(nuevoNombre, path, Settings.Default.EditorShowLineNumbers,
-                    (SolidColorBrush)new BrushConverter().ConvertFrom(Settings.Default.EditorLinkTextForegroundBrush), Settings.Default.EditorFontSize);
-                Documents.Add(myEditor);
-                return myEditor;
-            }
-            return editorViewModels.First();
-        }
-
-
-        /// <summary>
         /// Clear all information of the project and get a new project
         /// </summary>
         public void Clear()
@@ -209,6 +189,56 @@ namespace Web_Studio.Models.Project
             }
          
             Instance.FullPath = Path.GetDirectoryName(path);
+        }
+
+        /// <summary>
+        /// Search for a document if it finds it, it returns it, else it creates a new Document and return it
+        /// </summary>
+        /// <param name="path"></param> 
+        public EditorViewModel SearchOrCreateDocument(string path)
+        {
+            var editorViewModel = Documents.Where(doc => doc.ToolTip == path);
+            var editorViewModels = editorViewModel as EditorViewModel[] ?? editorViewModel.ToArray();
+            if (!editorViewModels.Any())
+            {
+                var nuevoNombre = path.Replace(Instance.FullPath + @"\", String.Empty);
+                EditorViewModel myEditor = new EditorViewModel(nuevoNombre, path, Settings.Default.EditorShowLineNumbers,
+                    (SolidColorBrush)new BrushConverter().ConvertFrom(Settings.Default.EditorLinkTextForegroundBrush), Settings.Default.EditorFontSize);
+                Documents.Add(myEditor);
+                return myEditor;
+            }
+            return editorViewModels.First();
+        }
+
+        /// <summary>
+        /// Method to copy all files in source to release
+        /// </summary>
+        public void CopySourceToRelease()
+        {
+            string srcPath = Path.Combine(Instance.FullPath, "src");
+            string releasePath = Path.Combine(Instance.FullPath, "release");
+            try
+            {
+                if (Directory.Exists(releasePath))     //Remove old release
+                {
+                    Directory.Delete(releasePath, true);
+                }
+                Directory.CreateDirectory(releasePath);
+
+                foreach (string dirPath in Directory.GetDirectories(srcPath, "*", SearchOption.AllDirectories)) //Crete all directories
+                {
+                    Directory.CreateDirectory(dirPath.Replace(srcPath, releasePath));
+                }
+
+                foreach (string newPath in Directory.GetFiles(srcPath, "*.*", SearchOption.AllDirectories))
+                {
+                    File.Copy(newPath, newPath.Replace(srcPath, releasePath), true);
+                }
+            }
+            catch (Exception e)
+            {
+                Telemetry.Telemetry.TelemetryClient.TrackException(e);
+            }
         }
 
         /// <summary>
