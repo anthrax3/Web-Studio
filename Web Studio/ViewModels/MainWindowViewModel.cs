@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -314,20 +315,11 @@ namespace Web_Studio.ViewModels
                     return;
                 }
                 var plugin = t.Value;
-                if (plugin.IsEnabled)
-                {
-                    var tempResults = plugin.Check(releasePath);
-                    foreach (AnalysisResult analysisResult in tempResults ?? Enumerable.Empty<AnalysisResult>())
-                    {
-                        if (analysisResult.Type == ErrorType.Instance) _errorMessages++;
-                        if (analysisResult.Type == WarningType.Instance) _warningMessages++;
-                    }
-                    Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
-                    {
-                        Results.AddRange(tempResults);
-                        NumberOfRulesProcessed++;
-                    });
-                }
+                if (!plugin.IsEnabled) continue;
+
+                var tempResults = plugin.Check(releasePath);
+                CountMessageTypes(tempResults);
+                UpdateStatusOfGeneration(tempResults);
             }
 
             //Fix loop and recheck loop
@@ -339,39 +331,50 @@ namespace Web_Studio.ViewModels
                     return;
                 }
                 var plugin = t.Value;
-                if (plugin.IsAutoFixeable && plugin.IsEnabled)
-                {
-                    //Fix
-                    var tempResults = t.Value.Fix(releasePath);
-                    foreach (AnalysisResult analysisResult in tempResults ?? Enumerable.Empty<AnalysisResult>())
-                    {
-                        if (analysisResult.Type == ErrorType.Instance) _errorMessages++;
-                        if (analysisResult.Type == WarningType.Instance) _warningMessages++;
-                    }
-                    if (tempResults != null && tempResults.Count > 0)  tempResults.Insert(0,new AnalysisResult("",0,plugin.Name,Strings.FixMessages,InfoType.Instance));
-                    
-                    Application.Current.Dispatcher.BeginInvoke((Action) delegate //Update UI
-                    {
-                        Results.AddRange(tempResults);
-                        NumberOfRulesProcessed++;
-                    });
 
-                    //Recheck
-                    var checkResults = plugin.Check(releasePath);
-                    foreach (AnalysisResult analysisResult in tempResults ?? Enumerable.Empty<AnalysisResult>())
-                    {
-                        if (analysisResult.Type == ErrorType.Instance) _errorMessages++;
-                        if (analysisResult.Type == WarningType.Instance) _warningMessages++;
-                    }
-                    if(checkResults!=null && checkResults.Count > 0) checkResults.Insert(0,new AnalysisResult("",0,plugin.Name,Strings.NotFixedErrors,InfoType.Instance));
-                    Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
-                    {
-                        Results.AddRange(checkResults);
-                        NumberOfRulesProcessed++;
-                    });
-                }
+                if (!plugin.IsAutoFixeable || !plugin.IsEnabled) continue;
+
+                //Fix
+                var tempResults = t.Value.Fix(releasePath);
+                CountMessageTypes(tempResults);
+                if (tempResults != null && tempResults.Count > 0)  tempResults.Insert(0,new AnalysisResult("",0,plugin.Name,Strings.FixMessages,InfoType.Instance));
+
+                UpdateStatusOfGeneration(tempResults);
+
+                //Recheck
+                var checkResults = plugin.Check(releasePath);
+                CountMessageTypes(checkResults);  
+
+                if(checkResults!=null && checkResults.Count > 0) checkResults.Insert(0,new AnalysisResult("",0,plugin.Name,Strings.NotFixedErrors,InfoType.Instance));
+                UpdateStatusOfGeneration(checkResults);
             }
 
+        }
+
+        /// <summary>
+        ///  This method update the UI with the actual status of the generation process
+        /// </summary>
+        /// <param name="results"></param>
+        private void UpdateStatusOfGeneration(List<AnalysisResult> results)
+        {
+            Application.Current.Dispatcher.BeginInvoke((Action) delegate //Update UI
+            {
+                Results.AddRange(results);
+                NumberOfRulesProcessed++;
+            });
+        }
+
+        /// <summary>
+        ///  Count how many messages are error messages and the number of warning messages
+        /// </summary>
+        /// <param name="results"></param>
+        private void CountMessageTypes(List<AnalysisResult> results)
+        {
+            foreach (AnalysisResult analysisResult in results ?? Enumerable.Empty<AnalysisResult>())
+            {
+                if (analysisResult.Type == ErrorType.Instance) _errorMessages++;
+                if (analysisResult.Type == WarningType.Instance) _warningMessages++;
+            }
         }
 
         /// <summary>
