@@ -279,19 +279,29 @@ namespace Web_Studio.ViewModels
                 Telemetry.Telemetry.TelemetryClient.TrackEvent("Generation");
                 Results.Clear();
                 NumberOfRulesProcessed = 0;
-                int counter = 0;
-                foreach (Lazy<IValidation, IValidationMetadata> plugin in ValidationPluginManager.Plugins)
-                {
-                    if (!plugin.Value.IsEnabled) continue;
-                    counter++; // first check
-                    if (plugin.Value.IsAutoFixeable) counter += 2; //fix and second check 
-                }
-                NumberOfRules = counter; //Check and fix each plugin
+                
+                NumberOfRules = CalculateNumberOfRules(); //Check and fix each plugin
                 IsGeneratingProject = true;
                 ProjectModel.Instance.CopySourceToRelease();
                 EventSystem.Publish(new MessageContainerVisibilityChangedEvent {IsVisible = true});  //Make visible messages container  
                 GenerationWorker.RunWorkerAsync();
             }
+        }
+
+        /// <summary>
+        /// Calculate the number of rules that it has to process
+        /// </summary>
+        /// <returns></returns>
+        private int CalculateNumberOfRules()
+        {
+            int counter = 0;
+            foreach (Lazy<IValidation, IValidationMetadata> plugin in ValidationPluginManager.Plugins)
+            {
+                if (!plugin.Value.IsEnabled) continue;
+                counter++; // first check
+                if (plugin.Value.IsAutoFixeable) counter += 2; //fix and second check 
+            }
+            return counter;
         }
 
         /// <summary>
