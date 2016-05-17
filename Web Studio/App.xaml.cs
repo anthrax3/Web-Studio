@@ -32,12 +32,7 @@ namespace Web_Studio
             if (!string.IsNullOrEmpty(Settings.Default.Language))
             {
                 Localization.Localization.ChangeLanguage(new CultureInfo(Settings.Default.Language));
-            }
-            else
-            {
-                var cultureInfo = CultureInfo.CurrentCulture;
-                Localization.Localization.ChangeLanguage(cultureInfo);
-            }
+            } 
          
         
             TryCreateShortcut();
