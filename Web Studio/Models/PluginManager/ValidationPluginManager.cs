@@ -1,17 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Windows;
 using ValidationInterface;
+using ValidationInterface.MessageTypes;
+using Web_Studio.Localization;
+using Web_Studio.Models.Project;
+using Web_Studio.Utils;
+using Web_Studio.ViewModels;
 
 namespace Web_Studio.Models.PluginManager
 {
     /// <summary>
     ///    Class to manage the validation plugins
     /// </summary>
-    public static class ValidationPluginManager
+    public  class ValidationPluginManager
     {
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public ValidationPluginManager(MainWindowViewModel vm)
+        {
+            _mainWindowViewModel = vm;
+
+            //Worker
+            GenerationWorker = new BackgroundWorker();
+            GenerationWorker.DoWork += GenerationWorkerOnDoWork;
+            GenerationWorker.RunWorkerCompleted += GenerationWorkerOnRunWorkerCompleted;
+            GenerationWorker.WorkerSupportsCancellation = true;
+        }
+
+        private int _errorMessages;
+        private int _warningMessages;
         private static ObservableCollection<Lazy<IValidation, IValidationMetadata>> _plugins;
+        private readonly MainWindowViewModel _mainWindowViewModel;
 
         /// <summary>
         /// List of plugins that implements IValidation interface
@@ -74,5 +100,108 @@ namespace Web_Studio.Models.PluginManager
             }
             Plugins = new ObservableCollection<Lazy<IValidation, IValidationMetadata>>(sortedList);
         }
+
+        #region Background Worker
+
+        /// <summary>
+        /// the worker for project generation
+        /// </summary>
+        public BackgroundWorker GenerationWorker { get; }
+
+        /// <summary>
+        /// Run plugins and fixes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="doWorkEventArgs"></param>
+        private void GenerationWorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
+        {
+            string releasePath = Path.Combine(ProjectModel.Instance.FullPath, "release");
+            _errorMessages = 0;
+            _warningMessages = 0;
+
+            //Check loop
+            foreach (Lazy<IValidation, IValidationMetadata> t in Plugins)
+            {
+                if (GenerationWorker.CancellationPending)  //Manage the cancelation event
+                {
+                    doWorkEventArgs.Cancel = true;
+                    return;
+                }
+                var plugin = t.Value;
+                if (!plugin.IsEnabled) continue;
+
+                var tempResults = plugin.Check(releasePath);
+                CountMessageTypes(tempResults);
+                UpdateStatusOfGeneration(tempResults);
+            }
+
+            //Fix loop and recheck loop
+            foreach (Lazy<IValidation, IValidationMetadata> t in Plugins)
+            {
+                if (GenerationWorker.CancellationPending)  ////Manage the cancelation event
+                {
+                    doWorkEventArgs.Cancel = true;
+                    return;
+                }
+                var plugin = t.Value;
+
+                if (!plugin.IsAutoFixeable || !plugin.IsEnabled) continue;
+
+                //Fix
+                var tempResults = t.Value.Fix(releasePath);
+                CountMessageTypes(tempResults);
+                if (tempResults != null && tempResults.Count > 0) tempResults.Insert(0, new AnalysisResult("", 0, plugin.Name, Strings.FixMessages, InfoType.Instance));
+
+                UpdateStatusOfGeneration(tempResults);
+
+                //Recheck
+                var checkResults = plugin.Check(releasePath);
+                CountMessageTypes(checkResults);
+
+                if (checkResults != null && checkResults.Count > 0) checkResults.Insert(0, new AnalysisResult("", 0, plugin.Name, Strings.NotFixedErrors, InfoType.Instance));
+                UpdateStatusOfGeneration(checkResults);
+            }
+
+        }
+
+        /// <summary>
+        ///  Count how many messages are error messages and the number of warning messages
+        /// </summary>
+        /// <param name="results"></param>
+        private void CountMessageTypes(List<AnalysisResult> results)
+        {
+            foreach (AnalysisResult analysisResult in results ?? Enumerable.Empty<AnalysisResult>())
+            {
+                if (analysisResult.Type == ErrorType.Instance) _errorMessages++;
+                if (analysisResult.Type == WarningType.Instance) _warningMessages++;
+            }
+        }
+
+        /// <summary>
+        ///  When worker finishes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="runWorkerCompletedEventArgs"></param>
+        private void GenerationWorkerOnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs runWorkerCompletedEventArgs)
+        {
+            _mainWindowViewModel.IsGeneratingProject = false;
+            Telemetry.Telemetry.TelemetryClient.TrackMetric("Errors", _errorMessages);
+            Telemetry.Telemetry.TelemetryClient.TrackMetric("Warnings", _warningMessages);
+            Notifications.RaiseGeneratedNotification(_errorMessages, _warningMessages);
+        }
+
+        /// <summary>
+        ///  This method update the UI with the actual status of the generation process
+        /// </summary>
+        /// <param name="results"></param>
+        private void UpdateStatusOfGeneration(List<AnalysisResult> results)
+        {
+            Application.Current.Dispatcher.BeginInvoke((Action)delegate //Update UI
+            {
+                _mainWindowViewModel.Results.AddRange(results);
+                _mainWindowViewModel.NumberOfRulesProcessed++;
+            });
+        } 
+        #endregion
     }
 }
