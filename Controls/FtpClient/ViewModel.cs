@@ -342,6 +342,10 @@ namespace FtpClient
             {
                 DataContext = this
             };
+            if (Sites.Count > 0)
+            {
+                SelectedSite = Sites.ElementAt(0);
+            }
             MetroWindow window = new MetroWindow
             {
                 Title = Strings.SitesManager,
