@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -21,23 +22,17 @@ namespace Web_Studio.Editor
     {
         private TextDocument _document;
         private int _editorFontSize;
-
         private bool _editorIsModified;
         private Brush _editorLinkTextForegroundBrush;
-
         private bool _editorShowLineNumbers;
-
         private bool _isSelected;
-
         private IHighlightingDefinition _syntaxHighlighting;
-
         private string _textoToShow;
-
         private string _title;
-
         private string _toolTip;
-
         private FileSystemWatcher _watcher;
+        private string _selectedText;
+        private bool _selectedTextIsColor;
 
         /// <summary>
         ///     Default constructor
@@ -202,6 +197,47 @@ namespace Web_Studio.Editor
             get { return _toolTip; }
             set { SetProperty(ref _toolTip, value); }
         }
+
+        /// <summary>
+        /// The editor selected text
+        /// </summary>
+        public string SelectedText
+        {
+            get { return _selectedText; }
+            set
+            {
+                SetProperty(ref _selectedText, value);
+                ColorValidation(value);
+            }
+        }
+
+        /// <summary>
+        /// Check if the value is an hex color
+        /// </summary>
+        /// <param name="value"></param>
+        private void ColorValidation(string value)
+        {
+            if (value == null)
+            {
+                SelectedTextIsColor = false;
+                return;
+            }
+
+            Regex regex = new Regex("^#(?:[0-9a-fA-F]{3}){1,2}$");
+            SelectedTextIsColor = regex.IsMatch(value);
+        }
+
+
+        /// <summary>
+        ///  true if selected text is color
+        /// </summary>
+        public bool SelectedTextIsColor
+        {
+            get { return _selectedTextIsColor; }
+            set { SetProperty(ref _selectedTextIsColor, value); }
+        }
+
+
 
         /// <summary>
         ///     Selected tab in the editor
