@@ -1,11 +1,9 @@
-﻿using System.Windows.Controls;
-
-namespace Web_Studio
+﻿namespace Web_Studio
 {
     /// <summary>
     /// Code behind FtpClient.xaml
     /// </summary>
-    public partial class FtpClient : UserControl
+    public partial class FtpClient
     {
         /// <summary>
         /// Default constructor

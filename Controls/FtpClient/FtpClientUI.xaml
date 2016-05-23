@@ -6,10 +6,7 @@
              xmlns:local="clr-namespace:FtpClient"
              xmlns:lex="http://wpflocalizeextension.codeplex.com"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
-    <UserControl.DataContext>
-        <local:ViewModel />
-    </UserControl.DataContext>
+             d:DesignHeight="300" d:DesignWidth="300">  
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
