@@ -419,7 +419,7 @@ namespace FtpClient
         /// <summary>
         ///     True if we are connecting with remote host
         /// </summary>
-        private bool IsConnected
+        public bool IsConnected
         {
             get { return _isConnected; }
             set
