@@ -81,10 +81,8 @@ namespace Web_Studio.Models.Project
         {
             try
             {
-                Directory.CreateDirectory(Instance.FullPath);
                 //Create project config
                 Json.ObjectToFile(Instance, Path.Combine(Instance.FullPath, Instance.Name + ".ws"));
-
 
                 //Create source folder
                 var srcPath = Path.Combine(Instance.FullPath, "src");
