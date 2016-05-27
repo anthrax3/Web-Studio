@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ftpClient="clr-namespace:FtpClient;assembly=FtpClient"
+             xmlns:project="clr-namespace:Web_Studio.Models.Project"
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="900">
     <Grid>
-        <ftpClient:FtpClient VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></ftpClient:FtpClient>
+        <ftpClient:FtpClient VerticalAlignment="Stretch" HorizontalAlignment="Stretch" LocalPath="{Binding Source={x:Static project:ProjectModel.Instance}, Path=FullPath}"></ftpClient:FtpClient>
     </Grid>
 </UserControl>

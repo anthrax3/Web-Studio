@@ -28,29 +28,6 @@ namespace Web_Studio.Localization
             CultureInfo.DefaultThreadCurrentUICulture = culture;  // Other threads
             EventSystem.Publish(new ChangedLanguageEvent {CultureInfo = culture});
             Settings.Default.Language = culture.Name;
-        }
-
-        /// <summary>
-        /// Search for the best localization that we have with your system language
-        /// </summary>
-        /// <param name="languages"></param>
-        /// <returns></returns>
-        public static CultureInfo GetLanguage(List<CultureInfo> languages)
-        {
-            var myCulture = CultureInfo.CurrentUICulture;
-            if (languages.Any(c => string.Equals(c.Name, myCulture.Name, StringComparison.CurrentCultureIgnoreCase))) //we have the language
-            {
-                return myCulture;
-            }
-            var parentCulture =  languages.FirstOrDefault(c => string.Equals(c.Name, myCulture.Parent.Name, StringComparison.CurrentCultureIgnoreCase));
-            if (parentCulture != null) //We have the parent example ES-ES to ES
-            {
-                return parentCulture;
-            }
-            var brotherCulture = languages.FirstOrDefault(c => string.Equals(c.Parent.Name,myCulture.Parent.Name, StringComparison.CurrentCultureIgnoreCase));
-            if (brotherCulture != null) return brotherCulture; //use a language with the same parent, example ES-ES for ES-MX
-
-            return new CultureInfo("en"); //Use English as default value
-        }
+        } 
     }
 }

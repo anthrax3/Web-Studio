@@ -20,6 +20,18 @@ namespace Web_Studio.Editor
         {
             TextArea.DefaultInputHandler.AddBinding(new DelegateCommand(Save), ModifierKeys.Control,Key.S,null);
             TextArea.DefaultInputHandler.AddBinding(new DelegateCommand(Close),ModifierKeys.Control, Key.W,null );
+            this.TextArea.SelectionChanged+= TextAreaOnSelectionChanged;
+            
+        }
+
+        /// <summary>
+        /// Update selected text property
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
+        private void TextAreaOnSelectionChanged(object sender, EventArgs eventArgs)
+        {
+            SelectedTextMvvm = SelectedText;
         }
 
         /// <summary>
@@ -58,7 +70,7 @@ namespace Web_Studio.Editor
                     var target = (TextEditorMvvm) obj;
                     target.LinkTextForegroundBrush = (Brush) args.NewValue;
                 })
-                );
+                ); 
 
         /// <summary>
         ///     LinkTextForegroundBrushProperty
@@ -69,6 +81,20 @@ namespace Web_Studio.Editor
             set { TextArea.TextView.LinkTextForegroundBrush = value; }
         }
 
+        /// <summary>
+        ///  Property for binding selected text
+        /// </summary>
+        public static DependencyProperty SelectedTextMvvmProperty =
+        DependencyProperty.Register("SelectedTextMvvm", typeof(string), typeof(TextEditorMvvm));
+
+        /// <summary>
+        /// Selected text (can be bindable)
+        /// </summary>
+        public string SelectedTextMvvm
+        {
+            get { return (string)GetValue(SelectedTextMvvmProperty); }
+            set { SetValue(SelectedTextMvvmProperty, value); }
+        }
 
         /// <summary>
         /// Go to a line and select its content

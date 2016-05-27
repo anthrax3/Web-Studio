@@ -17,6 +17,7 @@ namespace FtpClient
         public FtpClientUI()
         {
             InitializeComponent();
+            DataContext = ViewModel.Instance;
         }
 
         /// <summary>

@@ -31,7 +31,6 @@ namespace Web_Studio.ViewModels
 
             Languages = new ObservableCollection<CultureInfo>(LocalizeDictionary.Instance.MergedAvailableCultures);
             Languages.Remove(CultureInfo.InvariantCulture);
-            SelectedLanguage = Localization.Localization.GetLanguage(Languages.ToList());
         }
 
         /// <summary>
@@ -42,7 +41,8 @@ namespace Web_Studio.ViewModels
             get { return _selectedLanguage; }
             set
             {
-                Localization.Localization.ChangeLanguage(value);
+                if(value!=null)
+                    Localization.Localization.ChangeLanguage(value);
                 SetProperty(ref _selectedLanguage, value);
             }
         }

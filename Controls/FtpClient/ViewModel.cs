@@ -27,7 +27,7 @@ namespace FtpClient
         /// <summary>
         ///     Default constructor
         /// </summary>
-        public ViewModel()
+        private ViewModel()
         {
             ConnectCommand = new DelegateCommand<PasswordBox>(Connect);
             Protocols = new ObservableCollection<string> {"SFTP", "FTP", "FTPS"};
@@ -62,7 +62,10 @@ namespace FtpClient
             InitLocal();
         }
 
-     
+        /// <summary>
+        /// Singleton pattern
+        /// </summary>
+        public static ViewModel Instance { get; }  = new ViewModel();
 
         #region Local
 
@@ -76,7 +79,7 @@ namespace FtpClient
         /// </summary>
         /// <param name="destination"></param>
         /// <param name="path"></param>
-        private void GetLocalFilesAndFolders(ObservableCollection<ProtocolItem> destination, string path)
+        public void GetLocalFilesAndFolders(ObservableCollection<ProtocolItem> destination, string path)
         {
             destination.Clear();
             var directories = Directory.GetDirectories(path);
@@ -144,7 +147,7 @@ namespace FtpClient
         /// <summary>
         ///     Init Local with the System drives
         /// </summary>
-        private void InitLocal()
+        public void InitLocal()
         {
             LocalPath = null;
             LocalItems.Clear();
@@ -342,6 +345,10 @@ namespace FtpClient
             {
                 DataContext = this
             };
+            if (Sites.Count > 0)
+            {
+                SelectedSite = Sites.ElementAt(0);
+            }
             MetroWindow window = new MetroWindow
             {
                 Title = Strings.SitesManager,
@@ -412,7 +419,7 @@ namespace FtpClient
         /// <summary>
         ///     True if we are connecting with remote host
         /// </summary>
-        private bool IsConnected
+        public bool IsConnected
         {
             get { return _isConnected; }
             set

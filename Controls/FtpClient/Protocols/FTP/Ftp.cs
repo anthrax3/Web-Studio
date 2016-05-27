@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using AlexPilotti.FTPS.Client;
+using AlexPilotti.FTPS.Common;
 using FtpClient.Protocols.ItemTypes;
 
 namespace FtpClient.Protocols.FTP
@@ -11,10 +13,11 @@ namespace FtpClient.Protocols.FTP
     /// </summary>
     public class Ftp : IProtocol
     {
+  
         /// <summary>
         ///     Client to manage the protocol
         /// </summary>
-        protected FTPSClient _client;
+        protected FTPSClient _client;   
 
         /// <summary>
         ///     Connect to remote host
@@ -29,7 +32,7 @@ namespace FtpClient.Protocols.FTP
             try
             {
                 _client = new FTPSClient();
-                _client.Connect(server, new NetworkCredential(user, password), ESSLSupportMode.ClearText);
+                _client.Connect(server, new NetworkCredential(user, password), ESSLSupportMode.ClearText); 
                 return true;
             }
             catch (Exception)
@@ -45,7 +48,17 @@ namespace FtpClient.Protocols.FTP
         /// <returns></returns>
         public List<ProtocolItem> ListDirectory(string path)
         {
-            return FtpParser.Parse(_client.GetDirectoryListUnparsed(path), path);
+            try
+            {
+                return FtpParser.Parse(_client.GetDirectoryListUnparsed(path), path);
+
+            }
+            catch (IOException)
+            {
+                Disconnect(); 
+                ViewModel.Instance.IsConnected = false;
+            }
+            return new List<ProtocolItem>();
         }
 
         /// <summary>
@@ -60,8 +73,15 @@ namespace FtpClient.Protocols.FTP
             {
                 return _client.GetFile(sourcePath, destinationPath) > 0;
             }
+            catch (IOException)
+            {
+                Disconnect();
+                ViewModel.Instance.IsConnected = false;
+                return false;
+            }
             catch (Exception)
             {
+                
                 return false;
             }
         }
@@ -78,8 +98,14 @@ namespace FtpClient.Protocols.FTP
             {
                 return _client.PutFile(sourcePath, destinationPath) > 0;
             }
-            catch (Exception)
+            catch (IOException)
             {
+                Disconnect();
+                ViewModel.Instance.IsConnected = false; 
+               return false;
+            }
+            catch (Exception)
+            { 
                 return false;
             }
         }
@@ -90,7 +116,17 @@ namespace FtpClient.Protocols.FTP
         /// <returns></returns>
         public string WorkingDirectory()
         {
-            return _client.GetCurrentDirectory();
+            try
+            {
+                return _client.GetCurrentDirectory();
+
+            }
+            catch (IOException)
+            {
+                Disconnect();
+                ViewModel.Instance.IsConnected = false; 
+            }
+            return null;
         }
 
         /// <summary>
@@ -104,6 +140,12 @@ namespace FtpClient.Protocols.FTP
             {
                 _client.MakeDir(path);
                 return true;
+            }
+            catch (IOException)
+            {
+                Disconnect(); 
+                ViewModel.Instance.IsConnected = false;
+                return false;
             }
             catch (Exception)
             {
