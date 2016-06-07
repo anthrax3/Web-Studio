@@ -40,6 +40,7 @@ namespace Web_Studio.ViewModels
         private void WizardFinishRun()
         {
             var fullPath = Path.Combine(ProjectModel.Instance.FullPath, ProjectModel.Instance.Name);
+            Directory.CreateDirectory(fullPath);   
             ProjectModel.Instance.FullPath = fullPath;
             ProjectModel.Instance.Create();
         }
