@@ -219,6 +219,8 @@ namespace TreeViewExplorerControl
                     _watcher.Dispose(); //Free
                     _watcher = null;
                     Nodes.Clear();
+                    SelectedItemName = null;
+                    SelectedItemPath = null;
                 }
             }
         }
