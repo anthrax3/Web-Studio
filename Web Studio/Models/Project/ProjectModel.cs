@@ -165,28 +165,35 @@ namespace Web_Studio.Models.Project
         /// </summary>
         /// <param name="path"></param>
         public static void Open(string path)
-        { 
-            
-            JObject jsonObject = JObject.Parse(File.ReadAllText(path));
-            Instance.FullPath = jsonObject["FullPath"]?.ToString();
-            Instance.Name = jsonObject["Name"]?.ToString();
-            var result = (ObservableCollection<Site>)jsonObject["Sites"]?.ToObject(new ObservableCollection<Site>().GetType());
-            if (result != null)
-                ViewModel.Sites = result;
-            for (int index = 0; index < ValidationPluginManager.Plugins.Count; index++)
+        {
+            try
             {
-                Lazy<IValidation, IValidationMetadata> plugin = ValidationPluginManager.Plugins[index];
-                var pluginJObject = jsonObject[plugin.Metadata.Name];
-
-                if (pluginJObject != null)
+                JObject jsonObject = JObject.Parse(File.ReadAllText(path));
+                Instance.FullPath = jsonObject["FullPath"]?.ToString();
+                Instance.Name = jsonObject["Name"]?.ToString();
+                var result = (ObservableCollection<Site>)jsonObject["Sites"]?.ToObject(new ObservableCollection<Site>().GetType());
+                if (result != null)
+                    ViewModel.Sites = result;
+                for (int index = 0; index < ValidationPluginManager.Plugins.Count; index++)
                 {
-                    //Updata plugin configuration with the project values
-                    var lazyPlugin = new Lazy<IValidation, IValidationMetadata>(() => (IValidation)pluginJObject.ToObject(plugin.Value.GetType()), plugin.Metadata);  
-                    ValidationPluginManager.Plugins[index] = lazyPlugin;
+                    Lazy<IValidation, IValidationMetadata> plugin = ValidationPluginManager.Plugins[index];
+                    var pluginJObject = jsonObject[plugin.Metadata.Name];
+
+                    if (pluginJObject != null)
+                    {
+                        //Updata plugin configuration with the project values
+                        var lazyPlugin = new Lazy<IValidation, IValidationMetadata>(() => (IValidation)pluginJObject.ToObject(plugin.Value.GetType()), plugin.Metadata);
+                        ValidationPluginManager.Plugins[index] = lazyPlugin;
+                    }
                 }
+
+                Instance.FullPath = Path.GetDirectoryName(path);
             }
-         
-            Instance.FullPath = Path.GetDirectoryName(path);
+            catch (Exception e)
+            {
+               Telemetry.Telemetry.TelemetryClient.TrackException(e);
+            } 
+           
         }
 
         /// <summary>

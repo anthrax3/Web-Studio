@@ -115,53 +115,59 @@ namespace Web_Studio.Models.PluginManager
         /// <param name="doWorkEventArgs"></param>
         private void GenerationWorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
         {
-            string releasePath = Path.Combine(ProjectModel.Instance.FullPath, "release");
-            _errorMessages = 0;
-            _warningMessages = 0;
-
-            //Check loop
-            foreach (Lazy<IValidation, IValidationMetadata> t in Plugins)
+            try
             {
-                if (GenerationWorker.CancellationPending)  //Manage the cancelation event
+                string releasePath = Path.Combine(ProjectModel.Instance.FullPath, "release");
+                _errorMessages = 0;
+                _warningMessages = 0;
+
+                //Check loop
+                foreach (Lazy<IValidation, IValidationMetadata> t in Plugins)
                 {
-                    doWorkEventArgs.Cancel = true;
-                    return;
+                    if (GenerationWorker.CancellationPending)  //Manage the cancelation event
+                    {
+                        doWorkEventArgs.Cancel = true;
+                        return;
+                    }
+                    var plugin = t.Value;
+                    if (!plugin.IsEnabled) continue;
+
+                    var tempResults = plugin.Check(releasePath);
+                    CountMessageTypes(tempResults);
+                    UpdateStatusOfGeneration(tempResults);
                 }
-                var plugin = t.Value;
-                if (!plugin.IsEnabled) continue;
 
-                var tempResults = plugin.Check(releasePath);
-                CountMessageTypes(tempResults);
-                UpdateStatusOfGeneration(tempResults);
+                //Fix loop and recheck loop
+                foreach (Lazy<IValidation, IValidationMetadata> t in Plugins)
+                {
+                    if (GenerationWorker.CancellationPending)  ////Manage the cancelation event
+                    {
+                        doWorkEventArgs.Cancel = true;
+                        return;
+                    }
+                    var plugin = t.Value;
+
+                    if (!plugin.IsAutoFixeable || !plugin.IsEnabled) continue;
+
+                    //Fix
+                    var tempResults = t.Value.Fix(releasePath);
+                    CountMessageTypes(tempResults);
+                    if (tempResults != null && tempResults.Count > 0) tempResults.Insert(0, new AnalysisResult("", 0, plugin.Name, Strings.FixMessages, InfoType.Instance));
+
+                    UpdateStatusOfGeneration(tempResults);
+
+                    //Recheck
+                    var checkResults = plugin.Check(releasePath);
+                    CountMessageTypes(checkResults);
+
+                    if (checkResults != null && checkResults.Count > 0) checkResults.Insert(0, new AnalysisResult("", 0, plugin.Name, Strings.NotFixedErrors, InfoType.Instance));
+                    UpdateStatusOfGeneration(checkResults);
+                }
             }
-
-            //Fix loop and recheck loop
-            foreach (Lazy<IValidation, IValidationMetadata> t in Plugins)
+            catch (Exception e)
             {
-                if (GenerationWorker.CancellationPending)  ////Manage the cancelation event
-                {
-                    doWorkEventArgs.Cancel = true;
-                    return;
-                }
-                var plugin = t.Value;
-
-                if (!plugin.IsAutoFixeable || !plugin.IsEnabled) continue;
-
-                //Fix
-                var tempResults = t.Value.Fix(releasePath);
-                CountMessageTypes(tempResults);
-                if (tempResults != null && tempResults.Count > 0) tempResults.Insert(0, new AnalysisResult("", 0, plugin.Name, Strings.FixMessages, InfoType.Instance));
-
-                UpdateStatusOfGeneration(tempResults);
-
-                //Recheck
-                var checkResults = plugin.Check(releasePath);
-                CountMessageTypes(checkResults);
-
-                if (checkResults != null && checkResults.Count > 0) checkResults.Insert(0, new AnalysisResult("", 0, plugin.Name, Strings.NotFixedErrors, InfoType.Instance));
-                UpdateStatusOfGeneration(checkResults);
+                Telemetry.Telemetry.TelemetryClient.TrackException(e);
             }
-
         }
 
         /// <summary>
