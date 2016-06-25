@@ -108,7 +108,7 @@ namespace SitemapPlugin
             sitemap.Append(@"</urlset>");
             File.WriteAllText(Path.Combine(projectPath,"sitemap.xml"),sitemap.ToString());
 
-            File.AppendAllText(Path.Combine(projectPath, "robots.txt"),@"Sitemap: "+Domain+@"/sitemap.xml"); //Update robots.txt
+            File.AppendAllText(Path.Combine(projectPath, "robots.txt"),@"\nSitemap: "+Domain+@"/sitemap.xml"); //Update robots.txt
 
             List<AnalysisResult> list = new List<AnalysisResult> {SitemapGenerated(Path.Combine(projectPath, "sitemap.xml")) };
             return list;
