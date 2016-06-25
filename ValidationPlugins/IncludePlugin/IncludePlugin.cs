@@ -63,7 +63,15 @@ namespace IncludePlugin
             {
                 var fileToCheck = new FileToCheck(file);
                 filesToChecks.Add(fileToCheck);
-                numIncludes += fileToCheck.MakeInclusion(analysisResults, Name);
+                try
+                {
+                    numIncludes += fileToCheck.MakeInclusion(analysisResults, Name); 
+                }
+                catch (Exception)
+                {
+                    analysisResults.Add(new AnalysisResult(file, 0,Name, Strings.ErrorFound, ErrorType.Instance));
+                    continue;     
+                }
                 fileToCheck.IncludedFile();
             }
 

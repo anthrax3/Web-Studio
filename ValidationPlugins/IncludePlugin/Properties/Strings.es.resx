@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -137,5 +137,8 @@ Por ejemplo: &lt;include src="menu.html" /&gt;</value>
   </data>
   <data name="SrcNotFound" xml:space="preserve">
     <value>Hemos detectado el uso de una etiqueta include sin el atributo origen (src)</value>
+  </data>
+  <data name="ErrorFound" xml:space="preserve">
+    <value>Un error fue encontrado en el proceso de inclusión, por favor comprueba todos los includes</value>
   </data>
 </root>

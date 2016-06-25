@@ -70,6 +70,15 @@ namespace IncludePlugin.Properties {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a An error was found in the include process, please check all includes.
+        /// </summary>
+        internal static string ErrorFound {
+            get {
+                return ResourceManager.GetString("ErrorFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a inclusions correctly.
         /// </summary>
         internal static string Inclusions {
