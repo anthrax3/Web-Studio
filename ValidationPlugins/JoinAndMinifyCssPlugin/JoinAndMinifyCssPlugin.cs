@@ -186,6 +186,10 @@ namespace JoinAndMinifyCssPlugin
                 linkTag.Attributes.Add("rel", "stylesheet");
                 linkTag.Attributes.Add("href", Domain + "/css/" + resultCssFile);
                 linkTag.Attributes.Add("type", "text/css");
+
+                //Put a new line
+                var newLine = HtmlNode.CreateNode("\r\n");
+                headNode.AppendChild(newLine);
                 //Add to head
                 headNode.AppendChild(linkTag);
                 document.Save(file);
