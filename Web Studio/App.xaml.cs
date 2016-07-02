@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using MS.WindowsAPICodePack.Internal;
@@ -25,9 +26,23 @@ namespace Web_Studio
         /// <param name="e"></param>
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            
+
             ResxLocalizationProvider.Instance.UpdateCultureList(GetType().Assembly.FullName, "Strings");
-            Telemetry.Telemetry.Initialize();
+            var cultureInfo = CultureInfo.CurrentUICulture;
+            var availableCultures = LocalizeDictionary.Instance.MergedAvailableCultures.ToList();
+            while (cultureInfo != CultureInfo.InvariantCulture && !availableCultures.Contains(cultureInfo))
+            {
+                cultureInfo = cultureInfo.Parent;
+            }
+
+            if (cultureInfo == CultureInfo.InvariantCulture)
+            {
+                cultureInfo = new CultureInfo("en");
+            }
+
+            LocalizeDictionary.Instance.Culture = cultureInfo;
+            Thread.CurrentThread.CurrentUICulture = cultureInfo;
+            Thread.CurrentThread.CurrentCulture = cultureInfo; Telemetry.Telemetry.Initialize();
 
             if (!string.IsNullOrEmpty(Settings.Default.Language))
             {
