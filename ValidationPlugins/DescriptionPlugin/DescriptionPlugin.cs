@@ -157,7 +157,7 @@ namespace DescriptionPlugin
                             HtmlNode metaDescription = document.CreateElement("meta");
                             
                             metaDescription.Attributes.Add("name","description");
-                            metaDescription.Attributes.Add("content",paragraph.InnerText);
+                            metaDescription.Attributes.Add("content", CreateDescription(paragraph.InnerText));
                             //Add to head
                             headNode.AppendChild(metaDescription);
                             descriptionsCreated++;
@@ -170,6 +170,15 @@ namespace DescriptionPlugin
             list.Add(DescriptionsGenerated(descriptionsCreated));
             return list;
         }
+
+        private String CreateDescription(String source)
+        {
+            if (source.Length < 150) return source;
+            string maxString = source.Substring(0, 150); //Cut the string
+            int index = maxString.LastIndexOf(' '); 
+            return maxString.Substring(0, index); //Get string without a cut word
+        }
+
 
         /// <summary>
         /// View showed when you select the plugin
