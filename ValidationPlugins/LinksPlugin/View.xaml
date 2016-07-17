@@ -10,14 +10,9 @@
         <StackPanel Margin="10">
             <TextBlock HorizontalAlignment="Center" Text="{Binding Name}" Margin="0,0,0,10" FontSize="21.333" />
             <TextBlock TextWrapping="Wrap" Margin="0,0,0,10" Text="{Binding Description}" />
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <TextBlock VerticalAlignment="Center" Text="{Binding DomainName}" Margin="0,0,10,0" />
-                <TextBox VerticalAlignment="Center" Grid.Column="1" Text="{Binding Domain}" />
-            </Grid>
+            <Separator Opacity="0" Height="20"/>  
+            <TextBlock VerticalAlignment="Center" Text="{Binding DomainName}" Margin="0,0,10,0" />
+            <TextBox VerticalAlignment="Center" Text="{Binding Domain}" />     
         </StackPanel>
     </Grid>
 </UserControl>

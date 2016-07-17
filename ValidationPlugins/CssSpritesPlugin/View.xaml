@@ -11,15 +11,8 @@
             <TextBlock HorizontalAlignment="Center" Text="{Binding Name}" Margin="0,0,0,10" FontSize="21.333" />
             <TextBlock TextWrapping="Wrap" Margin="0,0,0,10" Text="{Binding Description}" />
            <Separator Height="20" Opacity="0"></Separator>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding MaxImagesText}" VerticalAlignment="Center" Margin="0,0,10,0"></TextBlock>
-                <TextBox VerticalAlignment="Center" Grid.Column="1" Text="{Binding MaxImages}"></TextBox>
-            </Grid>
-          
+           <TextBlock Text="{Binding MaxImagesText}" VerticalAlignment="Center" Margin="0,0,10,0"></TextBlock>
+           <TextBox VerticalAlignment="Center"  Text="{Binding MaxImages}"></TextBox>     
         </StackPanel>
     </Grid>
 </UserControl>

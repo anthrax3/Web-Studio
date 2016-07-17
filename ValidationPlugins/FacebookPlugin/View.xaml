@@ -13,14 +13,9 @@
             <CheckBox IsChecked="{Binding IsAutoFixeable}">
                 <TextBlock Text="{Binding AutoFixText}" />
             </CheckBox>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <TextBlock VerticalAlignment="Center" Text="{Binding DomainName}" />
-                <TextBox VerticalAlignment="Center" Grid.Column="1" Text="{Binding Domain}" Margin="10,0,0,0" />
-            </Grid>
+            <Separator Opacity="0" Height="20"/>  
+            <TextBlock VerticalAlignment="Center" Text="{Binding DomainName}" />
+            <TextBox VerticalAlignment="Center" Text="{Binding Domain}" Margin="10,0,0,0" />  
         </StackPanel>
     </Grid>
 </UserControl>
