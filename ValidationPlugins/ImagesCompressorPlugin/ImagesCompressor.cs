@@ -113,7 +113,7 @@ namespace ImagesCompressorPlugin
             return new List<AnalysisResult>
             {
                 new AnalysisResult("", 0, Name,
-                    string.Format(Strings.CompressionRate, originalSize/(1024*1024), afterSize/(1024*1024)),
+                    string.Format(Strings.CompressionRate, originalSize/(1024.0*1024), afterSize/(1024.0*1024)),
                     InfoType.Instance)
             };
         }

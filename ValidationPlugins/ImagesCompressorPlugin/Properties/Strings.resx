@@ -131,6 +131,6 @@ This can help you to make your page faster</value>
     <value>The image compressor isn't enabled. You should turn on this plugin to optimize your page.</value>
   </data>
   <data name="CompressionRate" xml:space="preserve">
-    <value>The size of all images is {0} Mb however after compression is {1} MB</value>
+    <value>The size of all images is {0:0.00} Mb however after compression is {1:0.00} MB</value>
   </data>
 </root>

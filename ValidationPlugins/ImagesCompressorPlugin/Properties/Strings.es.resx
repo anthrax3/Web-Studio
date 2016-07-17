@@ -131,6 +131,6 @@ Esto puede ayudarte a hacer tu página más rápida.</value>
     <value>La compresión de imágenes no está activa, deberías habilitarla para optimizar tu página.</value>
   </data>
   <data name="CompressionRate" xml:space="preserve">
-    <value>El tamaño de todas las imágenes es {0} Mb, pero después de la compresión es de {1} MB</value>
+    <value>El tamaño de todas las imágenes es {0:0.00} Mb, pero después de la compresión es de {1:0.00} MB</value>
   </data>
 </root>

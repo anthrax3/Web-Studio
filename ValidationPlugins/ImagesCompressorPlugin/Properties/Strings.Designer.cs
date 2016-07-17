@@ -70,7 +70,7 @@ namespace ImagesCompressorPlugin.Properties {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a The size of all images is {0} Mb however after compression is {1} MB.
+        ///   Busca una cadena traducida similar a The size of all images is {0:0.00} Mb however after compression is {1:0.00} MB.
         /// </summary>
         internal static string CompressionRate {
             get {
