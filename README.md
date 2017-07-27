@@ -11,6 +11,11 @@ The main features can be seen in the following image:
 It also has its own FTP Client
 ![ftp client](http://i.imgur.com/FoWIqay.png)
 
+## Windows reference
+If you download this repository and you open it with Visual Studio, you are going to get an error because the Windows reference isn't set, to fix it you have to add this reference manually:
+
+* In Windows 10 the reference is under C:\Program Files (x86)\Windows Kits\10\UnionMetadata\ and the file is called **Windows.winmd**
+
 ## Thanks
 
 * My tutor Ivan Álvarez Navia (Department of Computer engineering - USAL) for all suggestions, reviews and feedback.
